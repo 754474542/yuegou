@@ -33,7 +33,7 @@ public class Spu implements Serializable {
     /**
      * 类别
      */
-    private Integer categoryId;
+    private Long categoryId;
     /**
      * 状态0 下架 1 上架 2 删除
      */
@@ -141,11 +141,11 @@ public class Spu implements Serializable {
         this.spuDescription = spuDescription;
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 

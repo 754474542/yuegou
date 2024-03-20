@@ -27,7 +27,6 @@ public class DetailController {
 
     @PostMapping
     public Result insert(@RequestBody Detail detail){
-        //这里后面要加Detail的业务
         boolean flag = detailService.insert(detail);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR,flag ? "OK" : "ERROR");
     }

@@ -22,38 +22,7 @@
                category_id,
                create_time
         from attribute
-        where attribute_id = #{attributeId}
-    </select>
-
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="AttributeMap">
-        select
-        attribute_id, attribute_name, attribute_options, attribute_type, attribute_sort, category_id, create_time
-        from attribute
-        <where>
-            <if test="attributeId != null">
-                and attribute_id = #{attributeId}
-            </if>
-            <if test="attributeName != null and attributeName != ''">
-                and attribute_name = #{attributeName}
-            </if>
-            <if test="attributeOptions != null and attributeOptions != ''">
-                and attribute_options = #{attributeOptions}
-            </if>
-            <if test="attributeType != null">
-                and attribute_type = #{attributeType}
-            </if>
-            <if test="attributeSort != null">
-                and attribute_sort = #{attributeSort}
-            </if>
-            <if test="categoryId != null">
-                and category_id = #{categoryId}
-            </if>
-            <if test="createTime != null">
-                and create_time = #{createTime}
-            </if>
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
+        where attribute_id = #{attributeId} order by attribute_sort;
     </select>
 
     <!--统计总行数-->

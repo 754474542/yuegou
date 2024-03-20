@@ -21,7 +21,7 @@ public interface SpuDao {
      * @param spu 实例对象
      * @return 影响行数
      */
-    int insert(Spu spu);
+    boolean insert(Spu spu);
 
 
     /**
@@ -30,7 +30,7 @@ public interface SpuDao {
      * @param spu 实例对象
      * @return 影响行数
      */
-    int update(Spu spu);
+    boolean update(Spu spu);
 
     /**
      * 通过主键删除数据
@@ -38,8 +38,11 @@ public interface SpuDao {
      * @param spuId 主键
      * @return 影响行数
      */
-    int deleteById(Long spuId);
+    boolean deleteById(Long spuId);
 
+    List<Spu> queryAll();
+
+    //根据店铺id查询
     List<Spu> queryByStoreId(Long storeId);
 
     Spu queryBySpuId(Long spuId);

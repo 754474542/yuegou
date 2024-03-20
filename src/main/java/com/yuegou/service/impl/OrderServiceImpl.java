@@ -1,8 +1,12 @@
 package com.yuegou.service.impl;
 
+import com.yuegou.dao.DetailDao;
+import com.yuegou.entity.Detail;
 import com.yuegou.entity.Order;
 import com.yuegou.dao.OrderDao;
+import com.yuegou.service.DetailService;
 import com.yuegou.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
@@ -16,8 +20,10 @@ import java.util.List;
  */
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
-    @Resource
+    @Autowired
     private OrderDao orderDao;
+    @Autowired
+    private DetailService detailService;
 
     /**
      * 通过ID查询单条数据
@@ -49,6 +55,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean insert(Order order) {
         order.setCreateTime(new Date());
+        List<Detail> detailList = order.getDetailList();
+        for (Detail detail : detailList) {
+            detail.setOrderId(order.getOrderId());
+            detailService.update(detail);
+        }
         return orderDao.insert(order);
     }
 

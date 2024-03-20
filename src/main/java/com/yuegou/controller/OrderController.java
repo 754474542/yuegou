@@ -31,7 +31,6 @@ public class OrderController {
 
     @PostMapping
     public Result insert(@RequestBody Order order){
-        //这里后面要加Detail的业务
         boolean flag = orderService.insert(order);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR,flag ? "OK" : "ERROR");
     }

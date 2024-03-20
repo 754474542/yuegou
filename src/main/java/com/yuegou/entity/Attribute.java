@@ -30,7 +30,7 @@ public class Attribute implements Serializable {
     /**
      * 排序
      */
-    private Integer attributeSort;
+    private Long attributeSort;
     /**
      * 所属类别
      */
@@ -73,11 +73,11 @@ public class Attribute implements Serializable {
         this.attributeType = attributeType;
     }
 
-    public Integer getAttributeSort() {
+    public Long getAttributeSort() {
         return attributeSort;
     }
 
-    public void setAttributeSort(Integer attributeSort) {
+    public void setAttributeSort(Long attributeSort) {
         this.attributeSort = attributeSort;
     }
 

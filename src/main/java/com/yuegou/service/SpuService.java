@@ -1,7 +1,10 @@
 package com.yuegou.service;
 
 import com.yuegou.entity.Spu;
+import com.yuegou.entity.SpuAndAttributeValues;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * (Spu)表服务接口
@@ -18,7 +21,7 @@ public interface SpuService {
      * @param spu 实例对象
      * @return 实例对象
      */
-    Spu insert(Spu spu);
+    boolean insert(Spu spu);
 
     /**
      * 通过主键删除数据
@@ -27,5 +30,13 @@ public interface SpuService {
      * @return 是否成功
      */
     boolean deleteById(Long spuId);
+
+    boolean update(SpuAndAttributeValues spuAndAttributeValues);
+
+    List<Spu> queryAll();
+
+    Spu queryBySpuId(Long spuId);
+
+    boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues);
 
 }

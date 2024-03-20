@@ -24,10 +24,6 @@ public class Category implements Serializable {
      */
     private Integer parentId;
     /**
-     * 排序
-     */
-    private Integer categorySort;
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -40,7 +36,6 @@ public class Category implements Serializable {
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
                 ", parentId=" + parentId +
-                ", categorySort=" + categorySort +
                 ", createTime=" + createTime +
                 ", parentName='" + parentName + '\'' +
                 '}';
@@ -76,14 +71,6 @@ public class Category implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
-    }
-
-    public Integer getCategorySort() {
-        return categorySort;
-    }
-
-    public void setCategorySort(Integer categorySort) {
-        this.categorySort = categorySort;
     }
 
     public Date getCreateTime() {

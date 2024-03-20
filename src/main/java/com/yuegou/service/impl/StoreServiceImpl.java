@@ -1,8 +1,13 @@
 package com.yuegou.service.impl;
 
+import com.yuegou.controller.pretreatment.Code;
+import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
+import com.yuegou.dao.UserDao;
 import com.yuegou.entity.Store;
 import com.yuegou.dao.StoreDao;
+import com.yuegou.entity.User;
 import com.yuegou.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,8 +21,10 @@ import java.util.List;
  */
 @Service("storeService")
 public class StoreServiceImpl implements StoreService {
-    @Resource
+    @Autowired
     private StoreDao storeDao;
+    @Autowired
+    private UserDao userDao;
 
     public List<Store> queryAll() {
         return storeDao.queryAll();
@@ -47,6 +54,11 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public boolean insert(Store store) {
+        if (storeDao.queryByUserId(store.getUserId()) != null) throw new CURDException(Code.SAVE_ERR,"您已经有店铺了！");
+        System.out.println(store);
+        User user = userDao.getById(store.getUserId());
+        user.setUserPower(2);
+        if (!userDao.update(user))throw new CURDException(Code.UPDATE_ERR,"权限更新失败！");
         return storeDao.insert(store);
     }
 
@@ -63,6 +75,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean delete(Long id) {
+        Store store = storeDao.queryById(id);
+        User user = userDao.getById(store.getUserId());
+        user.setUserPower(1);
+        if (!userDao.update(user))throw new CURDException(Code.UPDATE_ERR,"权限更新失败！");
         return storeDao.deleteById(id);
     }
 

@@ -41,23 +41,6 @@ public interface CategoryDao {
     int insert(Category category);
 
     /**
-     * 批量新增数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<Category> 实例对象列表
-     * @return 影响行数
-     */
-    int insertBatch(@Param("entities") List<Category> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<Category> 实例对象列表
-     * @return 影响行数
-     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
-     */
-    int insertOrUpdateBatch(@Param("entities") List<Category> entities);
-
-    /**
      * 修改数据
      *
      * @param category 实例对象

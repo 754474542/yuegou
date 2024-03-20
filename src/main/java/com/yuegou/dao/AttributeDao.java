@@ -40,7 +40,7 @@ public interface AttributeDao {
      * @param attribute 实例对象
      * @return 影响行数
      */
-    int insert(Attribute attribute);
+    boolean insert(Attribute attribute);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）

@@ -20,7 +20,7 @@
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="SkuMap">
+    <select id="queryById" resultMap="SkuMaps">
         select sku_id,
                spu_id,
                sku_price,
@@ -30,7 +30,7 @@
     </select>
 
     <!--查询多个-->
-    <select id="queryBySpuId" resultMap="SkuMap">
+    <select id="queryBySpuId" resultMap="SkuMaps">
         select sku_id,
                spu_id,
                sku_price,

@@ -65,6 +65,9 @@
             <if test="userGender != null">
                 user_gender = #{userGender},
             </if>
+            <if test="userPower != null">
+                user_power = #{userPower},
+            </if>
         </set>
         <where>
             user_id = #{userId};
@@ -90,7 +93,7 @@
     </delete>
 
     <select id="getById" resultMap="user">
-        SELECT user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create FROM user WHERE user_id = #{id};
+        SELECT user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create FROM user WHERE user_id = #{userId};
     </select>
 
     <select id="getAll" resultMap="user">

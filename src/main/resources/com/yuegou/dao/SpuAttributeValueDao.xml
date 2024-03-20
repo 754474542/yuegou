@@ -28,28 +28,6 @@
         where spu_id = #{spuId}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="SpuAttributeValueMap">
-        select
-        spu_attr_id, spu_id, attribute_id, attribute_value
-        from spu_attribute_value
-        <where>
-            <if test="spuAttrId != null">
-                and spu_attr_id = #{spuAttrId}
-            </if>
-            <if test="spuId != null">
-                and spu_id = #{spuId}
-            </if>
-            <if test="attributeId != null">
-                and attribute_id = #{attributeId}
-            </if>
-            <if test="attributeValue != null and attributeValue != ''">
-                and attribute_value = #{attributeValue}
-            </if>
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
-    </select>
-
     <!--统计总行数-->
     <select id="count" resultType="java.lang.Long">
         select count(1)

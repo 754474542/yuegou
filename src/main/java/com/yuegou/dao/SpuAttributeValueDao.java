@@ -39,7 +39,7 @@ public interface SpuAttributeValueDao {
      * @param spuAttributeValue 实例对象
      * @return 影响行数
      */
-    int insert(SpuAttributeValue spuAttributeValue);
+    boolean insert(SpuAttributeValue spuAttributeValue);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
@@ -64,7 +64,7 @@ public interface SpuAttributeValueDao {
      * @param spuAttributeValue 实例对象
      * @return 影响行数
      */
-    int update(SpuAttributeValue spuAttributeValue);
+    boolean update(SpuAttributeValue spuAttributeValue);
 
     /**
      * 通过主键删除数据
