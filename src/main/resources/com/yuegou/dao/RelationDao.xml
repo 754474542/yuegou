@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.RelationDao">
+
+    <resultMap type="com.yuegou.entity.Relation" id="RelationMap">
+        <result property="relationId" column="relation_id" jdbcType="INTEGER"/>
+        <result property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RelationMap">
+        select relation_id,
+               store_id,
+               spu_id
+        from relation
+        where relation_id = #{relationId}
+    </select>
+
+    <select id="queryByStoreId" resultMap="RelationMap">
+        select relation_id,
+               store_id,
+               spu_id
+        from relation
+        where store_id = #{storeId}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from relation
+        <where>
+            <if test="relationId != null">
+                and relation_id = #{relationId}
+            </if>
+            <if test="storeId != null">
+                and store_id = #{storeId}
+            </if>
+            <if test="spuId != null">
+                and spu_id = #{spuId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="relationId" useGeneratedKeys="true">
+        insert into relation(store_id, spu_id)
+        values (#{storeId}, #{spuId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="relationId" useGeneratedKeys="true">
+        insert into relation(store_id, spu_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.storeId}, #{entity.spuId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="relationId" useGeneratedKeys="true">
+        insert into relation(store_id, spu_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.storeId}, #{entity.spuId})
+        </foreach>
+        on duplicate key update
+        store_id = values(store_id),
+        spu_id = values(spu_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update relation
+        <set>
+            <if test="storeId != null">
+                store_id = #{storeId},
+            </if>
+            <if test="spuId != null">
+                spu_id = #{spuId},
+            </if>
+        </set>
+        where relation_id = #{relationId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from relation
+        where relation_id = #{relationId}
+    </delete>
+
+</mapper>
+

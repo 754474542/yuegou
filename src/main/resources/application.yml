@@ -1,0 +1,43 @@
+server:
+  port: 80
+
+mybatis:
+  mapper-locations: classpath:com.yuegou.dao/*.xml
+  type-aliases-package: com.yuegou.entity
+#配置mybatis
+
+logging:
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd hh:mm:ss.SSS}){cyan} %clr([%thread] %-5level %logger{50}) - %msg%n'
+#  file:
+#    path: C:\Users\Undertale\Desktop\悦购网上购物系统\YueGouService
+#    name: yuegou.log
+#  logback:
+#    rollingpolicy:
+#      max-history: 7
+#      max-file-size: 10MB
+#      total-size-cap: 100MB
+
+#配置日志格式
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yuegou
+    username: root
+    password: root
+  output:
+    ansi:
+      enabled: always
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  jackson:
+    date-format: yyyy-MM-dd mm:hh:ss
+#配置数据源和数据库，这里的enabled是开启彩色日志打印,配置默认时间转换
+
+
+
+

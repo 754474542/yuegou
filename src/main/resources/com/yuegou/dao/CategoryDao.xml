@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.CategoryDao">
+
+    <resultMap type="com.yuegou.entity.Category" id="CategoryMap">
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+        <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="categorySort" column="category_sort" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="parentName" column="j_name"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CategoryMap">
+        select category_id,
+               category_name,
+               parent_id,
+               category_sort,
+               create_time
+        from category
+        where category_id = #{categoryId}
+    </select>
+
+    <select id="queryByIdAllStyle" resultMap="CategoryMap">
+        WITH job_tb AS
+        (select c.category_id j_id, c.category_name j_name, c.parent_id j_pid FROM category c WHERE c.parent_id != 0 AND category_id = #{categoryId})
+        SELECT *
+        FROM category c JOIN job_tb j ON j.j_pid = c.category_id
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CategoryMap">
+        select
+        category_id, category_name, parent_id, category_sort, create_time
+        from category
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and category_name = #{categoryName}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="categorySort != null">
+                and category_sort = #{categorySort}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from category
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and category_name = #{categoryName}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="categorySort != null">
+                and category_sort = #{categorySort}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="categoryId" useGeneratedKeys="true">
+        insert into category(category_name, parent_id, category_sort, create_time)
+        values (#{categoryName}, #{parentId}, #{categorySort}, #{createTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="categoryId" useGeneratedKeys="true">
+        insert into category(category_name, parent_id, category_sort, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.categoryName}, #{entity.parentId}, #{entity.categorySort}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="categoryId" useGeneratedKeys="true">
+        insert into category(category_name, parent_id, category_sort, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.categoryName}, #{entity.parentId}, #{entity.categorySort}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        category_name = values(category_name),
+        parent_id = values(parent_id),
+        category_sort = values(category_sort),
+        create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update category
+        <set>
+            <if test="categoryName != null and categoryName != ''">
+                category_name = #{categoryName},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="categorySort != null">
+                category_sort = #{categorySort},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where category_id = #{categoryId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from category
+        where category_id = #{categoryId}
+    </delete>
+
+</mapper>
+

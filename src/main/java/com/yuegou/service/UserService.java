@@ -1,0 +1,17 @@
+package com.yuegou.service;
+
+import com.yuegou.entity.User;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Transactional
+public interface UserService {
+    boolean save(User user);
+    boolean delete(Long id);
+    boolean update(User user);
+    User getById(Long id);
+    User getUserName(User user);
+    List<User> getAll();
+    List<User> getUserAndStore();
+}

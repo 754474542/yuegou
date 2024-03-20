@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.SkuImagesDao">
+
+    <resultMap type="com.yuegou.entity.SkuImages" id="SkuImagesMap">
+        <result property="imgId" column="img_id" jdbcType="INTEGER"/>
+        <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
+        <result property="imgPath" column="img_path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="save">
+        insert into sku_images (sku_id,img_path) VALUES (#{skuId},#{imgPath});
+    </insert>
+    <update id="updateByImageIdAndSkuId">
+        update sku_images SET img_path = #{imgPath} WHERE img_id = #{imgId} AND sku_id = #{skuId};
+    </update>
+    <delete id="delete">
+        delete sku_images where img_id = #{imgId} ;
+    </delete>
+    <select id="queryById" resultMap="SkuImagesMap">
+        select img_id, sku_id, img_path from sku_images where img_id = #{imgId};
+    </select>
+    <select id="queryAll" resultMap="SkuImagesMap">
+        select img_id, sku_id, img_path from sku_images;
+    </select>
+    <select id="queryBySkuId" resultMap="SkuImagesMap">
+        select img_id, sku_id, img_path from sku_images where sku_id = #{skuId} ;
+    </select>
+    <select id="queryByImgIdAndSkuId" resultMap="SkuImagesMap">
+        select img_id, sku_id, img_path from sku_images where img_id = #{imgId} AND sku_id = #{skuId};
+    </select>
+
+
+</mapper>
+

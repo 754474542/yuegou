@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.CartDao">
+
+    <resultMap type="com.yuegou.entity.Cart" id="CartMaps">
+        <result property="cartId" column="cart_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
+        <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+        <association property="spu" javaType="com.yuegou.entity.Spu" select="com.yuegou.dao.SpuDao.queryBySpuId" column="spu_id"/>
+    </resultMap>
+
+    <resultMap type="com.yuegou.entity.Cart" id="CartMap">
+        <result property="cartId" column="cart_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
+        <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryByUserId" resultMap="CartMap">
+        select cart_id,
+               user_id,
+               store_id,
+               spu_id,
+               sku_id,
+               number
+        from cart
+        where user_id = #{userId}
+    </select>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from cart
+        where cart_id = #{cartId}
+    </delete>
+
+</mapper>
+

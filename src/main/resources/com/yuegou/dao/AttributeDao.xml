@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.AttributeDao">
+
+    <resultMap type="com.yuegou.entity.Attribute" id="AttributeMap">
+        <id property="attributeId" column="attribute_id" jdbcType="INTEGER"/>
+        <result property="attributeName" column="attribute_name" jdbcType="VARCHAR"/>
+        <result property="attributeOptions" column="attribute_options" jdbcType="VARCHAR"/>
+        <result property="attributeType" column="attribute_type" jdbcType="INTEGER"/>
+        <result property="attributeSort" column="attribute_sort" jdbcType="INTEGER"/>
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AttributeMap">
+        select attribute_id,
+               attribute_name,
+               attribute_options,
+               attribute_type,
+               attribute_sort,
+               category_id,
+               create_time
+        from attribute
+        where attribute_id = #{attributeId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AttributeMap">
+        select
+        attribute_id, attribute_name, attribute_options, attribute_type, attribute_sort, category_id, create_time
+        from attribute
+        <where>
+            <if test="attributeId != null">
+                and attribute_id = #{attributeId}
+            </if>
+            <if test="attributeName != null and attributeName != ''">
+                and attribute_name = #{attributeName}
+            </if>
+            <if test="attributeOptions != null and attributeOptions != ''">
+                and attribute_options = #{attributeOptions}
+            </if>
+            <if test="attributeType != null">
+                and attribute_type = #{attributeType}
+            </if>
+            <if test="attributeSort != null">
+                and attribute_sort = #{attributeSort}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from attribute
+        <where>
+            <if test="attributeId != null">
+                and attribute_id = #{attributeId}
+            </if>
+            <if test="attributeName != null and attributeName != ''">
+                and attribute_name = #{attributeName}
+            </if>
+            <if test="attributeOptions != null and attributeOptions != ''">
+                and attribute_options = #{attributeOptions}
+            </if>
+            <if test="attributeType != null">
+                and attribute_type = #{attributeType}
+            </if>
+            <if test="attributeSort != null">
+                and attribute_sort = #{attributeSort}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByCateId" resultMap="AttributeMap">
+        select attribute_id,
+               attribute_name,
+               attribute_options,
+               attribute_type,
+               attribute_sort,
+               category_id,
+               create_time
+        from attribute
+        where category_id = #{categoryId}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="attributeId" useGeneratedKeys="true">
+        insert into attribute(attribute_name, attribute_options, attribute_type, attribute_sort, category_id,
+                              create_time)
+        values (#{attributeName}, #{attributeOptions}, #{attributeType}, #{attributeSort}, #{categoryId}, #{createTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="attributeId" useGeneratedKeys="true">
+        insert into attribute(attribute_name, attribute_options, attribute_type, attribute_sort, category_id,
+        create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.attributeName}, #{entity.attributeOptions}, #{entity.attributeType}, #{entity.attributeSort},
+            #{entity.categoryId}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="attributeId" useGeneratedKeys="true">
+        insert into attribute(attribute_name, attribute_options, attribute_type, attribute_sort, category_id,
+        create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.attributeName}, #{entity.attributeOptions}, #{entity.attributeType}, #{entity.attributeSort},
+            #{entity.categoryId}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        attribute_name = values(attribute_name),
+        attribute_options = values(attribute_options),
+        attribute_type = values(attribute_type),
+        attribute_sort = values(attribute_sort),
+        category_id = values(category_id),
+        create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update attribute
+        <set>
+            <if test="attributeName != null and attributeName != ''">
+                attribute_name = #{attributeName},
+            </if>
+            <if test="attributeOptions != null and attributeOptions != ''">
+                attribute_options = #{attributeOptions},
+            </if>
+            <if test="attributeType != null">
+                attribute_type = #{attributeType},
+            </if>
+            <if test="attributeSort != null">
+                attribute_sort = #{attributeSort},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where attribute_id = #{attributeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from attribute
+        where attribute_id = #{attributeId}
+    </delete>
+
+</mapper>
+

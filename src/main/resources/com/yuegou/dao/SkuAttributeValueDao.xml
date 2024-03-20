@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.SkuAttributeValueDao">
+
+    <resultMap type="com.yuegou.entity.SkuAttributeValue" id="SkuAttributeValueMap">
+        <result property="skuAttrId" column="sku_attr_id" jdbcType="INTEGER"/>
+        <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
+        <result property="attributeId" column="attribute_id" jdbcType="INTEGER"/>
+        <result property="attributeValue" column="attribute_value" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SkuAttributeValueMap">
+        select sku_attr_id,
+               sku_id,
+               attribute_id,
+               attribute_value
+        from sku_attribute_value
+        where sku_attr_id = #{skuAttrId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SkuAttributeValueMap">
+        select
+        sku_attr_id, sku_id, attribute_id, attribute_value
+        from sku_attribute_value
+        <where>
+            <if test="skuAttrId != null">
+                and sku_attr_id = #{skuAttrId}
+            </if>
+            <if test="skuId != null">
+                and sku_id = #{skuId}
+            </if>
+            <if test="attributeId != null">
+                and attribute_id = #{attributeId}
+            </if>
+            <if test="attributeValue != null and attributeValue != ''">
+                and attribute_value = #{attributeValue}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sku_attribute_value
+        <where>
+            <if test="skuAttrId != null">
+                and sku_attr_id = #{skuAttrId}
+            </if>
+            <if test="skuId != null">
+                and sku_id = #{skuId}
+            </if>
+            <if test="attributeId != null">
+                and attribute_id = #{attributeId}
+            </if>
+            <if test="attributeValue != null and attributeValue != ''">
+                and attribute_value = #{attributeValue}
+            </if>
+        </where>
+    </select>
+    <select id="queryBySkuId" resultMap="SkuAttributeValueMap">
+        select sku_attr_id,
+               sku_id,
+               attribute_id,
+               attribute_value
+        from sku_attribute_value
+        where sku_id = #{skuId}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="skuAttrId" useGeneratedKeys="true">
+        insert into sku_attribute_value(sku_id, attribute_id, attribute_value)
+        values (#{skuId}, #{attributeId}, #{attributeValue})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="skuAttrId" useGeneratedKeys="true">
+        insert into sku_attribute_value(sku_id, attribute_id, attribute_value)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.skuId}, #{entity.attributeId}, #{entity.attributeValue})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="skuAttrId" useGeneratedKeys="true">
+        insert into sku_attribute_value(sku_id, attribute_id, attribute_value)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.skuId}, #{entity.attributeId}, #{entity.attributeValue})
+        </foreach>
+        on duplicate key update
+        sku_id = values(sku_id),
+        attribute_id = values(attribute_id),
+        attribute_value = values(attribute_value)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sku_attribute_value
+        <set>
+            <if test="skuId != null">
+                sku_id = #{skuId},
+            </if>
+            <if test="attributeId != null">
+                attribute_id = #{attributeId},
+            </if>
+            <if test="attributeValue != null and attributeValue != ''">
+                attribute_value = #{attributeValue},
+            </if>
+        </set>
+        where sku_attr_id = #{skuAttrId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sku_attribute_value
+        where sku_attr_id = #{skuAttrId}
+    </delete>
+
+</mapper>
+

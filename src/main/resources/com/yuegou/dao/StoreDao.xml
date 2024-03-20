@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuegou.dao.StoreDao">
+
+    <resultMap type="com.yuegou.entity.Store" id="StoreMaps">
+        <id property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="storeName" column="store_name" jdbcType="VARCHAR"/>
+        <result property="storeIntroduce" column="store_introduce" jdbcType="VARCHAR"/>
+        <result property="storeBite" column="store_bite" jdbcType="INTEGER"/>
+        <result property="storeVisit" column="store_visit" jdbcType="INTEGER"/>
+        <collection property="spuList" ofType="com.yuegou.entity.Spu" select="com.yuegou.dao.SpuDao.queryByStoreId" column="store_id"/>
+    </resultMap>
+
+    <resultMap type="com.yuegou.entity.Store" id="StoreMap">
+        <id property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="storeName" column="store_name" jdbcType="VARCHAR"/>
+        <result property="storeIntroduce" column="store_introduce" jdbcType="VARCHAR"/>
+        <result property="storeBite" column="store_bite" jdbcType="INTEGER"/>
+        <result property="storeVisit" column="store_visit" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryAll" resultMap="StoreMap">
+        select store_id,
+               user_id,
+               store_name,
+               store_introduce,
+               store_bite,
+               store_visit
+        from store;
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StoreMap">
+        select store_id,
+               user_id,
+               store_name,
+               store_introduce,
+               store_bite,
+               store_visit
+        from store where store_id = #{storeId}
+
+    </select>
+
+    <select id="queryByUserId" resultMap="StoreMap">
+        select store_id,
+               user_id,
+               store_name,
+               store_introduce,
+               store_bite,
+               store_visit
+        from store where user_id = #{userId}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from store
+        <where>
+            <if test="storeId != null">
+                and store_id = #{storeId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="storeName != null and storeName != ''">
+                and store_name = #{storeName}
+            </if>
+            <if test="storeIntroduce != null and storeIntroduce != ''">
+                and store_introduce = #{storeIntroduce}
+            </if>
+            <if test="storeBite != null">
+                and store_bite = #{storeBite}
+            </if>
+            <if test="storeVisit != null">
+                and store_visit = #{storeVisit}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="storeId" useGeneratedKeys="true">
+        insert into store(user_id, store_name, store_introduce)
+        values (#{userId}, #{storeName}, #{storeIntroduce})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="storeId" useGeneratedKeys="true">
+        insert into store(user_id, store_name, store_introduce, store_bite, store_visit)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.storeName}, #{entity.storeIntroduce}, #{entity.storeBite}, #{entity.storeVisit})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="storeId" useGeneratedKeys="true">
+        insert into store(user_id, store_name, store_introduce, store_bite, store_visit)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.storeName}, #{entity.storeIntroduce}, #{entity.storeBite}, #{entity.storeVisit})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        store_name = values(store_name),
+        store_introduce = values(store_introduce),
+        store_bite = values(store_bite),
+        store_visit = values(store_visit)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update store
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="storeName != null and storeName != ''">
+                store_name = #{storeName},
+            </if>
+            <if test="storeIntroduce != null and storeIntroduce != ''">
+                store_introduce = #{storeIntroduce},
+            </if>
+            <if test="storeBite != null">
+                store_bite = #{storeBite},
+            </if>
+            <if test="storeVisit != null">
+                store_visit = #{storeVisit},
+            </if>
+        </set>
+        where store_id = #{storeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from store
+        where store_id = #{storeId}
+    </delete>
+    
+    <select id="queryStoreAndSpu" resultMap="StoreMap">
+        select * from store s JOIN relation r ON s.store_id = r.store_id JOIN spu p ON p.spu_id = r.spu_id;
+    </select>
+
+</mapper>
+
