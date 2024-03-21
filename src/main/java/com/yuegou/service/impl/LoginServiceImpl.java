@@ -29,6 +29,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String login(User user) {
         //验证用户名密码
+        System.out.println(user);
         if (user.getUserName().trim().equals("") || user.getUserName() == null || user.getUserPassword() == null || user.getUserPassword().trim().equals("")){
             throw new LoginException(Code.LOGIN_ERR,"请输入正确的用户名或密码");
         }

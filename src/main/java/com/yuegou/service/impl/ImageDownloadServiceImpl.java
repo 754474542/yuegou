@@ -4,10 +4,14 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
 import com.yuegou.controller.pretreatment.exceptionhandle.FileFailedException;
 import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
+import com.yuegou.dao.SkuDao;
+import com.yuegou.dao.SkuImagesDao;
+import com.yuegou.dao.UserDao;
 import com.yuegou.entity.SkuImages;
 import com.yuegou.entity.User;
 import com.yuegou.service.ImageDownloadService;
 import com.yuegou.service.SkuImagesService;
+import com.yuegou.service.SkuService;
 import com.yuegou.service.UserService;
 import com.yuegou.utils.FileUtil;
 import com.yuegou.utils.JwtUtil;
@@ -24,11 +28,13 @@ import java.util.List;
 public class ImageDownloadServiceImpl implements ImageDownloadService {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private Logger logger;
     @Autowired
-    private SkuImagesService skuImagesService;
+    private UserDao userDao;
+    @Autowired
+    private SkuImagesDao skuImagesDao;
+    @Autowired
+    private SkuDao skuDao;
 
     @Override
     public boolean userHeadFileUp(MultipartFile file,String token) {
@@ -39,7 +45,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         Claims claims = JwtUtil.parseToken(token);
         //生成保存url
         String url = "images/" + claims.get("userName") + "head" + System.currentTimeMillis() + ".jpg";
-        User user = userService.getUserName(new User((String) claims.get("userName")));
+        User user = userDao.getUserName(new User((String) claims.get("userName")));
         String userHead = user.getUserHead();
         //判断有没有头像，如果有删除掉
         if (userHead != null){
@@ -54,13 +60,14 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         if (!FileUtil.saveFile(file,url)) throw new FileFailedException(Code.FILEDAILED_ERR,"文件上传出现异常");
         user.setUserHead(url);
         //更新用户信息
-        if (!userService.update(user)) throw new FileFailedException(Code.FILEDAILED_ERR,"文件上传出现问题");
+        if (!userDao.update(user)) throw new FileFailedException(Code.FILEDAILED_ERR,"文件上传出现问题");
         logger.info(user.getUserName() + msg);
         return true;
     }
 
     @Override
     public boolean storeImgFileUp(List<MultipartFile> files, List<Long> imgIds, Long skuId, String token) {
+        if (skuDao.queryById(skuId) == null) throw new CURDException(Code.SELECT_ERR,"没有找到对应的sku商品");
         //遍历图片大小
         for (MultipartFile file : files) {
             long maxSize = 3145728L;
@@ -74,11 +81,11 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         //图片新增/修改
         for (int i = 0; i < files.size(); i++) {
             paths = "images/" + claims.get("userName") + (i+1) + "store" +  timeStamp + ".jpg";
-            SkuImages skuImages = skuImagesService.queryByImgIdAndSkuId(new SkuImages(imgIds.get(i), skuId, null));
+            SkuImages skuImages = skuImagesDao.queryByImgIdAndSkuId(new SkuImages(imgIds.get(i), skuId, null));
             //如果这里等于空代表数据库里没有这条数据，要新增数据。
             if (skuImages == null ){
                 logger.info("新增了图片");
-                if(!skuImagesService.save(new SkuImages(null,skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
+                if(!skuImagesDao.save(new SkuImages(null,skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
                 if(!FileUtil.saveFile(files.get(i),paths)) throw new FileFailedException(Code.FILEUP_ERR,"文件上传异常");
                 continue;
             }
@@ -86,7 +93,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
             logger.info("修改了图片" + imgIds.get(i));
             if (!new File(skuImages.getImgPath()).delete()) throw new FileFailedException(Code.FILEDAILED_ERR,"文件删除失败");
             skuImages.setImgPath(paths);
-            if(!skuImagesService.updateByImageIdAndSkuId(new SkuImages(skuImages.getImgId(),skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
+            if(!skuImagesDao.updateByImageIdAndSkuId(new SkuImages(skuImages.getImgId(),skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
             if(!FileUtil.saveFile(files.get(i),paths)) throw new FileFailedException(Code.FILEUP_ERR,"文件上传异常");
         }
         return true;

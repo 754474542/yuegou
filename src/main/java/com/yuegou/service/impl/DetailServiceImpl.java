@@ -35,6 +35,11 @@ public class DetailServiceImpl implements DetailService {
         return detailDao.queryByOrderId(orderId);
     }
 
+    @Override
+    public Detail queryBySkuIdAndSpuId(Detail detail) {
+        return detailDao.queryBySkuIdAndSpuId(detail);
+    }
+
 
     /**
      * 新增数据

@@ -50,7 +50,7 @@ public interface OrderDao {
      * @param orderId 主键
      * @return 影响行数
      */
-    int deleteById(Long orderId);
+    boolean deleteById(Long orderId);
 
 }
 

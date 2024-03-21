@@ -23,7 +23,11 @@ public interface SkuDao {
      */
     Sku queryById(Long skuId);
 
+    List<Sku> queryByIdMax(Long skuId);
+
     List<Sku> queryBySpuId(Long spuId);
+
+    List<Sku> queryBySpuIdMax(Long spuId);
 
     List<Sku> queryAll();
 

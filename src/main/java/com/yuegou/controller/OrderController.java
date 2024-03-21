@@ -3,6 +3,7 @@ package com.yuegou.controller;
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.Order;
+import com.yuegou.entity.OrderAndDetail;
 import com.yuegou.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public Result insert(@RequestBody Order order){
-        boolean flag = orderService.insert(order);
+    public Result insert(@RequestBody OrderAndDetail orderAndDetail){
+        boolean flag = orderService.insert(orderAndDetail);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR,flag ? "OK" : "ERROR");
     }
 
     @PutMapping
-    public Result update(@RequestBody Order order){
-        boolean flag = orderService.update(order);
+    public Result update(@RequestBody OrderAndDetail orderAndDetail){
+        boolean flag = orderService.update(orderAndDetail);
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR,flag,flag ? "OK" : "Error");
     }
 

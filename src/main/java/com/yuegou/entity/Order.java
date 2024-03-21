@@ -20,8 +20,7 @@ public class Order implements Serializable {
     private Long orderId;
     
     private Long userId;
-    
-    private Long detailId;
+
 
     private Date createTime;
 
@@ -33,7 +32,6 @@ public class Order implements Serializable {
         return "Order{" +
                 "orderId=" + orderId +
                 ", userId=" + userId +
-                ", detailId=" + detailId +
                 ", createTime=" + createTime +
                 ", detailList=" + detailList +
                 '}';
@@ -61,14 +59,6 @@ public class Order implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public Long getDetailId() {
-        return detailId;
-    }
-
-    public void setDetailId(Long detailId) {
-        this.detailId = detailId;
     }
 
     public Date getCreateTime() {

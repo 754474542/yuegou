@@ -13,8 +13,9 @@ public class GoodEvaluate implements Serializable {
     
     private Long evaluateId;
 
-    
-    private Long storeId;
+    private Long spuId;
+
+    private Long skuId;
     
     private Long userId;
     /**
@@ -30,7 +31,8 @@ public class GoodEvaluate implements Serializable {
     public String toString() {
         return "GoodEvaluate{" +
                 "evaluateId=" + evaluateId +
-                ", storeId=" + storeId +
+                ", spuId=" + spuId +
+                ", skuId=" + skuId +
                 ", userId=" + userId +
                 ", evaluateContent='" + evaluateContent + '\'' +
                 ", evaluateFraction=" + evaluateFraction +
@@ -45,12 +47,20 @@ public class GoodEvaluate implements Serializable {
         this.evaluateId = evaluateId;
     }
 
-    public Long getStoreId() {
-        return storeId;
+    public Long getSpuId() {
+        return spuId;
     }
 
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
+    public void setSpuId(Long spuId) {
+        this.spuId = spuId;
+    }
+
+    public Long getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Long skuId) {
+        this.skuId = skuId;
     }
 
     public Long getUserId() {
@@ -77,5 +87,7 @@ public class GoodEvaluate implements Serializable {
         this.evaluateFraction = evaluateFraction;
     }
 
+    public GoodEvaluate() {
+    }
 }
 

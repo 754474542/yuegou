@@ -20,7 +20,16 @@
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="SkuMaps">
+    <select id="queryById" resultMap="SkuMap">
+        select sku_id,
+               spu_id,
+               sku_price,
+               sku_fund
+        from sku
+        where sku_id = #{skuId}
+    </select>
+
+    <select id="queryByIdMax" resultMap="SkuMaps">
         select sku_id,
                spu_id,
                sku_price,
@@ -30,7 +39,17 @@
     </select>
 
     <!--查询多个-->
-    <select id="queryBySpuId" resultMap="SkuMaps">
+    <select id="queryBySpuId" resultMap="SkuMap">
+        select sku_id,
+               spu_id,
+               sku_price,
+               sku_fund
+        from sku
+        where spu_id = #{spuId}
+    </select>
+
+    <!--查询多个-->
+    <select id="queryBySpuIdMax" resultMap="SkuMaps">
         select sku_id,
                spu_id,
                sku_price,

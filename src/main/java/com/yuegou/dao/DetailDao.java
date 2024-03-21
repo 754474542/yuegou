@@ -25,6 +25,10 @@ public interface DetailDao {
 
     List<Detail> queryByOrderId(Long orderId);
 
+    List<Detail> queryByOrderIdMax(Long orderId);
+
+    Detail queryBySkuIdAndSpuId(Detail detail);
+
     /**
      * 新增数据
      *

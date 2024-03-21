@@ -1,7 +1,5 @@
 package com.yuegou.utils;
 
-import com.yuegou.controller.pretreatment.Code;
-import com.yuegou.controller.pretreatment.exceptionhandle.FileFailedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;

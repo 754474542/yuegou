@@ -24,6 +24,8 @@ public interface DetailService {
 
     List<Detail> queryByOrderId(Long orderId);
 
+    Detail queryBySkuIdAndSpuId(Detail detail);
+
     /**
      * 新增数据
      *

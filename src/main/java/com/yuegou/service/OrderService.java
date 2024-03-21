@@ -1,6 +1,7 @@
 package com.yuegou.service;
 
 import com.yuegou.entity.Order;
+import com.yuegou.entity.OrderAndDetail;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,21 +27,9 @@ public interface OrderService {
 
     List<Order> queryAll();
 
-    /**
-     * 新增数据
-     *
-     * @param order 实例对象
-     * @return 实例对象
-     */
-    boolean insert(Order order);
+    boolean insert(OrderAndDetail orderAndDetail);
 
-    /**
-     * 修改数据
-     *
-     * @param order 实例对象
-     * @return 实例对象
-     */
-    boolean update(Order order);
+    boolean update(OrderAndDetail orderAndDetail);
 
     /**
      * 通过主键删除数据
@@ -49,5 +38,7 @@ public interface OrderService {
      * @return 是否成功
      */
     boolean deleteById(Long orderId);
+
+    double calPrice(Long skuId,Integer number,Long detailId);
 
 }

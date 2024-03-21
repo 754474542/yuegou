@@ -63,9 +63,7 @@
         where detail_id = #{detailId}
     </select>
 
-
-
-    <select id="queryByOrderId" resultMap="DetailMaps">
+    <select id="queryByOrderId" resultMap="DetailMap">
         select detail_id,
                order_id,
                store_id,
@@ -74,6 +72,28 @@
                price,
                number
         from detail where order_id = #{orderId};
+    </select>
+
+    <select id="queryByOrderIdMax" resultMap="DetailMaps">
+        select detail_id,
+               order_id,
+               store_id,
+               spu_id,
+               sku_id,
+               price,
+               number
+        from detail where order_id = #{orderId};
+    </select>
+
+    <select id="queryBySkuIdAndSpuId" resultMap="DetailMaps">
+        select detail_id,
+               order_id,
+               store_id,
+               spu_id,
+               sku_id,
+               price,
+               number
+        from detail where sku_id = #{skuId} And spu_id = #{spuId};
     </select>
 
     <!--新增所有列-->

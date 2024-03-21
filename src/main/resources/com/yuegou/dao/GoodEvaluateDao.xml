@@ -4,7 +4,8 @@
 
     <resultMap type="com.yuegou.entity.GoodEvaluate" id="GoodEvaluateMap">
         <result property="evaluateId" column="evaluate_id" jdbcType="INTEGER"/>
-        <result property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
+        <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="evaluateContent" column="evaluate_content" jdbcType="VARCHAR"/>
         <result property="evaluateFraction" column="evaluate_fraction" jdbcType="INTEGER"/>
@@ -13,7 +14,8 @@
     <!--查询单个-->
     <select id="queryById" resultMap="GoodEvaluateMap">
         select evaluate_id,
-               store_id,
+               spu_id,
+               sku_id,
                user_id,
                evaluate_content,
                evaluate_fraction
@@ -22,43 +24,28 @@
     </select>
 
 
-
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="GoodEvaluateMap">
-        select
-        evaluate_id, store_id, user_id, evaluate_content, evaluate_fraction
-        from good_evaluate
-        <where>
-            <if test="evaluateId != null">
-                and evaluate_id = #{evaluateId}
-            </if>
-            <if test="storeId != null">
-                and store_id = #{storeId}
-            </if>
-            <if test="userId != null">
-                and user_id = #{userId}
-            </if>
-            <if test="evaluateContent != null and evaluateContent != ''">
-                and evaluate_content = #{evaluateContent}
-            </if>
-            <if test="evaluateFraction != null">
-                and evaluate_fraction = #{evaluateFraction}
-            </if>
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
-    </select>
-
     <select id="queryAll" resultMap="GoodEvaluateMap">
-        select evaluate_id, sku_id, user_id, evaluate_content, evaluate_fraction from good_evaluate;
+        select evaluate_id,
+               spu_id,
+               sku_id,
+               user_id,
+               evaluate_content,
+               evaluate_fraction from good_evaluate;
     </select>
+
     <select id="queryBySkuId" resultMap="GoodEvaluateMap">
-        select evaluate_id, sku_id, user_id, evaluate_content, evaluate_fraction from good_evaluate where sku_id = #{skuId};
+        select evaluate_id,
+               spu_id,
+               sku_id,
+               user_id,
+               evaluate_content,
+               evaluate_fraction from good_evaluate where sku_id = #{skuId};
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="evaluateId" useGeneratedKeys="true">
-        insert into good_evaluate(store_id, user_id, evaluate_content, evaluate_fraction)
-        values (#{storeId}, #{userId}, #{evaluateContent}, #{evaluateFraction})
+        insert into good_evaluate(spu_id, sku_id, user_id, evaluate_content, evaluate_fraction)
+        values (#{spu_id},#{sku_id},#{userId}, #{evaluateContent}, #{evaluateFraction})
     </insert>
 
 
@@ -66,8 +53,11 @@
     <update id="update">
         update good_evaluate
         <set>
-            <if test="storeId != null">
-                store_id = #{storeId},
+            <if test="spu_id != null">
+                spu_id = #{spuId},
+            </if>
+            <if test="sku_id != null">
+                sku_id = #{skuId},
             </if>
             <if test="userId != null">
                 user_id = #{userId},
