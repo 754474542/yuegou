@@ -1,6 +1,7 @@
 package com.yuegou.service;
 
 import com.yuegou.entity.Sku;
+import com.yuegou.entity.SkuAndAttributeValues;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,21 +25,19 @@ public interface SkuService {
 
     List<Sku> queryBySpuId(Long spuId);
 
+    List<Sku> queryAll();
+
     /**
      * 新增数据
      *
      * @param sku 实例对象
      * @return 实例对象
      */
-    Sku insert(Sku sku);
+    boolean insert(Sku sku);
 
-    /**
-     * 修改数据
-     *
-     * @param sku 实例对象
-     * @return 实例对象
-     */
-    Sku update(Sku sku);
+    boolean insertSkuAndAttributeValues (SkuAndAttributeValues skuAndAttributeValues);
+
+    boolean update(SkuAndAttributeValues skuAndAttributeValues);
 
     /**
      * 通过主键删除数据

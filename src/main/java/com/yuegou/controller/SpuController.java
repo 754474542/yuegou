@@ -19,7 +19,7 @@ public class SpuController {
     @Autowired
     private SpuService spuService;
 
-    //这里一次性接收Spu,SpuAttributeValue,Attribute,因为他们之间互相有关联，所以放在一起存储。
+    //这里一次性接收Spu,Attribute,因为他们之间互相有关联，所以放在一起存储。
     @PostMapping
     public Result saveSpuAndAttributeValues(@RequestBody SpuAndAttributeValues spuAndAttributeValues){
         boolean flag = spuService.saveSpuAndAttributeValues(spuAndAttributeValues);

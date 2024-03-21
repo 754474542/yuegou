@@ -25,6 +25,8 @@ public interface SkuDao {
 
     List<Sku> queryBySpuId(Long spuId);
 
+    List<Sku> queryAll();
+
 
     /**
      * 统计总行数
@@ -40,7 +42,7 @@ public interface SkuDao {
      * @param sku 实例对象
      * @return 影响行数
      */
-    int insert(Sku sku);
+    boolean insert(Sku sku);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
@@ -65,7 +67,7 @@ public interface SkuDao {
      * @param sku 实例对象
      * @return 影响行数
      */
-    int update(Sku sku);
+    boolean update(Sku sku);
 
     /**
      * 通过主键删除数据
@@ -73,7 +75,7 @@ public interface SkuDao {
      * @param skuId 主键
      * @return 影响行数
      */
-    int deleteById(Long skuId);
+    boolean deleteById(Long skuId);
 
 }
 

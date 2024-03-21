@@ -39,28 +39,6 @@
         where spu_id = #{spuId}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="SkuMap">
-        select
-        sku_id, spu_id, sku_price, sku_fund
-        from sku
-        <where>
-            <if test="skuId != null">
-                and sku_id = #{skuId}
-            </if>
-            <if test="spuId != null">
-                and spu_id = #{spuId}
-            </if>
-            <if test="skuPrice != null">
-                and sku_price = #{skuPrice}
-            </if>
-            <if test="skuFund != null and skuFund != ''">
-                and sku_fund = #{skuFund}
-            </if>
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
-    </select>
-
     <!--统计总行数-->
     <select id="count" resultType="java.lang.Long">
         select count(1)
@@ -79,6 +57,14 @@
                 and sku_fund = #{skuFund}
             </if>
         </where>
+    </select>
+
+    <select id="queryAll" resultMap="SkuMap">
+        select sku_id,
+               spu_id,
+               sku_price,
+               sku_fund
+        from sku
     </select>
 
     <!--新增所有列-->

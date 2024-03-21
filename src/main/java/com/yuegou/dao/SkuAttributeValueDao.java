@@ -39,7 +39,7 @@ public interface SkuAttributeValueDao {
      * @param skuAttributeValue 实例对象
      * @return 影响行数
      */
-    int insert(SkuAttributeValue skuAttributeValue);
+    boolean insert(SkuAttributeValue skuAttributeValue);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
@@ -64,7 +64,7 @@ public interface SkuAttributeValueDao {
      * @param skuAttributeValue 实例对象
      * @return 影响行数
      */
-    int update(SkuAttributeValue skuAttributeValue);
+    boolean update(SkuAttributeValue skuAttributeValue);
 
     /**
      * 通过主键删除数据
@@ -72,7 +72,7 @@ public interface SkuAttributeValueDao {
      * @param skuAttrId 主键
      * @return 影响行数
      */
-    int deleteById(Long skuAttrId);
+    boolean deleteById(Long skuAttrId);
 
 }
 

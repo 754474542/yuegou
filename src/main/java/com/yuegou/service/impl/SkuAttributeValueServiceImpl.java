@@ -36,9 +36,8 @@ public class SkuAttributeValueServiceImpl implements SkuAttributeValueService {
      * @return 实例对象
      */
     @Override
-    public SkuAttributeValue insert(SkuAttributeValue skuAttributeValue) {
-        this.skuAttributeValueDao.insert(skuAttributeValue);
-        return skuAttributeValue;
+    public boolean insert(SkuAttributeValue skuAttributeValue) {
+        return skuAttributeValueDao.insert(skuAttributeValue);
     }
 
     /**
@@ -48,9 +47,8 @@ public class SkuAttributeValueServiceImpl implements SkuAttributeValueService {
      * @return 实例对象
      */
     @Override
-    public SkuAttributeValue update(SkuAttributeValue skuAttributeValue) {
-        this.skuAttributeValueDao.update(skuAttributeValue);
-        return this.queryById(skuAttributeValue.getSkuAttrId());
+    public boolean update(SkuAttributeValue skuAttributeValue) {
+        return skuAttributeValueDao.update(skuAttributeValue);
     }
 
     /**
@@ -61,6 +59,6 @@ public class SkuAttributeValueServiceImpl implements SkuAttributeValueService {
      */
     @Override
     public boolean deleteById(Long skuAttrId) {
-        return this.skuAttributeValueDao.deleteById(skuAttrId) > 0;
+        return skuAttributeValueDao.deleteById(skuAttrId);
     }
 }

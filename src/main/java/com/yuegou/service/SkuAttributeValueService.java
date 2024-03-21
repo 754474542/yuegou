@@ -26,7 +26,7 @@ public interface SkuAttributeValueService {
      * @param skuAttributeValue 实例对象
      * @return 实例对象
      */
-    SkuAttributeValue insert(SkuAttributeValue skuAttributeValue);
+    boolean insert(SkuAttributeValue skuAttributeValue);
 
     /**
      * 修改数据
@@ -34,7 +34,7 @@ public interface SkuAttributeValueService {
      * @param skuAttributeValue 实例对象
      * @return 实例对象
      */
-    SkuAttributeValue update(SkuAttributeValue skuAttributeValue);
+    boolean update(SkuAttributeValue skuAttributeValue);
 
     /**
      * 通过主键删除数据
