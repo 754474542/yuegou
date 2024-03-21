@@ -34,9 +34,7 @@ public class UserController {
     }
     @GetMapping("/{id}")
     public Result getById(@PathVariable Long id){
-        System.out.println(id);
         User user = service.getById(id);
-        System.out.println(user);
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
     }
     @GetMapping

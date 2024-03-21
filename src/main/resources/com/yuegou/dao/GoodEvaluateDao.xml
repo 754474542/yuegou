@@ -42,10 +42,19 @@
                evaluate_fraction from good_evaluate where sku_id = #{skuId};
     </select>
 
+    <select id="queryByUserId" resultMap="GoodEvaluateMap">
+        select evaluate_id,
+               spu_id,
+               sku_id,
+               user_id,
+               evaluate_content,
+               evaluate_fraction from good_evaluate where user_id = #{userId};
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="evaluateId" useGeneratedKeys="true">
         insert into good_evaluate(spu_id, sku_id, user_id, evaluate_content, evaluate_fraction)
-        values (#{spu_id},#{sku_id},#{userId}, #{evaluateContent}, #{evaluateFraction})
+        values (#{spuId},#{skuId},#{userId}, #{evaluateContent}, #{evaluateFraction})
     </insert>
 
 
@@ -53,12 +62,6 @@
     <update id="update">
         update good_evaluate
         <set>
-            <if test="spu_id != null">
-                spu_id = #{spuId},
-            </if>
-            <if test="sku_id != null">
-                sku_id = #{skuId},
-            </if>
             <if test="userId != null">
                 user_id = #{userId},
             </if>

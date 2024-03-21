@@ -3,9 +3,10 @@ package com.yuegou.service.impl;
 import com.yuegou.entity.GoodEvaluate;
 import com.yuegou.dao.GoodEvaluateDao;
 import com.yuegou.service.GoodEvaluateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (GoodEvaluate)表服务实现类
@@ -15,7 +16,7 @@ import javax.annotation.Resource;
  */
 @Service("goodEvaluateService")
 public class GoodEvaluateServiceImpl implements GoodEvaluateService {
-    @Resource
+    @Autowired
     private GoodEvaluateDao goodEvaluateDao;
 
     /**
@@ -36,9 +37,8 @@ public class GoodEvaluateServiceImpl implements GoodEvaluateService {
      * @return 实例对象
      */
     @Override
-    public GoodEvaluate insert(GoodEvaluate goodEvaluate) {
-        this.goodEvaluateDao.insert(goodEvaluate);
-        return goodEvaluate;
+    public boolean insert(GoodEvaluate goodEvaluate) {
+        return goodEvaluateDao.insert(goodEvaluate);
     }
 
     /**
@@ -48,9 +48,8 @@ public class GoodEvaluateServiceImpl implements GoodEvaluateService {
      * @return 实例对象
      */
     @Override
-    public GoodEvaluate update(GoodEvaluate goodEvaluate) {
-        this.goodEvaluateDao.update(goodEvaluate);
-        return this.queryById(goodEvaluate.getEvaluateId());
+    public boolean update(GoodEvaluate goodEvaluate) {
+        return goodEvaluateDao.update(goodEvaluate);
     }
 
     /**
@@ -61,6 +60,21 @@ public class GoodEvaluateServiceImpl implements GoodEvaluateService {
      */
     @Override
     public boolean deleteById(Long evaluateId) {
-        return this.goodEvaluateDao.deleteById(evaluateId) > 0;
+        return goodEvaluateDao.deleteById(evaluateId);
+    }
+
+    @Override
+    public List<GoodEvaluate> queryBySkuId(Long skuId) {
+        return goodEvaluateDao.queryBySkuId(skuId);
+    }
+
+    @Override
+    public List<GoodEvaluate> queryAll() {
+        return goodEvaluateDao.queryAll();
+    }
+
+    @Override
+    public List<GoodEvaluate> queryByUserId(Long userId) {
+        return goodEvaluateDao.queryByUserId(userId);
     }
 }

@@ -3,6 +3,8 @@ package com.yuegou.service;
 import com.yuegou.entity.GoodEvaluate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * (GoodEvaluate)表服务接口
  *
@@ -26,7 +28,7 @@ public interface GoodEvaluateService {
      * @param goodEvaluate 实例对象
      * @return 实例对象
      */
-    GoodEvaluate insert(GoodEvaluate goodEvaluate);
+    boolean insert(GoodEvaluate goodEvaluate);
 
     /**
      * 修改数据
@@ -34,7 +36,7 @@ public interface GoodEvaluateService {
      * @param goodEvaluate 实例对象
      * @return 实例对象
      */
-    GoodEvaluate update(GoodEvaluate goodEvaluate);
+    boolean update(GoodEvaluate goodEvaluate);
 
     /**
      * 通过主键删除数据
@@ -42,6 +44,13 @@ public interface GoodEvaluateService {
      * @param evaluateId 主键
      * @return 是否成功
      */
+
     boolean deleteById(Long evaluateId);
+
+    List<GoodEvaluate> queryBySkuId(Long skuId);
+
+    List<GoodEvaluate> queryAll();
+
+    List<GoodEvaluate> queryByUserId(Long userId);
 
 }

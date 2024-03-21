@@ -23,16 +23,11 @@ public interface GoodEvaluateDao {
      */
     GoodEvaluate queryById(Long evaluateId);
 
-    List<GoodEvaluate> queryBySkuId(Long Sku_id);
+    List<GoodEvaluate> queryBySkuId(Long skuId);
+
     List<GoodEvaluate> queryAll();
 
-    /**
-     * 统计总行数
-     *
-     * @param goodEvaluate 查询条件
-     * @return 总行数
-     */
-    long count(GoodEvaluate goodEvaluate);
+    List<GoodEvaluate> queryByUserId(Long userId);
 
     /**
      * 新增数据
@@ -40,24 +35,7 @@ public interface GoodEvaluateDao {
      * @param goodEvaluate 实例对象
      * @return 影响行数
      */
-    int insert(GoodEvaluate goodEvaluate);
-
-    /**
-     * 批量新增数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<GoodEvaluate> 实例对象列表
-     * @return 影响行数
-     */
-    int insertBatch(@Param("entities") List<GoodEvaluate> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<GoodEvaluate> 实例对象列表
-     * @return 影响行数
-     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
-     */
-    int insertOrUpdateBatch(@Param("entities") List<GoodEvaluate> entities);
+    boolean insert(GoodEvaluate goodEvaluate);
 
     /**
      * 修改数据
@@ -65,7 +43,7 @@ public interface GoodEvaluateDao {
      * @param goodEvaluate 实例对象
      * @return 影响行数
      */
-    int update(GoodEvaluate goodEvaluate);
+    boolean update(GoodEvaluate goodEvaluate);
 
     /**
      * 通过主键删除数据
@@ -73,7 +51,7 @@ public interface GoodEvaluateDao {
      * @param evaluateId 主键
      * @return 影响行数
      */
-    int deleteById(Long evaluateId);
+    boolean deleteById(Long evaluateId);
 
 }
 

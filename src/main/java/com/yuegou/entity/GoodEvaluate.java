@@ -27,6 +27,9 @@ public class GoodEvaluate implements Serializable {
      */
     private Integer evaluateFraction;
 
+    public GoodEvaluate() {
+    }
+
     @Override
     public String toString() {
         return "GoodEvaluate{" +
@@ -85,9 +88,6 @@ public class GoodEvaluate implements Serializable {
 
     public void setEvaluateFraction(Integer evaluateFraction) {
         this.evaluateFraction = evaluateFraction;
-    }
-
-    public GoodEvaluate() {
     }
 }
 
