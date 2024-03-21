@@ -2,6 +2,7 @@ package com.yuegou.dao;
 
 import com.yuegou.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface UserDao {
     User getUserPhone(User user);
     User getUserName(User user);
     List<User> getEmptTimeUser();
-    List<User> getAll();
+    List<User> getAll(@Param("size") Integer size,@Param("offset") Integer offset);
     List<User> getUserAndStore();
 }

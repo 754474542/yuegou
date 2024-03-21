@@ -65,7 +65,7 @@ public interface AttributeDao {
      * @param attribute 实例对象
      * @return 影响行数
      */
-    int update(Attribute attribute);
+    boolean update(Attribute attribute);
 
     /**
      * 通过主键删除数据
@@ -73,7 +73,7 @@ public interface AttributeDao {
      * @param attributeId 主键
      * @return 影响行数
      */
-    int deleteById(Long attributeId);
+    boolean deleteById(Long attributeId);
 
 }
 

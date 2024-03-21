@@ -60,6 +60,6 @@ public class AttributeServiceImpl implements AttributeService {
      */
     @Override
     public boolean deleteById(Long attributeId) {
-        return this.attributeDao.deleteById(attributeId) > 0;
+        return attributeDao.deleteById(attributeId);
     }
 }

@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userDao.getAll();
+    public List<User> getAll(Integer size,Integer offset) {
+        return userDao.getAll(size,offset);
     }
 
     public List<User> getUserAndStore(){

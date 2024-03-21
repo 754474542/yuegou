@@ -97,7 +97,9 @@
     </select>
 
     <select id="getAll" resultMap="user">
-        SELECT user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create FROM user;
+        SELECT
+               user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create
+        FROM user limit #{size} OFFSET #{offset};
     </select>
 
     <select id="getUserPhone" resultMap="user">

@@ -12,11 +12,17 @@ public class ProjectExceptionHandler {
     @Autowired
     private Logger logger;
 
+    @ExceptionHandler(OffSetException.class)
+    public Result curdException(OffSetException ex){
+        Class<? extends OffSetException> aClass = ex.getClass();
+        logger.error("出现 " + aClass + " 异常");
+        return new Result(ex.getCode(),ex.getMessage());
+    }
+
     @ExceptionHandler(CURDException.class)
     public Result curdException(CURDException ex){
         Class<? extends CURDException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
-        ex.printStackTrace();
         return new Result(ex.getCode(),ex.getMessage());
     }
 
@@ -58,7 +64,7 @@ public class ProjectExceptionHandler {
 
     @ExceptionHandler(PathJumpException.class)
     public Result pathJumpException(PathJumpException ex){
-        Class<? extends Exception> aClass = ex.getClass();
+        Class<? extends PathJumpException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
         return new Result(ex.getCode(),ex.getMessage());
     }

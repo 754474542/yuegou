@@ -4,6 +4,7 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.User;
 import com.yuegou.service.UserService;
+import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,9 @@ public class UserController {
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
     }
     @GetMapping
-    public Result getAll(){
-        List<User> user = service.getAll();
+    public Result getAll(@RequestParam(value = "page",defaultValue = "0") Integer page, @RequestParam(value = "size", defaultValue = "20") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<User> user = service.getAll(size,offset);
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
     }
 

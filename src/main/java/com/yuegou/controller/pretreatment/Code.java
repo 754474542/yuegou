@@ -8,6 +8,7 @@ public class Code {
     public static final Integer NULLVALUE_ERR = 1300;
     public static final Integer FILEDAILED_ERR = 1400;
     public static final Integer FILEUP_ERR = 1500;
+    public static final Integer OFFSET_ERR = 1600;
 
     public static final Integer SELECT_OK = 201;
     public static final Integer UPDATE_OK = 202;
