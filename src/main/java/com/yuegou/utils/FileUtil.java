@@ -30,4 +30,9 @@ public class FileUtil {
         return files.isFile();
     }
 
+    public static boolean deleteFile(String url){
+        File file = new File(url);
+        return file.delete();
+    }
+
 }

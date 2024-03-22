@@ -4,6 +4,7 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.controller.pretreatment.exceptionhandle.FileFailedException;
 import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
+import com.yuegou.entity.ImageDeleteEntity;
 import com.yuegou.entity.SkuImages;
 import com.yuegou.entity.User;
 import com.yuegou.service.ImageDownloadService;
@@ -34,9 +35,15 @@ public class ImageDownloadController {
     }
 
     @PostMapping("/store")
-    public Result storeImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam("imgIds")List<Long> imgIds,@RequestParam("skuId")Long skuId, @RequestHeader String token){
+    public Result storeImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam(value = "imgIds",defaultValue = "0")List<Long> imgIds,@RequestParam(value = "skuId", defaultValue = "0")Long skuId, @RequestHeader String token){
         boolean flag = imageDownloadService.storeImgFileUp(files, imgIds, skuId, token);
         return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品图片上传完毕" : "商品图片上传失败");
+    }
+
+    @PostMapping("/delete")
+    public Result storeImgDelete(@RequestBody ImageDeleteEntity imageDeleteEntity, @RequestHeader String token){
+        boolean flag = imageDownloadService.storeImgDelete(imageDeleteEntity, token);
+        return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品删除完毕" : "商品删除失败");
     }
 
 }

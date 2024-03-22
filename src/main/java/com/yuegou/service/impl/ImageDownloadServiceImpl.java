@@ -7,6 +7,8 @@ import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
 import com.yuegou.dao.SkuDao;
 import com.yuegou.dao.SkuImagesDao;
 import com.yuegou.dao.UserDao;
+import com.yuegou.entity.ImageDeleteEntity;
+import com.yuegou.entity.Sku;
 import com.yuegou.entity.SkuImages;
 import com.yuegou.entity.User;
 import com.yuegou.service.ImageDownloadService;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -39,64 +43,92 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     private JwtUtil jwtUtil;
 
     @Override
-    public boolean userHeadFileUp(MultipartFile file,String token) {
+    public boolean userHeadFileUp(MultipartFile file, String token) {
         long maxSize = 3145728L;
-        if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR,"文件大小过大，请重新选择文件");
+        if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择文件");
         String msg = "头像上传成功";
-        if (file.isEmpty()) throw new NullValueException(Code.NULLVALUE_ERR,"上传文件失败，请重新上传");
+        if (file.isEmpty()) throw new NullValueException(Code.NULLVALUE_ERR, "上传文件失败，请重新上传");
         Claims claims = jwtUtil.parseToken(token);
         //生成保存url
-        String url = "images/" + claims.get("userName") + "head" + System.currentTimeMillis() + ".jpg";
         User user = userDao.getUserName(new User((String) claims.get("userName")));
+        String url = "images/" + "head" + user.getUserId() + System.currentTimeMillis() + ".jpg";
         String userHead = user.getUserHead();
         //判断有没有头像，如果有删除掉
-        if (userHead != null){
+        if (userHead != null) {
             File oldHead = new File(userHead);
-            if (oldHead.isFile()){
+            if (oldHead.isFile()) {
                 boolean delete = oldHead.delete();
                 if (delete) logger.info(" 删除了" + userHead);
                 msg = "头像修改成功";
             }
         }
         //进行头像上传
-        if (!FileUtil.saveFile(file,url)) throw new FileFailedException(Code.FILEDAILED_ERR,"文件上传出现异常");
+        if (!FileUtil.saveFile(file, url)) throw new FileFailedException(Code.FILEDAILED_ERR, "文件上传出现异常");
         user.setUserHead(url);
         //更新用户信息
-        if (!userDao.update(user)) throw new FileFailedException(Code.FILEDAILED_ERR,"文件上传出现问题");
+        if (!userDao.update(user)) throw new FileFailedException(Code.FILEDAILED_ERR, "文件上传出现问题");
         logger.info(user.getUserName() + msg);
         return true;
     }
 
     @Override
     public boolean storeImgFileUp(List<MultipartFile> files, List<Long> imgIds, Long skuId, String token) {
-        if (skuDao.queryById(skuId) == null) throw new CURDException(Code.SELECT_ERR,"没有找到对应的sku商品");
+        if (skuId == 0) throw new FileFailedException(Code.FILEUP_ERR, "skuId不能为空");
+        if (files.size() > 10) throw new FileFailedException(Code.FILEUP_ERR, "上传的图片数量不能大于10张");
+        if (skuDao.queryById(skuId) == null) throw new CURDException(Code.SELECT_ERR, "没有找到对应的sku商品");
         //遍历图片大小
         for (MultipartFile file : files) {
             long maxSize = 3145728L;
-            if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR,"文件过大，请重新选择文件");
+            if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件过大，请重新选择文件");
         }
-        if (files.size() != imgIds.size()) throw new FileFailedException(Code.FILEUP_ERR,"请确保前端发送过来的图片id数量和文件数量相等");
         Claims claims = jwtUtil.parseToken(token);
-        //获取当前时间戳
-        String paths;
         long timeStamp = System.currentTimeMillis();
-        //图片新增/修改
-        for (int i = 0; i < files.size(); i++) {
-            paths = "images/" + claims.get("userName") + (i+1) + "store" +  timeStamp + ".jpg";
-            SkuImages skuImages = skuImagesDao.queryByImgIdAndSkuId(new SkuImages(imgIds.get(i), skuId, null));
-            //如果这里等于空代表数据库里没有这条数据，要新增数据。
-            if (skuImages == null ){
-                logger.info("新增了图片");
-                if(!skuImagesDao.save(new SkuImages(null,skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
-                if(!FileUtil.saveFile(files.get(i),paths)) throw new FileFailedException(Code.FILEUP_ERR,"文件上传异常");
-                continue;
+        String paths;
+        //imgIds等于0，代表使用的是默认值0，全部是第一次上传的文件。
+        if (!(imgIds.get(0) == 0)) {
+            //使用迭代器把前几个要修改的文件先修改然后在删除,剩下的就都是创建文件的操作了
+            Iterator<MultipartFile> iterator = files.iterator();
+            for (int i = 0; i < imgIds.size(); i++) {
+                MultipartFile nextFile = iterator.next();
+                paths = "images/" + "skuId_" + skuId + nextFile + timeStamp + ".jpg";
+                SkuImages skuImages = skuImagesDao.queryById(imgIds.get(i));
+                if (!FileUtil.deleteFile(skuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR,"文件删除失败");
+                skuImages.setImgPath(paths);
+                if (!skuImagesDao.updateByImageIdAndSkuId(skuImages)) throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
+                if (!FileUtil.saveFile(nextFile,paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
+                iterator.remove();
             }
-            //这里是数据库找到了相应的数据，进行数据删除和更新
-            logger.info("修改了图片" + imgIds.get(i));
-            if (!new File(skuImages.getImgPath()).delete()) throw new FileFailedException(Code.FILEDAILED_ERR,"文件删除失败");
-            skuImages.setImgPath(paths);
-            if(!skuImagesDao.updateByImageIdAndSkuId(new SkuImages(skuImages.getImgId(),skuId,paths))) throw new CURDException(Code.SAVE_ERR, "用户数据保存异常");
-            if(!FileUtil.saveFile(files.get(i),paths)) throw new FileFailedException(Code.FILEUP_ERR,"文件上传异常");
+        }
+        //执行创建文件的操作
+        for (int i = 0; i < files.size(); i++) {
+            paths = "images/" + "skuId_" + skuId + files.get(i) + timeStamp + ".jpg";
+            if (!FileUtil.saveFile(files.get(i), paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
+            if (!skuImagesDao.save(new SkuImages(null, skuId, paths))) throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
+        }
+        if ((imgIds.get(0) == 0)){
+            logger.info(claims.get("userName") + "上传了 " + files.size() + " 张商品图片");
+        }else {
+            logger.info(claims.get("userName") + "上传了 " + files.size() + " 张商品图片" + " 修改了 " + imgIds.size() + " 张商品图片");
+        }
+            return true;
+    }
+
+    @Override
+    public boolean storeImgDelete(ImageDeleteEntity imageDeleteEntity, String token) {
+        Long skuId = imageDeleteEntity.getSkuId();
+        List<Long> imgIds = imageDeleteEntity.getImgIds();
+        Sku sku = null;
+        if ((sku = skuDao.queryById(skuId)) == null) throw new CURDException(Code.SELECT_ERR, "没有找到对应的sku商品");
+        List<SkuImages> skuImagesList = sku.getSkuImagesList();
+        List<SkuImages> deleteList = new ArrayList<>();
+        for (SkuImages skuImages : skuImagesList) {
+            for (Long imgId : imgIds) {
+                if (skuImages.getImgId().equals(imgId)) deleteList.add(skuImages);
+            }
+        }
+        for (SkuImages skuImages : deleteList) {
+            if (!skuImagesDao.delete(skuImages.getImgId())) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
+            if (!FileUtil.deleteFile(skuImages.getImgPath())) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
         }
         return true;
     }
