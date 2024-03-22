@@ -32,7 +32,7 @@
     </select>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="StoreMap">
+    <select id="queryById" resultMap="StoreMaps">
         select store_id,
                user_id,
                store_name,

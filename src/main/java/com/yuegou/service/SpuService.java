@@ -37,6 +37,6 @@ public interface SpuService {
 
     Spu queryBySpuId(Long spuId);
 
-    boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues);
+    boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token);
 
 }

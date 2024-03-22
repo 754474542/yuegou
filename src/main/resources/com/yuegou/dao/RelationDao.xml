@@ -41,30 +41,18 @@
             </if>
         </where>
     </select>
+    <select id="queryBySpuId" resultMap="RelationMap">
+        select relation_id,
+               store_id,
+               spu_id
+        from relation
+        where spu_id = #{spuId}
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="relationId" useGeneratedKeys="true">
         insert into relation(store_id, spu_id)
         values (#{storeId}, #{spuId})
-    </insert>
-
-    <insert id="insertBatch" keyProperty="relationId" useGeneratedKeys="true">
-        insert into relation(store_id, spu_id)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.storeId}, #{entity.spuId})
-        </foreach>
-    </insert>
-
-    <insert id="insertOrUpdateBatch" keyProperty="relationId" useGeneratedKeys="true">
-        insert into relation(store_id, spu_id)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.storeId}, #{entity.spuId})
-        </foreach>
-        on duplicate key update
-        store_id = values(store_id),
-        spu_id = values(spu_id)
     </insert>
 
     <!--通过主键修改数据-->

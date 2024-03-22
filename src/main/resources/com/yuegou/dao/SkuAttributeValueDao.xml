@@ -118,6 +118,11 @@
         from sku_attribute_value
         where sku_attr_id = #{skuAttrId}
     </delete>
+    <delete id="deleteBySkuId">
+        delete
+        from sku_attribute_value
+        where sku_id = #{skuId}
+    </delete>
 
 </mapper>
 

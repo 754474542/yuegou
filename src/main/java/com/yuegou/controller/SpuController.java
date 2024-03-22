@@ -22,8 +22,8 @@ public class SpuController {
 
     //这里一次性接收Spu,Attribute,因为他们之间互相有关联，所以放在一起存储。
     @PostMapping
-    public Result saveSpuAndAttributeValues(@RequestBody SpuAndAttributeValues spuAndAttributeValues){
-        boolean flag = spuService.saveSpuAndAttributeValues(spuAndAttributeValues);
+    public Result saveSpuAndAttributeValues(@RequestBody SpuAndAttributeValues spuAndAttributeValues, @RequestHeader String token){
+        boolean flag = spuService.saveSpuAndAttributeValues(spuAndAttributeValues,token);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }
 

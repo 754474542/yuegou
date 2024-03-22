@@ -23,6 +23,7 @@ public class ProjectExceptionHandler {
     public Result curdException(CURDException ex){
         Class<? extends CURDException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
+        ex.printStackTrace();
         return new Result(ex.getCode(),ex.getMessage());
     }
 

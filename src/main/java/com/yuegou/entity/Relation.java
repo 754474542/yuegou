@@ -1,5 +1,7 @@
 package com.yuegou.entity;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2024-03-14 09:41:37
  */
+@Mapper
 public class Relation implements Serializable {
     private static final long serialVersionUID = 658845771749635562L;
 
@@ -16,6 +19,15 @@ public class Relation implements Serializable {
     private Long storeId;
 
     private Long spuId;
+
+    public Relation(Long relationId, Long storeId, Long spuId) {
+        this.relationId = relationId;
+        this.storeId = storeId;
+        this.spuId = spuId;
+    }
+
+    public Relation() {
+    }
 
     @Override
     public String toString() {

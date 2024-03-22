@@ -1,6 +1,7 @@
 package com.yuegou.dao;
 
 import com.yuegou.entity.Relation;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2024-03-14 09:41:37
  */
+@Mapper
 public interface RelationDao {
 
     /**
@@ -20,6 +22,8 @@ public interface RelationDao {
      * @return 实例对象
      */
     Relation queryById(Long relationId);
+
+    Relation queryBySpuId(Long spuId);
 
     List<Relation> queryByStoreId(Long storeId);
 
@@ -37,24 +41,7 @@ public interface RelationDao {
      * @param relation 实例对象
      * @return 影响行数
      */
-    int insert(Relation relation);
-
-    /**
-     * 批量新增数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<Relation> 实例对象列表
-     * @return 影响行数
-     */
-    int insertBatch(@Param("entities") List<Relation> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<Relation> 实例对象列表
-     * @return 影响行数
-     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
-     */
-    int insertOrUpdateBatch(@Param("entities") List<Relation> entities);
+    boolean insert(Relation relation);
 
     /**
      * 修改数据
@@ -62,7 +49,7 @@ public interface RelationDao {
      * @param relation 实例对象
      * @return 影响行数
      */
-    int update(Relation relation);
+    boolean update(Relation relation);
 
     /**
      * 通过主键删除数据
@@ -70,7 +57,8 @@ public interface RelationDao {
      * @param relationId 主键
      * @return 影响行数
      */
-    int deleteById(Long relationId);
+    boolean deleteById(Long relationId);
+
 
 }
 

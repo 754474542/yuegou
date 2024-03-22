@@ -33,7 +33,7 @@
 
 
     <!--查询指定行数据-->
-    <select id="queryBySpuId" resultMap="SpuMaps">
+    <select id="queryBySpuId" resultMap="SpuMap">
         select
         spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
         from spu
@@ -83,6 +83,10 @@
     </delete>
 
     <select id="queryByStoreId" resultMap="SpuMap">
+        select * from spu s JOIN relation r ON s.spu_id = r.spu_id where r.store_id = #{storeId}
+    </select>
+
+    <select id="queryByStoreIdMax" resultMap="SpuMaps">
         select * from spu s JOIN relation r ON s.spu_id = r.spu_id where r.store_id = #{storeId}
     </select>
 

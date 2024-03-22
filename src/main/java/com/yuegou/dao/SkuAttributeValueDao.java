@@ -74,5 +74,7 @@ public interface SkuAttributeValueDao {
      */
     boolean deleteById(Long skuAttrId);
 
+    boolean deleteBySkuId(Long skuId);
+
 }
 

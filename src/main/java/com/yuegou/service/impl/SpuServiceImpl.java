@@ -2,14 +2,12 @@ package com.yuegou.service.impl;
 
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
-import com.yuegou.dao.AttributeDao;
-import com.yuegou.dao.SpuAttributeValueDao;
-import com.yuegou.entity.Attribute;
-import com.yuegou.entity.Spu;
-import com.yuegou.dao.SpuDao;
-import com.yuegou.entity.SpuAndAttributeValues;
-import com.yuegou.entity.SpuAttributeValue;
+import com.yuegou.dao.*;
+import com.yuegou.entity.*;
+import com.yuegou.service.SkuService;
 import com.yuegou.service.SpuService;
+import com.yuegou.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +30,16 @@ public class SpuServiceImpl implements SpuService {
     private SpuAttributeValueDao spuAttributeValueDao;
     @Autowired
     private AttributeDao attributeDao;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private StoreDao storeDao;
+    @Autowired
+    private RelationDao relationDao;
+    @Autowired
+    private SkuService skuService;
 
     /**
      * 新增数据
@@ -58,7 +66,15 @@ public class SpuServiceImpl implements SpuService {
         for (SpuAttributeValue spuAttributeValue : spuAttributeValues) {
             size -= spuAttributeValueDao.deleteById(spuAttributeValue.getSpuAttrId());
         }
-        //后续还要加上删除所有有关系的sku
+        //删除关系表的关系。
+        Relation relation = relationDao.queryBySpuId(spuId);
+        if (relation == null) throw new CURDException(Code.DELETE_ERR,"找不到对应的关系");
+        if (!relationDao.deleteById(relation.getRelationId())) throw new CURDException(Code.DELETE_ERR,"删除关系失败");;
+        //删除所有有关系的sku
+        List<Sku> skus = skuService.queryBySpuId(spuId);
+        for (Sku sku : skus) {
+            if (!skuService.deleteById(sku.getSkuId())) throw new CURDException(Code.DELETE_ERR,"sku删除失败");;
+        }
         return size == 0;
     }
 
@@ -84,7 +100,7 @@ public class SpuServiceImpl implements SpuService {
         return spuDao.queryBySpuId(spuId);
     }
 
-    public boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues) {
+    public boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token) {
         Spu spu = spuAndAttributeValues.getSpu();
         List<SpuAttributeValue> spuAttributeValueList = spuAndAttributeValues.getSpuAttributeValueList();
         Date isTime = new Date();
@@ -92,6 +108,13 @@ public class SpuServiceImpl implements SpuService {
         if (!spuDao.insert(spu)) throw new CURDException(Code.SAVE_ERR, "spu存储失败");
         List<Attribute> attributes = attributeDao.queryByCateId(spu.getCategoryId());
         Long spuId = spu.getSpuId();
+        Claims claims = jwtUtil.parseToken(token);
+        //通过名字获取用户，通过用户获取店铺
+        User userName = userDao.getUserName((String) claims.get("userName"));
+        Store store = storeDao.queryByUserId(userName.getUserId());
+        //relation创建这个对象与店铺建立关系
+        Relation relation = new Relation(null,store.getStoreId(),spuId);
+        if (!relationDao.insert(relation)) throw new CURDException(Code.SAVE_ERR,"商品和店铺关系建立失败");
 
         List<Attribute> collect = attributes.stream().filter((item1) -> {
             return item1.getAttributeType().equals(0);

@@ -97,7 +97,7 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public boolean deleteById(Long skuId) {
-        if(!skuAttributeValueDao.deleteById(skuId)) throw new CURDException(Code.DELETE_ERR,"skuAttributeValue删除失败，或没有找到这个商品实体");
+        if(!skuDao.deleteById(skuId)) throw new CURDException(Code.DELETE_ERR,"sku删除失败，或没有找到这个商品实体");
         List<SkuAttributeValue> skuAttributeValues = skuAttributeValueDao.queryBySkuId(skuId);
         int sum = skuAttributeValues.size();
         for (SkuAttributeValue skuAttributeValue : skuAttributeValues) {

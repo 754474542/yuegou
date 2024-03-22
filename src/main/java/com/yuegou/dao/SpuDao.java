@@ -45,6 +45,8 @@ public interface SpuDao {
     //根据店铺id查询
     List<Spu> queryByStoreId(Long storeId);
 
+    List<Spu> queryByStoreIdMax(Long storeId);
+
     Spu queryBySpuId(Long spuId);
 
 }
