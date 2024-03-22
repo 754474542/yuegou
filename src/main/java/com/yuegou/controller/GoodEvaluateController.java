@@ -4,6 +4,7 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.GoodEvaluate;
 import com.yuegou.service.GoodEvaluateService;
+import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +43,9 @@ public class GoodEvaluateController {
     }
 
     @GetMapping
-    public Result getAll(){
-        List<GoodEvaluate> goodEvaluateList = goodEvaluateService.queryAll();
+    public Result getAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<GoodEvaluate> goodEvaluateList = goodEvaluateService.queryAll(size,offset);
         return new Result(goodEvaluateList != null ? Code.SELECT_OK : Code.SELECT_ERR, goodEvaluateList, goodEvaluateList != null ? "OK" : "Error");
     }
 

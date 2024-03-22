@@ -82,9 +82,8 @@
     </select>
 
     <select id="queryAll" resultMap="SpuMap">
-        select spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time from spu;
+        select spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time from spu limit #{size} offset #{offset};
     </select>
-
 
 </mapper>
 

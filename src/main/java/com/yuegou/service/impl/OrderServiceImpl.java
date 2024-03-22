@@ -51,8 +51,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> queryAll() {
-        return orderDao.queryAll();
+    public List<Order> queryAll(Integer size,Integer offset) {
+        return orderDao.queryAll(size,offset);
     }
 
     @Override

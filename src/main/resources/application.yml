@@ -38,6 +38,15 @@ spring:
     date-format: yyyy-MM-dd mm:hh:ss
 #配置数据源和数据库，这里的enabled是开启彩色日志打印,配置默认时间转换
 
+paginationconfig:
+  page: 1
+  size: 2
+#配置默认页码和读取行数
 
+utils:
+  token:
+    tokenKey: YueGou_JWT_Key
+    tokenExpirationTime: 43200000
+#配置token，密钥和有效时间
 
 

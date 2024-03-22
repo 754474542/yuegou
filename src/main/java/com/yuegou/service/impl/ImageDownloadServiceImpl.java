@@ -35,6 +35,8 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     private SkuImagesDao skuImagesDao;
     @Autowired
     private SkuDao skuDao;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public boolean userHeadFileUp(MultipartFile file,String token) {
@@ -42,7 +44,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR,"文件大小过大，请重新选择文件");
         String msg = "头像上传成功";
         if (file.isEmpty()) throw new NullValueException(Code.NULLVALUE_ERR,"上传文件失败，请重新上传");
-        Claims claims = JwtUtil.parseToken(token);
+        Claims claims = jwtUtil.parseToken(token);
         //生成保存url
         String url = "images/" + claims.get("userName") + "head" + System.currentTimeMillis() + ".jpg";
         User user = userDao.getUserName(new User((String) claims.get("userName")));
@@ -74,7 +76,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
             if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR,"文件过大，请重新选择文件");
         }
         if (files.size() != imgIds.size()) throw new FileFailedException(Code.FILEUP_ERR,"请确保前端发送过来的图片id数量和文件数量相等");
-        Claims claims = JwtUtil.parseToken(token);
+        Claims claims = jwtUtil.parseToken(token);
         //获取当前时间戳
         String paths;
         long timeStamp = System.currentTimeMillis();

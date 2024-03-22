@@ -40,7 +40,7 @@ public interface SpuDao {
      */
     boolean deleteById(Long spuId);
 
-    List<Spu> queryAll();
+    List<Spu> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 
     //根据店铺id查询
     List<Spu> queryByStoreId(Long storeId);

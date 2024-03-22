@@ -25,7 +25,7 @@ public interface OrderService {
 
     List<Order> queryByUserId(Long userId);
 
-    List<Order> queryAll();
+    List<Order> queryAll(Integer size,Integer offset);
 
     boolean insert(OrderAndDetail orderAndDetail);
 

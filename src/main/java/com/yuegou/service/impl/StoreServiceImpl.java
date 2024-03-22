@@ -26,8 +26,8 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     private UserDao userDao;
 
-    public List<Store> queryAll() {
-        return storeDao.queryAll();
+    public List<Store> queryAll(Integer size,Integer offset) {
+        return storeDao.queryAll(size, offset);
     }
 
     /**

@@ -29,7 +29,7 @@ public interface SkuDao {
 
     List<Sku> queryBySpuIdMax(Long spuId);
 
-    List<Sku> queryAll();
+    List<Sku> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 
 
     /**

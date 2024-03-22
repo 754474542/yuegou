@@ -17,6 +17,8 @@ public class ControllerInterceptor implements HandlerInterceptor {
 
     @Autowired
     private Logger logger;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -24,7 +26,7 @@ public class ControllerInterceptor implements HandlerInterceptor {
         String path = hm.getMethod().getName();
         String token = request.getHeader("token");
         if (token!=null){
-            Claims claims = JwtUtil.parseToken(token);
+            Claims claims = jwtUtil.parseToken(token);
             logger.info(claims.get("userName") + " 访问 " + path);
         }else {
             logger.info("未登录用户 访问了：" + path);

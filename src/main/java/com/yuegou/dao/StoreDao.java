@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface StoreDao {
 
-    List<Store> queryAll();
+    List<Store> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 
     /**
      * 通过ID查询单条数据

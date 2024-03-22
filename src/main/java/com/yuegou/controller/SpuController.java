@@ -6,6 +6,7 @@ import com.yuegou.entity.Spu;
 import com.yuegou.entity.SpuAndAttributeValues;
 import com.yuegou.entity.SpuAttributeValue;
 import com.yuegou.service.SpuService;
+import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,9 @@ public class SpuController {
     }
 
     @GetMapping
-    public Result queryAll(){
-        List<Spu> spus = spuService.queryAll();
+    public Result queryAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<Spu> spus = spuService.queryAll(size,offset);
         return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
     }
 

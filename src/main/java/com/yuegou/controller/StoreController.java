@@ -4,6 +4,7 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.Store;
 import com.yuegou.service.StoreService;
+import com.yuegou.utils.PaginationUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,9 @@ public class StoreController {
     private Logger logger;
 
     @GetMapping
-    private Result queryAll(){
-        List<Store> stores = storeService.queryAll();
+    private Result queryAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<Store> stores = storeService.queryAll(size,offset);
         return new Result(stores != null ? Code.SELECT_OK : Code.SELECT_ERR, stores, stores != null ? "OK" : "Error");
     }
 

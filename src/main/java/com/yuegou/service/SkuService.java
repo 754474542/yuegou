@@ -25,7 +25,7 @@ public interface SkuService {
 
     List<Sku> queryBySpuId(Long spuId);
 
-    List<Sku> queryAll();
+    List<Sku> queryAll(Integer size, Integer offset);
 
     /**
      * 新增数据

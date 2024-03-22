@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public interface StoreService {
 
-    List<Store> queryAll();
+    List<Store> queryAll(Integer size,Integer offset);
 
     /**
      * 通过ID查询单条数据

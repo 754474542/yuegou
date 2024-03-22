@@ -69,8 +69,8 @@ public class GoodEvaluateServiceImpl implements GoodEvaluateService {
     }
 
     @Override
-    public List<GoodEvaluate> queryAll() {
-        return goodEvaluateDao.queryAll();
+    public List<GoodEvaluate> queryAll(Integer size, Integer offset) {
+        return goodEvaluateDao.queryAll(size,offset);
     }
 
     @Override

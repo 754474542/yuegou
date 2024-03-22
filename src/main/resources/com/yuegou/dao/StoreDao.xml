@@ -28,7 +28,7 @@
                store_introduce,
                store_bite,
                store_visit
-        from store;
+        from store limit #{size} offset #{offset};
     </select>
 
     <!--查询单个-->

@@ -26,7 +26,7 @@ public interface OrderDao {
 
     List<Order> queryByUserId(Long userId);
 
-    List<Order> queryAll();
+    List<Order> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 
     /**
      * 新增数据

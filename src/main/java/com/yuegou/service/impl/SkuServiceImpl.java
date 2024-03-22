@@ -49,8 +49,8 @@ public class SkuServiceImpl implements SkuService {
     }
 
     @Override
-    public List<Sku> queryAll() {
-        return skuDao.queryAll();
+    public List<Sku> queryAll(Integer size, Integer offset) {
+        return skuDao.queryAll(size,offset);
     }
 
     /**

@@ -25,7 +25,7 @@ public interface GoodEvaluateDao {
 
     List<GoodEvaluate> queryBySkuId(Long skuId);
 
-    List<GoodEvaluate> queryAll();
+    List<GoodEvaluate> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 
     List<GoodEvaluate> queryByUserId(Long userId);
 

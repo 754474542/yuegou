@@ -34,7 +34,7 @@
     <select id="queryAll" resultMap="OrderMap">
         select  order_id,
                 user_id,
-                create_time from `order`;
+                create_time from `order` limit #{size} offset #{offset};
     </select>
 
     <!--新增所有列-->

@@ -75,8 +75,8 @@ public class SpuServiceImpl implements SpuService {
         return true;
     }
 
-    public List<Spu> queryAll() {
-        return spuDao.queryAll();
+    public List<Spu> queryAll(Integer size, Integer offset) {
+        return spuDao.queryAll(size,offset);
     }
 
     @Override

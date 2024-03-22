@@ -4,6 +4,7 @@ package com.yuegou.dao;
 import com.yuegou.entity.Sku;
 import com.yuegou.entity.SkuImages;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

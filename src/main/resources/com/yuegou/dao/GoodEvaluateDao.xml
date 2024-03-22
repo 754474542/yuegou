@@ -30,7 +30,7 @@
                sku_id,
                user_id,
                evaluate_content,
-               evaluate_fraction from good_evaluate;
+               evaluate_fraction from good_evaluate limit #{size} offset #{offset};
     </select>
 
     <select id="queryBySkuId" resultMap="GoodEvaluateMap">

@@ -20,7 +20,7 @@
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="SkuMap">
+    <select id="queryById" resultMap="SkuMaps">
         select sku_id,
                spu_id,
                sku_price,
@@ -83,7 +83,7 @@
                spu_id,
                sku_price,
                sku_fund
-        from sku
+        from sku limit #{size} offset #{offset};
     </select>
 
     <!--新增所有列-->

@@ -25,6 +25,8 @@ public class LoginServiceImpl implements LoginService {
     private BanService banService;
     @Autowired
     private Logger logger;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public String login(User user) {
@@ -54,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
             sql_user.setUserEmpt(0);
             userDao.setEmpt(sql_user);
             logger.info(sql_user.getUserName() + " | " + sql_user.getUserPhone() + " 登录成功");
-            return JwtUtil.createToken(sql_user);
+            return jwtUtil.createToken(sql_user);
         }
 
         sql_user.setUserEmpt(sql_user.getUserEmpt() + 1);

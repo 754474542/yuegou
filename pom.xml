@@ -64,8 +64,14 @@
             <version>5.8.10</version>
         </dependency>
 <!--        这个是Bcrypt加密要用的包-->
-    </dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+<!--        防止使用配置类属性报错-->
 
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

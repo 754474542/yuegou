@@ -5,6 +5,7 @@ import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.Sku;
 import com.yuegou.entity.SkuAndAttributeValues;
 import com.yuegou.service.SkuService;
+import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,9 @@ public class SkuController {
     }
 
     @GetMapping
-    public Result queryAll(){
-        List<Sku> skus = skuService.queryAll();
+    public Result queryAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<Sku> skus = skuService.queryAll(size,offset);
         return new Result(skus != null ? Code.SELECT_OK : Code.SELECT_ERR , skus ,skus != null ? "OK" : "ERROR" );
     }
 

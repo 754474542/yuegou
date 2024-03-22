@@ -1,5 +1,6 @@
 package com.yuegou.controller;
 
+import com.yuegou.config.PaginationConfig;
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.User;
@@ -39,7 +40,7 @@ public class UserController {
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
     }
     @GetMapping
-    public Result getAll(@RequestParam(value = "page",defaultValue = "0") Integer page, @RequestParam(value = "size", defaultValue = "20") Integer size){
+    public Result getAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
         int offset = PaginationUtil.calculateOffset(page, size);
         List<User> user = service.getAll(size,offset);
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");

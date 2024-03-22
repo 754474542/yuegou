@@ -5,6 +5,7 @@ import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.Order;
 import com.yuegou.entity.OrderAndDetail;
 import com.yuegou.service.OrderService;
+import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,9 @@ public class OrderController {
     }
 
     @GetMapping
-    public Result queryAll(){
-        List<Order> orders = orderService.queryAll();
+    public Result queryAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<Order> orders = orderService.queryAll(size,offset);
         return new Result(orders != null ? Code.SELECT_OK : Code.SELECT_ERR,orders,orders != null ? "OK" : "ERROR");
     }
 

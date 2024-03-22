@@ -33,7 +33,7 @@ public interface SpuService {
 
     boolean update(SpuAndAttributeValues spuAndAttributeValues);
 
-    List<Spu> queryAll();
+    List<Spu> queryAll(Integer size, Integer offset);
 
     Spu queryBySpuId(Long spuId);
 
