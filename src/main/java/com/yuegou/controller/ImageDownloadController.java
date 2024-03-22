@@ -35,14 +35,26 @@ public class ImageDownloadController {
     }
 
     @PostMapping("/store")
-    public Result storeImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam(value = "imgIds",defaultValue = "0")List<Long> imgIds,@RequestParam(value = "skuId", defaultValue = "0")Long skuId, @RequestHeader String token){
+    public Result skuStoreImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam(value = "imgIds",defaultValue = "0")List<Long> imgIds,@RequestParam(value = "skuId", defaultValue = "0")Long skuId, @RequestHeader String token){
         boolean flag = imageDownloadService.storeImgFileUp(files, imgIds, skuId, token);
         return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品图片上传完毕" : "商品图片上传失败");
     }
 
-    @PostMapping("/delete")
-    public Result storeImgDelete(@RequestBody ImageDeleteEntity imageDeleteEntity, @RequestHeader String token){
+    @PostMapping("/deleteStore")
+    public Result skuStoreImgDelete(@RequestBody ImageDeleteEntity imageDeleteEntity, @RequestHeader String token){
         boolean flag = imageDownloadService.storeImgDelete(imageDeleteEntity, token);
+        return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品删除完毕" : "商品删除失败");
+    }
+
+    @PostMapping("/carousel")
+    public Result spuImgFileUp(@RequestParam("file") MultipartFile file ,@RequestParam(value = "spuId",defaultValue = "0")Long spuId,  @RequestHeader("token") String token){
+        boolean flag = imageDownloadService.spuImgFileUp(file,spuId,token);
+        return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "轮播图上传完毕，感谢您的参加" : "轮播图上传失败");
+    }
+
+    @PostMapping("/deleteCarousel/{imgId}")
+    public Result spuImageDelete(@PathVariable Long imgId, @RequestHeader String token){
+        boolean flag = imageDownloadService.spuImgFileDelete(imgId, token);
         return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品删除完毕" : "商品删除失败");
     }
 

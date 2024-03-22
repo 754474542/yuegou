@@ -15,7 +15,7 @@ public interface UserDao {
     boolean setEmpt(User user);
     User getById(Long id);
     User getUserPhone(User user);
-    User getUserName(User user);
+    User getUserName(String userName);
     List<User> getEmptTimeUser();
     List<User> getAll(@Param("size") Integer size,@Param("offset") Integer offset);
     List<User> getUserAndStore();

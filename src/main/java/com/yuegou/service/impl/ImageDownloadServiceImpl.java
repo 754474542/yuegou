@@ -4,13 +4,8 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
 import com.yuegou.controller.pretreatment.exceptionhandle.FileFailedException;
 import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
-import com.yuegou.dao.SkuDao;
-import com.yuegou.dao.SkuImagesDao;
-import com.yuegou.dao.UserDao;
-import com.yuegou.entity.ImageDeleteEntity;
-import com.yuegou.entity.Sku;
-import com.yuegou.entity.SkuImages;
-import com.yuegou.entity.User;
+import com.yuegou.dao.*;
+import com.yuegou.entity.*;
 import com.yuegou.service.ImageDownloadService;
 import com.yuegou.service.SkuImagesService;
 import com.yuegou.service.SkuService;
@@ -18,6 +13,7 @@ import com.yuegou.service.UserService;
 import com.yuegou.utils.FileUtil;
 import com.yuegou.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,18 +36,20 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     @Autowired
     private SkuDao skuDao;
     @Autowired
+    private SpuImagesDao spuImagesDao;
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Override
     public boolean userHeadFileUp(MultipartFile file, String token) {
         long maxSize = 3145728L;
-        if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择文件");
+        if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择小于3MB的文件");
         String msg = "头像上传成功";
         if (file.isEmpty()) throw new NullValueException(Code.NULLVALUE_ERR, "上传文件失败，请重新上传");
         Claims claims = jwtUtil.parseToken(token);
         //生成保存url
-        User user = userDao.getUserName(new User((String) claims.get("userName")));
-        String url = "images/" + "head" + user.getUserId() + System.currentTimeMillis() + ".jpg";
+        User user = userDao.getUserName((String) claims.get("userName"));
+        String url = "images/" + "head" + user.getUserName() + System.currentTimeMillis() + ".jpg";
         String userHead = user.getUserHead();
         //判断有没有头像，如果有删除掉
         if (userHead != null) {
@@ -79,7 +77,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         //遍历图片大小
         for (MultipartFile file : files) {
             long maxSize = 3145728L;
-            if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件过大，请重新选择文件");
+            if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件过大，请重新选择小于3MB的文件");
         }
         Claims claims = jwtUtil.parseToken(token);
         long timeStamp = System.currentTimeMillis();
@@ -92,10 +90,12 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
                 MultipartFile nextFile = iterator.next();
                 paths = "images/" + "skuId_" + skuId + nextFile + timeStamp + ".jpg";
                 SkuImages skuImages = skuImagesDao.queryById(imgIds.get(i));
-                if (!FileUtil.deleteFile(skuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR,"文件删除失败");
+                if (!FileUtil.deleteFile(skuImages.getImgPath()))
+                    throw new FileFailedException(Code.FILEDAILED_ERR, "文件删除失败");
                 skuImages.setImgPath(paths);
-                if (!skuImagesDao.updateByImageIdAndSkuId(skuImages)) throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
-                if (!FileUtil.saveFile(nextFile,paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
+                if (!skuImagesDao.updateByImageIdAndSkuId(skuImages))
+                    throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
+                if (!FileUtil.saveFile(nextFile, paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
                 iterator.remove();
             }
         }
@@ -103,14 +103,15 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         for (int i = 0; i < files.size(); i++) {
             paths = "images/" + "skuId_" + skuId + files.get(i) + timeStamp + ".jpg";
             if (!FileUtil.saveFile(files.get(i), paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
-            if (!skuImagesDao.save(new SkuImages(null, skuId, paths))) throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
+            if (!skuImagesDao.save(new SkuImages(null, skuId, paths)))
+                throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
         }
-        if ((imgIds.get(0) == 0)){
+        if ((imgIds.get(0) == 0)) {
             logger.info(claims.get("userName") + "上传了 " + files.size() + " 张商品图片");
-        }else {
+        } else {
             logger.info(claims.get("userName") + "上传了 " + files.size() + " 张商品图片" + " 修改了 " + imgIds.size() + " 张商品图片");
         }
-            return true;
+        return true;
     }
 
     @Override
@@ -128,9 +129,43 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         }
         for (SkuImages skuImages : deleteList) {
             if (!skuImagesDao.delete(skuImages.getImgId())) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
-            if (!FileUtil.deleteFile(skuImages.getImgPath())) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
+            if (!FileUtil.deleteFile(skuImages.getImgPath()))
+                throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");
         }
         return true;
     }
+
+    @Override
+    public boolean spuImgFileUp(MultipartFile file, Long spuId, String token) {
+        long maxSize = 5242880L;
+        if (spuId == 0) throw new FileFailedException(Code.FILEDAILED_ERR,"spuId不能为空");
+        if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择小于5MB的文件");
+        Claims claims = jwtUtil.parseToken(token);
+        String userName = (String) claims.get("userName");
+        long isTime = System.currentTimeMillis();
+        String path = "images/" + "spu" + userName + isTime + ".jpg";
+        SpuImages spuImages = spuImagesDao.queryBySpuId(spuId);
+        if (spuImages == null) {
+            SpuImages newSpuImages = new SpuImages(null, spuId, path);
+            if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片添加失败");
+        }else {
+            if (!FileUtil.deleteFile(spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");;
+            spuImages.setImgPath(path);
+            if (!spuImagesDao.updateByImageIdAndSpuId(spuImages))throw new CURDException(Code.SAVE_ERR, "店铺图片修改失败");
+        }
+        if (!FileUtil.saveFile(file, path)) throw new FileFailedException(Code.FILEUP_ERR, "店铺图片创建失败");
+        return true;
+    }
+
+    @Override
+    public boolean spuImgFileDelete(Long imgId, String token) {
+        SpuImages spuImages = spuImagesDao.queryByImgId(imgId);
+        if (spuImages == null) throw new CURDException(Code.DELETE_ERR,"找不到imgId为" + imgId + " 的图片");
+        String imgPath = spuImages.getImgPath();
+        if (!FileUtil.deleteFile(imgPath)) throw new FileFailedException(Code.FILEDAILED_ERR,"找不到imgId为" + imgId + " 的图片");
+        if (!spuImagesDao.delete(imgId)) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
+        return true;
+    }
+
 
 }

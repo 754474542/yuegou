@@ -34,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
         if (user.getUserName().trim().equals("") || user.getUserName() == null || user.getUserPassword() == null || user.getUserPassword().trim().equals("")){
             throw new LoginException(Code.LOGIN_ERR,"请输入正确的用户名或密码");
         }
-        User sql_user = userDao.getUserName(user);
+        User sql_user = userDao.getUserName(user.getUserName());
         if (sql_user == null) throw new LoginException(Code.LOGIN_ERR,"没有搜索到这个用户，请确保用户名输入是否正确");
         boolean flag = banLevel(sql_user.getUserId());
         //验证是否被封号
@@ -77,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginException(Code.REGISTER_ERR,"请查看手机号是否合法");
         }
         User userPhone = userDao.getUserPhone(user);
-        User userName = userDao.getUserName(user);
+        User userName = userDao.getUserName(user.getUserName());
         if (userPhone != null) throw new LoginException(Code.REGISTER_ERR,"此手机号已被注册");
         if (userName != null) throw new LoginException(Code.REGISTER_ERR,"此用户名已被注册");
         user.setUserPassword(BcryptUtil.getPasswordBcrypt(user.getUserPassword()));

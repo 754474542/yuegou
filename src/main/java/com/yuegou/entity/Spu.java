@@ -43,6 +43,8 @@ public class Spu implements Serializable {
      */
     private Date createTime;
 
+    private Integer discount;
+
     private Category category;
 
     private List<Sku> skuList;
@@ -62,11 +64,20 @@ public class Spu implements Serializable {
                 ", categoryId=" + categoryId +
                 ", spuStatus=" + spuStatus +
                 ", createTime=" + createTime +
+                ", discount=" + discount +
                 ", category=" + category +
                 ", skuList=" + skuList +
                 ", attributeList=" + attributeList +
                 ", spuAttributeValueList=" + spuAttributeValueList +
                 '}';
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 
     public List<SpuAttributeValue> getSpuAttributeValueList() {

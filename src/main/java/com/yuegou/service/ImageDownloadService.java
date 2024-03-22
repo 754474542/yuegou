@@ -14,5 +14,7 @@ public interface ImageDownloadService {
     boolean userHeadFileUp(MultipartFile file, String token);
     boolean storeImgFileUp(List<MultipartFile> files,List<Long> imgIds,Long skuId,String token);
     boolean storeImgDelete(ImageDeleteEntity imageDeleteEntity, String token);
+    boolean spuImgFileUp(MultipartFile file,Long spuId,String token);
+    boolean spuImgFileDelete(Long imgId, String token);
 
 }
