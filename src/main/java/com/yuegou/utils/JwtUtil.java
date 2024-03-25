@@ -1,10 +1,9 @@
 package com.yuegou.utils;
 
 import com.yuegou.config.TokenConfig;
+import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.entity.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +17,6 @@ public class JwtUtil {
     private TokenConfig tokenConfig;
 
     public String createToken(User user){
-        System.out.println(tokenConfig.getTokenKey());
-        System.out.println(tokenConfig.getTokenExpirationTime());
         String userName = user.getUserName();
         Integer userPower = user.getUserPower();
         Map<String,Object> claim = new HashMap<>();
@@ -33,10 +30,16 @@ public class JwtUtil {
     }
 
     public Claims parseToken(String token){
-        return Jwts.parser()
-                .setSigningKey(tokenConfig.getTokenKey())
-                .parseClaimsJws(token)
-                .getBody();
+        Claims body = null;
+        try {
+            body = Jwts.parser()
+                    .setSigningKey(tokenConfig.getTokenKey())
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new com.yuegou.controller.pretreatment.exceptionhandle.ExpiredJwtException(Code.TOKEN_EXPIRE_ERR,"登录过期，请重新登录");
+        }
+        return body;
     }
 
 }

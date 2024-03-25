@@ -67,6 +67,6 @@ public class BanServiceImpl implements BanService {
      */
     @Override
     public boolean deleteById(Long userId) {
-        return this.banDao.deleteById(userId) > 0;
+        return banDao.deleteById(userId);
     }
 }

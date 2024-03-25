@@ -11,6 +11,5 @@ public interface LoginService {
     boolean register(User user);
     boolean verificationCode(User user);
     boolean forgot(UserForgot userForgot);
-    boolean banLevel(Long userId);
 
 }

@@ -5,6 +5,8 @@ import com.yuegou.entity.SpuImages;
 import com.yuegou.service.SpuImagesService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class SpuImagesServiceImpl implements SpuImagesService {
 
     @Autowired
@@ -33,5 +35,10 @@ public class SpuImagesServiceImpl implements SpuImagesService {
     @Override
     public SpuImages queryByImgId(Long imgId) {
         return spuImagesDao.queryByImgId(imgId);
+    }
+
+    @Override
+    public List<SpuImages> queryAll() {
+        return spuImagesDao.queryAll();
     }
 }

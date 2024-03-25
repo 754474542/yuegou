@@ -18,7 +18,8 @@ public class HomePageController {
     @Autowired
     private HomePageService homePageService;
 
-    @GetMapping("/carouselImgs")
+    //获取轮播图
+    @GetMapping("/carousel")
     public Result carouseImages(){
         List<SpuImages> spuImages = homePageService.carouseImages();
         return new Result(spuImages != null ? Code.SAVE_OK : Code.SAVE_ERR,spuImages,spuImages != null ? "OK" : "ERROR");

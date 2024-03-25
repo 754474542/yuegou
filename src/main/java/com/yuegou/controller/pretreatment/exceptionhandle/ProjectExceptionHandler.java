@@ -60,6 +60,7 @@ public class ProjectExceptionHandler {
     public Result loginException(LoginException ex){
         Class<? extends LoginException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
+        ex.printStackTrace();
         return new Result(ex.getCode(),ex.getMessage());
     }
 

@@ -47,6 +47,12 @@ utils:
   token:
     tokenKey: YueGou_JWT_Key
     tokenExpirationTime: 43200000
+  projecttasks:
+    loginEmptCleanTime: 0 0/10 * * * *
+    #登录验证检测执行间隔时间,这里是每十分钟执行一次。 0 0/10 * * * *
+    detectionUnBanTime: 0 5 0 * * *
+    #封号处理每次处理时间,这里是每天凌晨12:05分执行。
+    bannerCarousel: 0 0 0 * * *
 #配置token，密钥和有效时间
 
 

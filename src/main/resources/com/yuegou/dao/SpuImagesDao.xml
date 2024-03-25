@@ -34,5 +34,8 @@
     <select id="queryByImgId" resultMap="SpuImagesMap">
         select img_id, spu_id, img_path from spu_images where img_id = #{imgId};
     </select>
+    <select id="queryAll" resultMap="SpuImagesMap">
+        select img_id, spu_id, img_path from spu_images ;
+    </select>
 
 </mapper>

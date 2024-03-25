@@ -3,6 +3,8 @@ package com.yuegou.dao;
 import com.yuegou.entity.SpuImages;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface SpuImagesDao {
 
@@ -11,5 +13,6 @@ public interface SpuImagesDao {
     boolean delete(Long imgId);
     SpuImages queryBySpuId(Long spuId);
     SpuImages queryByImgId(Long imgId);
+    List<SpuImages> queryAll();
 
 }

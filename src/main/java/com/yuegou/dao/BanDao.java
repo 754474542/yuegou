@@ -72,7 +72,7 @@ public interface BanDao {
      * @param userId 主键
      * @return 影响行数
      */
-    int deleteById(Long userId);
+    boolean deleteById(Long userId);
 
 }
 

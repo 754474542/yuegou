@@ -35,9 +35,9 @@
     <!--查询指定行数据-->
     <select id="queryBySpuId" resultMap="SpuMap">
         select
-        spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
-        from spu
-        where spu_id = #{spuId};
+        s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
+        from spu s LEFT JOIN relation r ON s.spu_id = r.spu_id JOIN store dp ON r.store_id = dp.store_id
+        where s.spu_id = #{spuId};
     </select>
 
     <!--新增所有列-->
@@ -91,7 +91,10 @@
     </select>
 
     <select id="queryAll" resultMap="SpuMap">
-        select spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount from spu limit #{size} offset #{offset};
+        select
+            s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
+        from spu s LEFT JOIN relation r ON s.spu_id = r.spu_id JOIN store dp ON r.store_id = dp.store_id
+        limit #{size} offset #{offset};
     </select>
 
 </mapper>

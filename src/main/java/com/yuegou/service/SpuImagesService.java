@@ -3,6 +3,8 @@ package com.yuegou.service;
 import com.yuegou.entity.SpuImages;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 public interface SpuImagesService {
 
@@ -11,4 +13,5 @@ public interface SpuImagesService {
     boolean delete(Long imgId);
     SpuImages queryBySpuId(Long spuId);
     SpuImages queryByImgId(Long imgId);
+    List<SpuImages> queryAll();
 }
