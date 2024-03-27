@@ -41,7 +41,6 @@ public class FileUtil {
 
     public static byte[] queryFile(String url){
         File file = new File(url);
-        System.out.println(url);
         if (!file.isFile()) throw new FileFailedException(Code.SELECT_ERR,"文件不存在");
         try(
             FileInputStream fis = new FileInputStream(file);
@@ -59,6 +58,7 @@ public class FileUtil {
 
     public static byte[] fileToByte(String path) {
         File img = new File(path);
+        if (!img.isFile()) throw new FileFailedException(Code.SELECT_ERR,"找不到指定文件");
         byte[] bytes = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -75,7 +75,6 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
-        System.out.println(bytes);
         return bytes;
     }
 

@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Transactional
-public interface ImageDownloadService<spuImageList> {
+public interface ImageDownloadService {
 
     boolean userHeadFileUp(MultipartFile file, String token);
     boolean storeImgFileUp(List<MultipartFile> files,List<Long> imgIds,Long skuId,String token);
@@ -17,5 +17,6 @@ public interface ImageDownloadService<spuImageList> {
     boolean spuImgFileUp(MultipartFile file,Long spuId,String token);
     boolean spuImgFileDelete(Long imgId, String token);
     String queryOneImage(QainImageEntity imagePath);
+    List<SpuImages> queryBannerList();
 
 }

@@ -7,6 +7,7 @@ import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
 import com.yuegou.dao.*;
 import com.yuegou.entity.*;
 import com.yuegou.service.ImageDownloadService;
+import com.yuegou.service.timetacks.ProjectTasks;
 import com.yuegou.utils.FileUtil;
 import com.yuegou.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -37,6 +38,8 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     private SpuImagesDao spuImagesDao;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private ProjectTasks projectTasks;
 
     @Value("${utils.imagessavepath}")
     private String path;
@@ -178,8 +181,16 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     public String queryOneImage(QainImageEntity imagePath) {
         byte[] bytes = FileUtil.fileToByte(path + imagePath.getImagePath());
         if (bytes == null) throw new FileFailedException(Code.SELECT_ERR,"图片读取失败");
-        System.out.println(Base64.getEncoder().encodeToString(bytes));
-        return Base64.getEncoder().encodeToString(bytes);
+        return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(bytes);
+    }
+
+    @Override
+    public List<SpuImages> queryBannerList() {
+        List<SpuImages> bannerList = projectTasks.getBannerList();
+        for (SpuImages spuImages : bannerList) {
+            spuImages.setBase64("data:image/jpeg;base64," + Base64.getEncoder().encodeToString(FileUtil.fileToByte(path + spuImages.getImgPath())));
+        }
+        return bannerList;
     }
 
 }

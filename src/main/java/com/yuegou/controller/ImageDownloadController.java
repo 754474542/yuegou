@@ -19,8 +19,6 @@ public class ImageDownloadController {
 
     @Autowired
     private ImageDownloadService imageDownloadService;
-    @Autowired
-    private ProjectTasks projectTasks;
 
     @PostMapping("/user")
     public Result userHeadFileUp(@RequestParam("file") MultipartFile file , @RequestHeader("token") String token){
@@ -56,6 +54,12 @@ public class ImageDownloadController {
     public Result queryOneImage(@RequestBody QainImageEntity imagePath){
         String base = imageDownloadService.queryOneImage(imagePath);
         return new Result(Code.SELECT_OK, base,"图片读取成功");
+    }
+
+    @GetMapping("/queryBannerList")
+    public Result queryBannerList(){
+        List<SpuImages> bannerList = imageDownloadService.queryBannerList();
+        return new Result(bannerList != null ? Code.SELECT_OK : Code.SELECT_ERR, bannerList,bannerList != null ? "轮播图获取成功" : "轮播图获取失败" );
     }
 
 }
