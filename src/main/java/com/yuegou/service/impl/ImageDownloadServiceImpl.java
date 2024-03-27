@@ -7,20 +7,18 @@ import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
 import com.yuegou.dao.*;
 import com.yuegou.entity.*;
 import com.yuegou.service.ImageDownloadService;
-import com.yuegou.service.SkuImagesService;
-import com.yuegou.service.SkuService;
-import com.yuegou.service.UserService;
 import com.yuegou.utils.FileUtil;
 import com.yuegou.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +38,9 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Value("${utils.imagessavepath}")
+    private String path;
+
     @Override
     public boolean userHeadFileUp(MultipartFile file, String token) {
         long maxSize = 3145728L;
@@ -49,11 +50,12 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         Claims claims = jwtUtil.parseToken(token);
         //生成保存url
         User user = userDao.getUserName((String) claims.get("userName"));
-        String url = "images/" + "head" + user.getUserName() + System.currentTimeMillis() + ".jpg";
+        String url = path + user.getUserId() + System.currentTimeMillis() + ".jpg";
+        String fileName = "" + user.getUserId() + System.currentTimeMillis() + ".jpg";
         String userHead = user.getUserHead();
         //判断有没有头像，如果有删除掉
         if (userHead != null) {
-            File oldHead = new File(userHead);
+            File oldHead = new File(path + userHead);
             if (oldHead.isFile()) {
                 boolean delete = oldHead.delete();
                 if (delete) logger.info(" 删除了" + userHead);
@@ -62,7 +64,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         }
         //进行头像上传
         if (!FileUtil.saveFile(file, url)) throw new FileFailedException(Code.FILEDAILED_ERR, "文件上传出现异常");
-        user.setUserHead(url);
+        user.setUserHead(fileName);
         //更新用户信息
         if (!userDao.update(user)) throw new FileFailedException(Code.FILEDAILED_ERR, "文件上传出现问题");
         logger.info(user.getUserName() + msg);
@@ -82,17 +84,19 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         Claims claims = jwtUtil.parseToken(token);
         long timeStamp = System.currentTimeMillis();
         String paths;
+        String fileName;
         //imgIds等于0，代表使用的是默认值0，全部是第一次上传的文件。
         if (!(imgIds.get(0) == 0)) {
             //使用迭代器把前几个要修改的文件先修改然后在删除,剩下的就都是创建文件的操作了
             Iterator<MultipartFile> iterator = files.iterator();
             for (int i = 0; i < imgIds.size(); i++) {
                 MultipartFile nextFile = iterator.next();
-                paths = "images/" + "skuId_" + skuId + nextFile + timeStamp + ".jpg";
+                paths = path + skuId + nextFile.hashCode() + timeStamp + ".jpg";
+                fileName = "" + skuId + nextFile.hashCode() + timeStamp + ".jpg";
                 SkuImages skuImages = skuImagesDao.queryById(imgIds.get(i));
-                if (!FileUtil.deleteFile(skuImages.getImgPath()))
-                    throw new FileFailedException(Code.FILEDAILED_ERR, "文件删除失败");
-                skuImages.setImgPath(paths);
+                if (!FileUtil.deleteFile(path + skuImages.getImgPath()))
+                throw new FileFailedException(Code.FILEDAILED_ERR, "文件删除失败");
+                skuImages.setImgPath(fileName);
                 if (!skuImagesDao.updateByImageIdAndSkuId(skuImages))
                     throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
                 if (!FileUtil.saveFile(nextFile, paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
@@ -101,9 +105,10 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         }
         //执行创建文件的操作
         for (int i = 0; i < files.size(); i++) {
-            paths = "images/" + "skuId_" + skuId + files.get(i) + timeStamp + ".jpg";
+            paths = path + skuId + files.get(i).hashCode() + timeStamp + ".jpg";
+            String fileName2 = "" + skuId +  files.get(i).hashCode() + timeStamp + ".jpg";
             if (!FileUtil.saveFile(files.get(i), paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
-            if (!skuImagesDao.save(new SkuImages(null, skuId, paths)))
+            if (!skuImagesDao.save(new SkuImages(null, skuId, fileName2)))
                 throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
         }
         if ((imgIds.get(0) == 0)) {
@@ -129,7 +134,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         }
         for (SkuImages skuImages : deleteList) {
             if (!skuImagesDao.delete(skuImages.getImgId())) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
-            if (!FileUtil.deleteFile(skuImages.getImgPath()))
+            if (!FileUtil.deleteFile(path + skuImages.getImgPath()))
                 throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");
         }
         return true;
@@ -141,19 +146,21 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         if (spuId == 0) throw new FileFailedException(Code.FILEDAILED_ERR,"spuId不能为空");
         if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择小于5MB的文件");
         Claims claims = jwtUtil.parseToken(token);
-        String userName = (String) claims.get("userName");
+        User user = userDao.getUserName((String) claims.get("userName"));
         long isTime = System.currentTimeMillis();
-        String path = "images/" + "spu" + userName + isTime + ".jpg";
+        String paths = path + user.getUserId() + isTime + ".jpg";
+        String fileName = "" + user.getUserId() + isTime + ".jpg";
         SpuImages spuImages = spuImagesDao.queryBySpuId(spuId);
+
         if (spuImages == null) {
-            SpuImages newSpuImages = new SpuImages(null, spuId, path);
+            SpuImages newSpuImages = new SpuImages(null, spuId, fileName);
             if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片添加失败");
         }else {
-            if (!FileUtil.deleteFile(spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");;
-            spuImages.setImgPath(path);
+            if (!FileUtil.deleteFile(path + spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");;
+            spuImages.setImgPath(fileName);
             if (!spuImagesDao.updateByImageIdAndSpuId(spuImages))throw new CURDException(Code.SAVE_ERR, "店铺图片修改失败");
         }
-        if (!FileUtil.saveFile(file, path)) throw new FileFailedException(Code.FILEUP_ERR, "店铺图片创建失败");
+        if (!FileUtil.saveFile(file, paths)) throw new FileFailedException(Code.FILEUP_ERR, "店铺图片创建失败");
         return true;
     }
 
@@ -161,11 +168,18 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     public boolean spuImgFileDelete(Long imgId, String token) {
         SpuImages spuImages = spuImagesDao.queryByImgId(imgId);
         if (spuImages == null) throw new CURDException(Code.DELETE_ERR,"找不到imgId为" + imgId + " 的图片");
-        String imgPath = spuImages.getImgPath();
+        String imgPath = path + spuImages.getImgPath();
         if (!FileUtil.deleteFile(imgPath)) throw new FileFailedException(Code.FILEDAILED_ERR,"找不到imgId为" + imgId + " 的图片");
         if (!spuImagesDao.delete(imgId)) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
         return true;
     }
 
+    @Override
+    public String queryOneImage(QainImageEntity imagePath) {
+        byte[] bytes = FileUtil.fileToByte(path + imagePath.getImagePath());
+        if (bytes == null) throw new FileFailedException(Code.SELECT_ERR,"图片读取失败");
+        System.out.println(Base64.getEncoder().encodeToString(bytes));
+        return Base64.getEncoder().encodeToString(bytes);
+    }
 
 }

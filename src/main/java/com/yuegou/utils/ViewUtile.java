@@ -4,6 +4,7 @@ import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
 import com.yuegou.dao.SpuImagesDao;
 import com.yuegou.entity.SpuImages;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ public class ViewUtile {
 
     @Autowired
     private SpuImagesDao spuImagesDao;
+    @Autowired
+    private Logger logger;
 
     //获取打乱顺序的轮播图
     public List<SpuImages> getSpuImages(){
@@ -23,7 +26,8 @@ public class ViewUtile {
         List<SpuImages> spuImages = spuImagesDao.queryAll();
         Collections.shuffle(spuImages);
         if (spuImages.size() < 8 ){
-            throw new CURDException(Code.SELECT_ERR,"可用轮播图数量小于8张");
+            logger.error("可用轮播图数量小于8张");
+            return bannerList;
         }
         for (int i = 0; i < 8; i++) {
             bannerList.add(spuImages.get(i));

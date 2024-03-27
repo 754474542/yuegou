@@ -2,23 +2,15 @@ package com.yuegou.controller;
 
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
-import com.yuegou.controller.pretreatment.exceptionhandle.FileFailedException;
-import com.yuegou.controller.pretreatment.exceptionhandle.NullValueException;
 import com.yuegou.entity.ImageDeleteEntity;
-import com.yuegou.entity.SkuImages;
-import com.yuegou.entity.User;
+import com.yuegou.entity.QainImageEntity;
+import com.yuegou.entity.SpuImages;
 import com.yuegou.service.ImageDownloadService;
-import com.yuegou.service.SkuImagesService;
-import com.yuegou.service.UserService;
-import com.yuegou.utils.FileUtil;
-import com.yuegou.utils.JwtUtil;
-import io.jsonwebtoken.Claims;
-import org.slf4j.Logger;
+import com.yuegou.service.timetacks.ProjectTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
 @RestController
@@ -26,7 +18,9 @@ import java.util.List;
 public class ImageDownloadController {
 
     @Autowired
-    ImageDownloadService imageDownloadService;
+    private ImageDownloadService imageDownloadService;
+    @Autowired
+    private ProjectTasks projectTasks;
 
     @PostMapping("/user")
     public Result userHeadFileUp(@RequestParam("file") MultipartFile file , @RequestHeader("token") String token){
@@ -35,7 +29,7 @@ public class ImageDownloadController {
     }
 
     @PostMapping("/store")
-    public Result skuStoreImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam(value = "imgIds",defaultValue = "0")List<Long> imgIds,@RequestParam(value = "skuId", defaultValue = "0")Long skuId, @RequestHeader String token){
+    public Result skuStoreImgFileUp(@RequestParam("files") List<MultipartFile> files,@RequestParam(value = "imgIds",defaultValue = "0")List<Long> imgIds,@RequestParam(value = "skuId", defaultValue = "0")Long skuId, @RequestHeader("token") String token){
         boolean flag = imageDownloadService.storeImgFileUp(files, imgIds, skuId, token);
         return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品图片上传完毕" : "商品图片上传失败");
     }
@@ -56,6 +50,12 @@ public class ImageDownloadController {
     public Result spuImageDelete(@PathVariable Long imgId, @RequestHeader String token){
         boolean flag = imageDownloadService.spuImgFileDelete(imgId, token);
         return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "商品删除完毕" : "商品删除失败");
+    }
+
+    @PostMapping("/gainImage")
+    public Result queryOneImage(@RequestBody QainImageEntity imagePath){
+        String base = imageDownloadService.queryOneImage(imagePath);
+        return new Result(Code.SELECT_OK, base,"图片读取成功");
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface LoginService {
 
     String login(User user);
-    boolean register(User user);
+    boolean register(UserForgot userForgot);
     boolean verificationCode(User user);
     boolean forgot(UserForgot userForgot);
 

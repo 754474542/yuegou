@@ -3,6 +3,8 @@ package com.yuegou.service.impl;
 import com.yuegou.entity.User;
 import com.yuegou.dao.UserDao;
 import com.yuegou.service.UserService;
+import com.yuegou.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public boolean save(User user) {
@@ -45,6 +49,13 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getUserAndStore(){
         return userDao.getUserAndStore();
+    }
+
+    @Override
+    public User getUserOnToken(String token) {
+        Claims claims = jwtUtil.parseToken(token);
+        User userName = userDao.getUserName((String) claims.get("userName"));
+        return userDao.getUserName((String) claims.get("userName"));
     }
 
 }

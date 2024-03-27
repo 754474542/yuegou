@@ -13,7 +13,7 @@ public class ProjectExceptionHandler {
     private Logger logger;
 
     @ExceptionHandler(OffSetException.class)
-    public Result curdException(OffSetException ex){
+    public Result offSetException(OffSetException ex){
         Class<? extends OffSetException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
         return new Result(ex.getCode(),ex.getMessage());
@@ -23,7 +23,6 @@ public class ProjectExceptionHandler {
     public Result curdException(CURDException ex){
         Class<? extends CURDException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
-        ex.printStackTrace();
         return new Result(ex.getCode(),ex.getMessage());
     }
 
@@ -60,7 +59,6 @@ public class ProjectExceptionHandler {
     public Result loginException(LoginException ex){
         Class<? extends LoginException> aClass = ex.getClass();
         logger.error("出现 " + aClass + " 异常");
-        ex.printStackTrace();
         return new Result(ex.getCode(),ex.getMessage());
     }
 
@@ -73,8 +71,8 @@ public class ProjectExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Result allException(Exception ex){
-        ex.printStackTrace();
         Class<? extends Exception> aClass = ex.getClass();
+        ex.printStackTrace();
         logger.error("出现 " + aClass + " 异常");
         return new Result(Code.SYSTEM_ERR,"出现未知错误，请联系管理员");
     }

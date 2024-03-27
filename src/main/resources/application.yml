@@ -27,6 +27,7 @@ spring:
     url: jdbc:mysql://localhost:3306/yuegou
     username: root
     password: root
+    #配置数据源和数据库
   output:
     ansi:
       enabled: always
@@ -34,9 +35,19 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+    #开启彩色日志打印，设置文件上传下载限制
   jackson:
     date-format: yyyy-MM-dd mm:hh:ss
-#配置数据源和数据库，这里的enabled是开启彩色日志打印,配置默认时间转换
+    #配置默认时间转换
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: resources/**,static/**,templates/**
+      exclude: date/**
+  thymeleaf:
+    cache: false
+  #配置热部署,关闭thymeleaf缓存
+
 
 paginationconfig:
   page: 1
@@ -53,6 +64,7 @@ utils:
     detectionUnBanTime: 0 5 0 * * *
     #封号处理每次处理时间,这里是每天凌晨12:05分执行。
     bannerCarousel: 0 0 0 * * *
+  imagessavepath: C:\Users\Undertale\Desktop\悦购网上购物系统\images\
 #配置token，密钥和有效时间
 
 

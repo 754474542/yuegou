@@ -15,4 +15,5 @@ public interface UserService {
     User getUserName(User user);
     List<User> getAll(Integer size,Integer offset);
     List<User> getUserAndStore();
+    User getUserOnToken(String token);
 }

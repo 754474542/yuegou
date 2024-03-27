@@ -21,8 +21,8 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody User user){
-        boolean register = loginService.register(user);
+    public Result register(@RequestBody UserForgot userForgot){
+        boolean register = loginService.register(userForgot);
         return new Result(register ? Code.REGISTER_OK : Code.REGISTER_ERR, register,register ? "注册成功"  : "注册出现错误，请联系管理员");
     }
 
@@ -33,8 +33,8 @@ public class LoginController {
     }
 
     @PostMapping("/forgot")
-    public Result forgot(@RequestBody UserForgot user){
-        boolean forgot = loginService.forgot(user);
+    public Result forgot(@RequestBody UserForgot userForgot){
+        boolean forgot = loginService.forgot(userForgot);
         return new Result(forgot ? Code.FORGOT_OK : Code.FORGOT_ERR, forgot,forgot ? "修改密码成功"  : "修改密码失败");
     }
 }

@@ -45,5 +45,10 @@ public class UserController {
         List<User> user = service.getAll(size,offset);
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
     }
+    @GetMapping("/onToken")
+    public Result getOnToken(@RequestHeader String token){
+        User user = service.getUserOnToken(token);
+        return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
+    }
 
 }

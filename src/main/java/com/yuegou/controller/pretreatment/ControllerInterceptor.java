@@ -1,5 +1,7 @@
 package com.yuegou.controller.pretreatment;
 
+import com.yuegou.controller.pretreatment.exceptionhandle.ExpiredJwtException;
+import com.yuegou.controller.pretreatment.exceptionhandle.PathJumpException;
 import com.yuegou.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ControllerInterceptor implements HandlerInterceptor {
@@ -22,15 +26,22 @@ public class ControllerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String[] ignoreList = {"login", "register", "verificationCode", "forgot"};
+        if (!(handler instanceof HandlerMethod)) return false;
         HandlerMethod hm = (HandlerMethod) handler;
         String path = hm.getMethod().getName();
-        String token = request.getHeader("token");
-        if (token!=null){
-            Claims claims = jwtUtil.parseToken(token);
-            logger.info(claims.get("userName") + " 访问 " + path);
-        }else {
-            logger.info("未登录用户 访问了：" + path);
+        for (String s : ignoreList) {
+            if (path.equals(s)) return true;
         }
+        Claims claims = null;
+        String token = request.getHeader("token");
+        try {
+            claims = jwtUtil.parseToken(token);
+        } catch (Exception e) {
+//            throw new ExpiredJwtException(Code.TOKEN_EXPIRE_ERR, "没检索到token过期，或者token过期，请重新登录");
+            e.printStackTrace();
+        }
+        logger.info(claims.get("userName") + " 访问了 " + path);
         return true;
     }
 

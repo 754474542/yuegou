@@ -68,7 +68,10 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean register(User user) {
+    public boolean register(UserForgot userForgot) {
+        User user = userForgot.getUser();
+        String code = userForgot.getCode();
+        if (!code.equals("246810")) throw new LoginException(Code.FORGOT_ERR,"验证码错误");
         if (user.getUserPhone() == null || user.getUserPhone().trim().equals("") || user.getUserPassword() == null || user.getUserPassword().trim().equals("") || user.getUserName().trim().equals("") || user.getUserName() == null) {
             throw new LoginException(Code.REGISTER_ERR, "输入的值不能为空");
         }
@@ -89,15 +92,16 @@ public class LoginServiceImpl implements LoginService {
         if (user.getUserPhone().length() != 11) {
             throw new LoginException(Code.REGISTER_ERR, "请查看手机号是否合法");
         }
-        User userPhone = userDao.getUserPhone(user);
-        return userPhone != null;
+        return true;
     }
 
 
     @Override
     public boolean forgot(UserForgot userForgot) {
+        String code = userForgot.getCode();
         User user = userForgot.getUser();
         User userPhone = userDao.getUserPhone(user);
+        if (!code.equals("246810")) throw new LoginException(Code.FORGOT_ERR,"验证码错误");
         if (userPhone == null) {
             throw new LoginException(Code.FORGOT_ERR, "此手机号还未注册");
         }
