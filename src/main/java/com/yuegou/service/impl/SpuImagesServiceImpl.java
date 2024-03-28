@@ -18,8 +18,13 @@ public class SpuImagesServiceImpl implements SpuImagesService {
     }
 
     @Override
-    public boolean updateByImageIdAndSpuId(SpuImages spuImages) {
-        return spuImagesDao.updateByImageIdAndSpuId(spuImages);
+    public boolean updateBySpuImgImageIdAndSpuId(SpuImages spuImages) {
+        return spuImagesDao.updateSpuImgByImageIdAndSkuId(spuImages);
+    }
+
+    @Override
+    public boolean updateBannerByImageIdAndSkuId(SpuImages spuImages) {
+        return spuImagesDao.updateBannerByImageIdAndSkuId(spuImages);
     }
 
     @Override

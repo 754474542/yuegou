@@ -17,6 +17,9 @@ public class SkuImages implements Serializable {
 
     private String imgPath;
 
+    public SkuImages() {
+    }
+
     @Override
     public String toString() {
         return "SkuImages{" +
@@ -24,9 +27,6 @@ public class SkuImages implements Serializable {
                 ", skuId=" + skuId +
                 ", imgPath='" + imgPath + '\'' +
                 '}';
-    }
-
-    public SkuImages() {
     }
 
     public SkuImages(Long imgId, Long skuId, String imgPath) {

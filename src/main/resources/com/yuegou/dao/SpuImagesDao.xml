@@ -7,6 +7,7 @@
         <result property="imgId" column="img_id" jdbcType="INTEGER"/>
         <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
         <result property="imgPath" column="img_path" jdbcType="VARCHAR"/>
+        <result property="indexImgPath" column="index_img_path" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insert">
@@ -14,9 +15,16 @@
         VALUES (#{spuId}, #{imgPath});
     </insert>
 
-    <update id="updateByImageIdAndSpuId">
+    <update id="updateBannerByImageIdAndSkuId">
         update spu_images
         SET img_path = #{imgPath}
+        WHERE img_id = #{imgId}
+          AND spu_id = #{spuId};
+    </update>
+
+    <update id="updateSpuImgByImageIdAndSkuId">
+        update spu_images
+        SET index_img_Path = #{indexImgPath}
         WHERE img_id = #{imgId}
           AND spu_id = #{spuId};
     </update>
@@ -28,14 +36,14 @@
     </delete>
 
     <select id="queryBySpuId" resultMap="SpuImagesMap">
-        select img_id, spu_id, img_path from spu_images where spu_id = #{spuId};
+        select img_id, spu_id, img_path, index_img_path from spu_images where spu_id = #{spuId};
     </select>
 
     <select id="queryByImgId" resultMap="SpuImagesMap">
-        select img_id, spu_id, img_path from spu_images where img_id = #{imgId};
+        select img_id, spu_id, img_path, index_img_path from spu_images where img_id = #{imgId};
     </select>
     <select id="queryAll" resultMap="SpuImagesMap">
-        select img_id, spu_id, img_path from spu_images ;
+        select img_id, spu_id, img_path, index_img_path from spu_images ;
     </select>
 
 </mapper>

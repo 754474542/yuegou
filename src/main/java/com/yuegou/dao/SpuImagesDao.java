@@ -9,7 +9,8 @@ import java.util.List;
 public interface SpuImagesDao {
 
     boolean insert(SpuImages spuImages);
-    boolean updateByImageIdAndSpuId(SpuImages spuImages);
+    boolean updateBannerByImageIdAndSkuId(SpuImages spuImages);
+    boolean updateSpuImgByImageIdAndSkuId(SpuImages spuImages);
     boolean delete(Long imgId);
     SpuImages queryBySpuId(Long spuId);
     SpuImages queryByImgId(Long imgId);

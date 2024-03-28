@@ -6,6 +6,7 @@ public class SpuImages {
     private Long spuId;
     private String imgPath;
     private String base64;
+    private String indexImgPath;
 
     public SpuImages() {
     }
@@ -23,6 +24,14 @@ public class SpuImages {
         this.base64 = base64;
     }
 
+    public SpuImages(Long imgId, Long spuId, String imgPath, String base64, String indexImgPath) {
+        this.imgId = imgId;
+        this.spuId = spuId;
+        this.imgPath = imgPath;
+        this.base64 = base64;
+        this.indexImgPath = indexImgPath;
+    }
+
     @Override
     public String toString() {
         return "SpuImages{" +
@@ -30,7 +39,16 @@ public class SpuImages {
                 ", spuId=" + spuId +
                 ", imgPath='" + imgPath + '\'' +
                 ", base64='" + base64 + '\'' +
+                ", indexImgPath='" + indexImgPath + '\'' +
                 '}';
+    }
+
+    public String getIndexImgPath() {
+        return indexImgPath;
+    }
+
+    public void setIndexImgPath(String indexImgPath) {
+        this.indexImgPath = indexImgPath;
     }
 
     public String getBase64() {

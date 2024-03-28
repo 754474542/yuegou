@@ -98,7 +98,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
                 fileName = "" + skuId + nextFile.hashCode() + timeStamp + ".jpg";
                 SkuImages skuImages = skuImagesDao.queryById(imgIds.get(i));
                 if (!FileUtil.deleteFile(path + skuImages.getImgPath()))
-                throw new FileFailedException(Code.FILEDAILED_ERR, "文件删除失败");
+                    throw new FileFailedException(Code.FILEDAILED_ERR, "文件删除失败");
                 skuImages.setImgPath(fileName);
                 if (!skuImagesDao.updateByImageIdAndSkuId(skuImages))
                     throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
@@ -109,7 +109,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         //执行创建文件的操作
         for (int i = 0; i < files.size(); i++) {
             paths = path + skuId + files.get(i).hashCode() + timeStamp + ".jpg";
-            String fileName2 = "" + skuId +  files.get(i).hashCode() + timeStamp + ".jpg";
+            String fileName2 = "" + skuId + files.get(i).hashCode() + timeStamp + ".jpg";
             if (!FileUtil.saveFile(files.get(i), paths)) throw new FileFailedException(Code.FILEUP_ERR, "图片存储出现异常");
             if (!skuImagesDao.save(new SkuImages(null, skuId, fileName2)))
                 throw new CURDException(Code.SAVE_ERR, "图片路径存储异常");
@@ -144,9 +144,9 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     }
 
     @Override
-    public boolean spuImgFileUp(MultipartFile file, Long spuId, String token) {
+    public boolean spuImgFileUp(MultipartFile file, Long spuId, String token, Boolean isBanner) {
         long maxSize = 5242880L;
-        if (spuId == 0) throw new FileFailedException(Code.FILEDAILED_ERR,"spuId不能为空");
+        if (spuId == 0) throw new FileFailedException(Code.FILEDAILED_ERR, "spuId不能为空");
         if (file.getSize() > maxSize) throw new FileFailedException(Code.FILEUP_ERR, "文件大小过大，请重新选择小于5MB的文件");
         Claims claims = jwtUtil.parseToken(token);
         User user = userDao.getUserName((String) claims.get("userName"));
@@ -154,14 +154,25 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
         String paths = path + user.getUserId() + isTime + ".jpg";
         String fileName = "" + user.getUserId() + isTime + ".jpg";
         SpuImages spuImages = spuImagesDao.queryBySpuId(spuId);
-
-        if (spuImages == null) {
-            SpuImages newSpuImages = new SpuImages(null, spuId, fileName);
-            if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片添加失败");
-        }else {
-            if (!FileUtil.deleteFile(path + spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");;
-            spuImages.setImgPath(fileName);
-            if (!spuImagesDao.updateByImageIdAndSpuId(spuImages))throw new CURDException(Code.SAVE_ERR, "店铺图片修改失败");
+        if (isBanner) {
+            if (spuImages == null) {
+                SpuImages newSpuImages = new SpuImages(null, spuId, fileName);
+                if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺轮播图添加失败");
+            } else {
+                if (spuImages.getImgPath() != null) if (!FileUtil.deleteFile(path + spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺轮播图删除失败");
+                spuImages.setImgPath(fileName);
+                if (!spuImagesDao.updateBannerByImageIdAndSkuId(spuImages))
+                    throw new CURDException(Code.SAVE_ERR, "店铺轮播图修改失败");
+            }
+        } else {
+            if (spuImages == null) {
+                SpuImages newSpuImages = new SpuImages(null, spuId, null, fileName);
+                if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片添加失败");
+            } else {
+                if (spuImages.getIndexImgPath() != null) if (!FileUtil.deleteFile(path + spuImages.getIndexImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");
+                spuImages.setIndexImgPath(fileName);
+                if (!spuImagesDao.updateSpuImgByImageIdAndSkuId(spuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片修改失败");
+            }
         }
         if (!FileUtil.saveFile(file, paths)) throw new FileFailedException(Code.FILEUP_ERR, "店铺图片创建失败");
         return true;
@@ -170,9 +181,10 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     @Override
     public boolean spuImgFileDelete(Long imgId, String token) {
         SpuImages spuImages = spuImagesDao.queryByImgId(imgId);
-        if (spuImages == null) throw new CURDException(Code.DELETE_ERR,"找不到imgId为" + imgId + " 的图片");
+        if (spuImages == null) throw new CURDException(Code.DELETE_ERR, "找不到imgId为" + imgId + " 的图片");
         String imgPath = path + spuImages.getImgPath();
-        if (!FileUtil.deleteFile(imgPath)) throw new FileFailedException(Code.FILEDAILED_ERR,"找不到imgId为" + imgId + " 的图片");
+        if (!FileUtil.deleteFile(imgPath))
+            throw new FileFailedException(Code.FILEDAILED_ERR, "找不到imgId为" + imgId + " 的图片");
         if (!spuImagesDao.delete(imgId)) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
         return true;
     }
@@ -180,7 +192,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     @Override
     public String queryOneImage(QainImageEntity imagePath) {
         byte[] bytes = FileUtil.fileToByte(path + imagePath.getImagePath());
-        if (bytes == null) throw new FileFailedException(Code.SELECT_ERR,"图片读取失败");
+        if (bytes == null) throw new FileFailedException(Code.SELECT_ERR, "图片读取失败");
         return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(bytes);
     }
 

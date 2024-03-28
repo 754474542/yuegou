@@ -39,9 +39,9 @@ public class ImageDownloadController {
     }
 
     @PostMapping("/carousel")
-    public Result spuImgFileUp(@RequestParam("file") MultipartFile file ,@RequestParam(value = "spuId",defaultValue = "0")Long spuId,  @RequestHeader("token") String token){
-        boolean flag = imageDownloadService.spuImgFileUp(file,spuId,token);
-        return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "轮播图上传完毕，感谢您的参加" : "轮播图上传失败");
+    public Result spuImgFileUp(@RequestParam("file") MultipartFile file ,@RequestParam(value = "spuId",defaultValue = "0")Long spuId,@RequestParam(value = "isBanner") Boolean isBanner,  @RequestHeader("token") String token){
+        boolean flag = imageDownloadService.spuImgFileUp(file,spuId,token,isBanner);
+        return new Result(flag ? Code.IMG_UP_OK : Code.IMG_UP_ERR,flag ? "图片上传完毕，感谢您的参加" : "图片上传失败");
     }
 
     @PostMapping("/deleteCarousel/{imgId}")

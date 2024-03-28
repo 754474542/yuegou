@@ -14,6 +14,7 @@
     <update id="updateByImageIdAndSkuId">
         update sku_images SET img_path = #{imgPath} WHERE img_id = #{imgId} AND sku_id = #{skuId};
     </update>
+
     <delete id="delete">
         delete from sku_images where img_id = #{imgId} ;
     </delete>
@@ -29,7 +30,6 @@
     <select id="queryByImgIdAndSkuId" resultMap="SkuImagesMap">
         select img_id, sku_id, img_path from sku_images where img_id = #{imgId} AND sku_id = #{skuId};
     </select>
-
 
 </mapper>
 
