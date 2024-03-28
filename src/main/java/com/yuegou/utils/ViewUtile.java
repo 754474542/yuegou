@@ -23,7 +23,7 @@ public class ViewUtile {
     //获取打乱顺序的轮播图
     public List<SpuImages> getSpuImages(){
         List<SpuImages> bannerList = new ArrayList<>();
-        List<SpuImages> spuImages = spuImagesDao.queryAll();
+        List<SpuImages> spuImages = spuImagesDao.queryBanner();
         Collections.shuffle(spuImages);
         if (spuImages.size() < 8 ){
             logger.error("可用轮播图数量小于8张");

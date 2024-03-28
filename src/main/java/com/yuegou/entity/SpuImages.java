@@ -5,8 +5,9 @@ public class SpuImages {
     private Long imgId;
     private Long spuId;
     private String imgPath;
-    private String base64;
     private String indexImgPath;
+    private String imgPathBase64;
+    private String indexImgPathBase64;
 
     public SpuImages() {
     }
@@ -17,19 +18,27 @@ public class SpuImages {
         this.imgPath = imgPath;
     }
 
-    public SpuImages(Long imgId, Long spuId, String imgPath, String base64) {
+    public SpuImages(Long imgId, Long spuId, String imgPath, String indexImgPath) {
         this.imgId = imgId;
         this.spuId = spuId;
         this.imgPath = imgPath;
-        this.base64 = base64;
+        this.indexImgPath = indexImgPath;
     }
 
-    public SpuImages(Long imgId, Long spuId, String imgPath, String base64, String indexImgPath) {
-        this.imgId = imgId;
-        this.spuId = spuId;
-        this.imgPath = imgPath;
-        this.base64 = base64;
-        this.indexImgPath = indexImgPath;
+    public String getImgPathBase64() {
+        return imgPathBase64;
+    }
+
+    public void setImgPathBase64(String imgPathBase64) {
+        this.imgPathBase64 = imgPathBase64;
+    }
+
+    public String getIndexImgPathBase64() {
+        return indexImgPathBase64;
+    }
+
+    public void setIndexImgPathBase64(String indexImgPathBase64) {
+        this.indexImgPathBase64 = indexImgPathBase64;
     }
 
     @Override
@@ -38,8 +47,9 @@ public class SpuImages {
                 "imgId=" + imgId +
                 ", spuId=" + spuId +
                 ", imgPath='" + imgPath + '\'' +
-                ", base64='" + base64 + '\'' +
                 ", indexImgPath='" + indexImgPath + '\'' +
+                ", imgPathBase64='" + imgPathBase64 + '\'' +
+                ", indexImgPathBase64='" + indexImgPathBase64 + '\'' +
                 '}';
     }
 
@@ -49,14 +59,6 @@ public class SpuImages {
 
     public void setIndexImgPath(String indexImgPath) {
         this.indexImgPath = indexImgPath;
-    }
-
-    public String getBase64() {
-        return base64;
-    }
-
-    public void setBase64(String base64) {
-        this.base64 = base64;
     }
 
     public Long getImgId() {

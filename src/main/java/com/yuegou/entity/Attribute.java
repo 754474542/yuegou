@@ -11,35 +11,30 @@ import java.util.Date;
  */
 public class Attribute implements Serializable {
     private static final long serialVersionUID = 232412927973990890L;
-    /**
-     * 属性id
-     */
+
     private Long attributeId;
-    /**
-     * 属性名称
-     */
+
     private String attributeName;
-    /**
-     * 可选值列表，用分号分割
-     */
+
     private String attributeOptions;
-    /**
-     * 属性类型0 基本属性 1 销售属性
-     */
+
     private Integer attributeType;
-    /**
-     * 排序
-     */
+
     private Long attributeSort;
-    /**
-     * 所属类别
-     */
+
     private Long categoryId;
-    /**
-     * 创建时间
-     */
+
     private Date createTime;
 
+    private Long spuId;
+
+    public Long getSpuId() {
+        return spuId;
+    }
+
+    public void setSpuId(Long spuId) {
+        this.spuId = spuId;
+    }
 
     public Long getAttributeId() {
         return attributeId;
@@ -107,6 +102,7 @@ public class Attribute implements Serializable {
                 ", attributeSort=" + attributeSort +
                 ", categoryId=" + categoryId +
                 ", createTime=" + createTime +
+                ", spuId=" + spuId +
                 '}';
     }
 }

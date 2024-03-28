@@ -5,6 +5,7 @@ import com.yuegou.dao.AttributeDao;
 import com.yuegou.service.AttributeService;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Attribute)表服务实现类
@@ -17,49 +18,24 @@ public class AttributeServiceImpl implements AttributeService {
     @Resource
     private AttributeDao attributeDao;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param attributeId 主键
-     * @return 实例对象
-     */
+
     @Override
-    public Attribute queryById(Long attributeId) {
-        return this.attributeDao.queryById(attributeId);
+    public List<Attribute> queryBySpuId(Long spuId) {
+        return attributeDao.queryBySpuId(spuId);
     }
 
-    /**
-     * 新增数据
-     *
-     * @param attribute 实例对象
-     * @return 实例对象
-     */
     @Override
-    public Attribute insert(Attribute attribute) {
-        this.attributeDao.insert(attribute);
-        return attribute;
+    public boolean insert(Attribute attribute) {
+        return attributeDao.insert(attribute);
     }
 
-    /**
-     * 修改数据
-     *
-     * @param attribute 实例对象
-     * @return 实例对象
-     */
     @Override
-    public Attribute update(Attribute attribute) {
-        this.attributeDao.update(attribute);
-        return this.queryById(attribute.getAttributeId());
+    public boolean update(Attribute attribute) {
+        return attributeDao.update(attribute);
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param attributeId 主键
-     * @return 是否成功
-     */
     @Override
-    public boolean deleteById(Long attributeId) {
-        return attributeDao.deleteById(attributeId);
+    public boolean deleteBySpuId(Long spuId) {
+        return attributeDao.deleteBySpuId(spuId);
     }
 }

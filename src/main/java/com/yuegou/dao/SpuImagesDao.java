@@ -15,5 +15,6 @@ public interface SpuImagesDao {
     SpuImages queryBySpuId(Long spuId);
     SpuImages queryByImgId(Long imgId);
     List<SpuImages> queryAll();
+    List<SpuImages> queryBanner();
 
 }

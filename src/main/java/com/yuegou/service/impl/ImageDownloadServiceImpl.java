@@ -166,7 +166,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
             }
         } else {
             if (spuImages == null) {
-                SpuImages newSpuImages = new SpuImages(null, spuId, null, fileName);
+                SpuImages newSpuImages = new SpuImages(null, spuId, null,fileName);
                 if (!spuImagesDao.insert(newSpuImages)) throw new CURDException(Code.SAVE_ERR, "店铺图片添加失败");
             } else {
                 if (spuImages.getIndexImgPath() != null) if (!FileUtil.deleteFile(path + spuImages.getIndexImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "店铺图片删除失败");
@@ -182,25 +182,22 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     public boolean spuImgFileDelete(Long imgId, String token) {
         SpuImages spuImages = spuImagesDao.queryByImgId(imgId);
         if (spuImages == null) throw new CURDException(Code.DELETE_ERR, "找不到imgId为" + imgId + " 的图片");
-        String imgPath = path + spuImages.getImgPath();
-        if (!FileUtil.deleteFile(imgPath))
-            throw new FileFailedException(Code.FILEDAILED_ERR, "找不到imgId为" + imgId + " 的图片");
+        if (spuImages.getImgPath() != null) if (!FileUtil.deleteFile(path + spuImages.getImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "删除轮播图失败");
+        if (spuImages.getIndexImgPath() != null) if (!FileUtil.deleteFile(path + spuImages.getIndexImgPath())) throw new FileFailedException(Code.FILEDAILED_ERR, "删除主页图失败");
         if (!spuImagesDao.delete(imgId)) throw new CURDException(Code.DELETE_ERR, "店铺图片删除失败");
         return true;
     }
 
     @Override
     public String queryOneImage(QainImageEntity imagePath) {
-        byte[] bytes = FileUtil.fileToByte(path + imagePath.getImagePath());
-        if (bytes == null) throw new FileFailedException(Code.SELECT_ERR, "图片读取失败");
-        return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(bytes);
+        return FileUtil.fileToByte(path + imagePath.getImagePath());
     }
 
     @Override
     public List<SpuImages> queryBannerList() {
         List<SpuImages> bannerList = projectTasks.getBannerList();
         for (SpuImages spuImages : bannerList) {
-            spuImages.setBase64("data:image/jpeg;base64," + Base64.getEncoder().encodeToString(FileUtil.fileToByte(path + spuImages.getImgPath())));
+            spuImages.setImgPathBase64(FileUtil.fileToByte(path + spuImages.getImgPath()));
         }
         return bannerList;
     }

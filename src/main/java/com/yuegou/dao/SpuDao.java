@@ -47,6 +47,8 @@ public interface SpuDao {
 
     List<Spu> queryByStoreIdMax(Long storeId);
 
+    List<Spu> queryIndexPageList(@Param("size") Integer size,@Param("offset") Integer offset);
+
     Spu queryBySpuId(Long spuId);
 
 }

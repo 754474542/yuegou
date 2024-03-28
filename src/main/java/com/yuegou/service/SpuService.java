@@ -39,4 +39,6 @@ public interface SpuService {
 
     boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token);
 
+    List<Spu> queryIndexPageList(Integer size, Integer offset);
+
 }

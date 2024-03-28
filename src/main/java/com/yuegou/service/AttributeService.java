@@ -3,6 +3,8 @@ package com.yuegou.service;
 import com.yuegou.entity.Attribute;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * (Attribute)表服务接口
  *
@@ -12,36 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface AttributeService {
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param attributeId 主键
-     * @return 实例对象
-     */
-    Attribute queryById(Long attributeId);
+    List<Attribute> queryBySpuId(Long spuId);
 
-    /**
-     * 新增数据
-     *
-     * @param attribute 实例对象
-     * @return 实例对象
-     */
-    Attribute insert(Attribute attribute);
+    boolean insert(Attribute attribute);
 
-    /**
-     * 修改数据
-     *
-     * @param attribute 实例对象
-     * @return 实例对象
-     */
-    Attribute update(Attribute attribute);
+    boolean update(Attribute attribute);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param attributeId 主键
-     * @return 是否成功
-     */
-    boolean deleteById(Long attributeId);
+    boolean deleteBySpuId(Long spuId);
 
 }

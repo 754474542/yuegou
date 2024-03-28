@@ -11,8 +11,8 @@
     </resultMap>
 
     <insert id="insert">
-        insert into spu_images (spu_id, img_path)
-        VALUES (#{spuId}, #{imgPath});
+        insert into spu_images (spu_id, img_path, index_img_path)
+        VALUES (#{spuId}, #{imgPath}, #{indexImgPath});
     </insert>
 
     <update id="updateBannerByImageIdAndSkuId">
@@ -44,6 +44,13 @@
     </select>
     <select id="queryAll" resultMap="SpuImagesMap">
         select img_id, spu_id, img_path, index_img_path from spu_images ;
+    </select>
+    <select id="queryBanner" resultMap="SpuImagesMap">
+        select
+            simg.img_id, simg.spu_id, simg.img_path, simg.index_img_path
+        from spu_images simg
+            JOIN spu s ON simg.spu_id = s.spu_id
+        where img_path IS NOT NULL AND s.spu_status = 1;
     </select>
 
 </mapper>

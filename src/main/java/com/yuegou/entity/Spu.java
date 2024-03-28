@@ -53,6 +53,10 @@ public class Spu implements Serializable {
 
     private List<SpuAttributeValue> spuAttributeValueList;
 
+    private SpuImages spuImages;
+
+    private String indexSpuPrice;
+
     @Override
     public String toString() {
         return "Spu{" +
@@ -69,7 +73,24 @@ public class Spu implements Serializable {
                 ", skuList=" + skuList +
                 ", attributeList=" + attributeList +
                 ", spuAttributeValueList=" + spuAttributeValueList +
+                ", spuImages=" + spuImages +
                 '}';
+    }
+
+    public String getIndexSpuPrice() {
+        return indexSpuPrice;
+    }
+
+    public void setIndexSpuPrice(String indexSpuPrice) {
+        this.indexSpuPrice = indexSpuPrice;
+    }
+
+    public SpuImages getSpuImages() {
+        return spuImages;
+    }
+
+    public void setSpuImages(SpuImages spuImages) {
+        this.spuImages = spuImages;
     }
 
     public Integer getDiscount() {

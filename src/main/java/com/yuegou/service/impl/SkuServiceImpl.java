@@ -68,13 +68,9 @@ public class SkuServiceImpl implements SkuService {
     public boolean insertSkuAndAttributeValues(SkuAndAttributeValues skuAndAttributeValues) {
         Sku sku = skuAndAttributeValues.getSku();
         List<SkuAttributeValue> skuAttributeValues = skuAndAttributeValues.getSkuAttributeValues();
-        //获取spu
-        Spu spu = spuDao.queryBySpuId(sku.getSpuId());
-        //通过spu的id获取对应的属性
-        List<Attribute> attributes = attributeDao.queryByCateId(spu.getCategoryId());
-        //用stream流把type=1的全取出来，就是sku要设置的属性
-        List<Attribute> attributesTypeIsOne = attributes.stream().filter(item -> item.getAttributeType().equals(1)).collect(Collectors.toList());
         if (!skuDao.insert(sku)) throw new CURDException(Code.SAVE_ERR,"sku保存失败");
+        List<Attribute> attributes = attributeDao.queryBySpuId(sku.getSpuId());
+        List<Attribute> attributesTypeIsOne = attributes.stream().filter(item -> item.getAttributeType().equals(1)).collect(Collectors.toList());
         for (int i = 0; i < attributesTypeIsOne.size(); i++) {
             skuAttributeValues.get(i).setSkuId(sku.getSkuId());
             skuAttributeValues.get(i).setAttributeId(attributesTypeIsOne.get(i).getAttributeId());
@@ -93,7 +89,6 @@ public class SkuServiceImpl implements SkuService {
         }
         return true;
     }
-
 
     @Override
     public boolean deleteById(Long skuId) {

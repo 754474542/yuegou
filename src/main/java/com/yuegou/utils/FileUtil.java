@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Base64;
 
 public class FileUtil {
 
@@ -56,7 +57,7 @@ public class FileUtil {
         return null;
     }
 
-    public static byte[] fileToByte(String path) {
+    public static String fileToByte(String path) {
         File img = new File(path);
         if (!img.isFile()) throw new FileFailedException(Code.SELECT_ERR,"找不到指定文件");
         byte[] bytes = null;
@@ -75,7 +76,7 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
-        return bytes;
+        return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(bytes);
     }
 
 }

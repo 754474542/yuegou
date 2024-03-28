@@ -6,9 +6,11 @@ import com.yuegou.dao.*;
 import com.yuegou.entity.*;
 import com.yuegou.service.SkuService;
 import com.yuegou.service.SpuService;
+import com.yuegou.utils.FileUtil;
 import com.yuegou.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,6 +42,10 @@ public class SpuServiceImpl implements SpuService {
     private RelationDao relationDao;
     @Autowired
     private SkuService skuService;
+
+    @Value("${utils.imagessavepath}")
+    private String path;
+
 
     /**
      * 新增数据
@@ -106,7 +112,7 @@ public class SpuServiceImpl implements SpuService {
         Date isTime = new Date();
         spu.setCreateTime(isTime);
         if (!spuDao.insert(spu)) throw new CURDException(Code.SAVE_ERR, "spu存储失败");
-        List<Attribute> attributes = attributeDao.queryByCateId(spu.getCategoryId());
+
         Long spuId = spu.getSpuId();
         Claims claims = jwtUtil.parseToken(token);
         //通过名字获取用户，通过用户获取店铺
@@ -116,17 +122,17 @@ public class SpuServiceImpl implements SpuService {
         Relation relation = new Relation(null,store.getStoreId(),spuId);
         if (!relationDao.insert(relation)) throw new CURDException(Code.SAVE_ERR,"商品和店铺关系建立失败");
 
-        List<Attribute> collect = attributes.stream().filter((item1) -> {
-            return item1.getAttributeType().equals(0);
-        }).collect(Collectors.toList());
-
-        for (int i = 0; i < collect.size(); i++) {
-            SpuAttributeValue spuAttributeValue = spuAttributeValueList.get(i);
-            spuAttributeValue.setSpuId(spuId);
-            spuAttributeValue.setAttributeId(collect.get(i).getAttributeId());
-            if (!spuAttributeValueDao.insert(spuAttributeValue)) throw new CURDException(Code.SAVE_ERR, "spu属性存储失败");
-        }
         return true;
+    }
+
+    @Override
+    public List<Spu> queryIndexPageList(Integer size, Integer offset) {
+        List<Spu> spuList = spuDao.queryIndexPageList(size, offset);
+        for (Spu spu : spuList) {
+            SpuImages spuImages = spu.getSpuImages();
+            spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
+        }
+        return spuList;
     }
 
 }

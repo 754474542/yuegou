@@ -52,10 +52,11 @@ public class SpuController {
         return new Result(spu != null ? Code.SELECT_OK : Code.SELECT_ERR, spu, spu != null ? "OK" : "Error");
     }
 
-//    @GetMapping('/indexSpuList')
-//    public Result queryIndexPageList(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
-//        List<Spu> spus = null;
-//        return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
-//    }
+    @GetMapping("/indexSpuList")
+    public Result queryIndexPageList(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<Spu> spus = spuService.queryIndexPageList(size,offset);
+        return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
+    }
 
 }
