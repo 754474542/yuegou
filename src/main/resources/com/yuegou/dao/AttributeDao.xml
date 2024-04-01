@@ -13,10 +13,9 @@
         <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
     </resultMap>
 
-    <!--查询单个-->
+    <!--根据spu查询多个-->
     <select id="queryBySpuId" resultMap="AttributeMap">
         select attribute_id,
-               spu_id
                attribute_name,
                attribute_options,
                attribute_type,

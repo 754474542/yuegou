@@ -42,9 +42,11 @@
     <select id="queryByImgId" resultMap="SpuImagesMap">
         select img_id, spu_id, img_path, index_img_path from spu_images where img_id = #{imgId};
     </select>
+
     <select id="queryAll" resultMap="SpuImagesMap">
         select img_id, spu_id, img_path, index_img_path from spu_images ;
     </select>
+
     <select id="queryBanner" resultMap="SpuImagesMap">
         select
             simg.img_id, simg.spu_id, simg.img_path, simg.index_img_path

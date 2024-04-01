@@ -2,6 +2,7 @@ package com.yuegou.service;
 
 import com.yuegou.entity.Spu;
 import com.yuegou.entity.SpuAndAttributeValues;
+import com.yuegou.entity.SpuSearchEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -40,5 +41,7 @@ public interface SpuService {
     boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token);
 
     List<Spu> queryIndexPageList(Integer size, Integer offset);
+
+    List<Spu> querySearchSpu(SpuSearchEntity spuSearchEntity);
 
 }

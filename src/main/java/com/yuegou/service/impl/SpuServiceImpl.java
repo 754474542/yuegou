@@ -103,7 +103,15 @@ public class SpuServiceImpl implements SpuService {
 
     @Override
     public Spu queryBySpuId(Long spuId) {
-        return spuDao.queryBySpuId(spuId);
+        Spu spu = spuDao.queryBySpuId(spuId);
+        List<Sku> skuList = spu.getSkuList();
+        for (Sku sku : skuList) {
+            List<SkuImages> skuImagesList = sku.getSkuImagesList();
+            for (SkuImages skuImages : skuImagesList) {
+                skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+            }
+        }
+        return spu;
     }
 
     public boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token) {
@@ -128,6 +136,16 @@ public class SpuServiceImpl implements SpuService {
     @Override
     public List<Spu> queryIndexPageList(Integer size, Integer offset) {
         List<Spu> spuList = spuDao.queryIndexPageList(size, offset);
+        for (Spu spu : spuList) {
+            SpuImages spuImages = spu.getSpuImages();
+            spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
+        }
+        return spuList;
+    }
+
+    @Override
+    public List<Spu> querySearchSpu(SpuSearchEntity spuSearchEntity) {
+        List<Spu> spuList = spuDao.querySearchSpu(spuSearchEntity);
         for (Spu spu : spuList) {
             SpuImages spuImages = spu.getSpuImages();
             spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));

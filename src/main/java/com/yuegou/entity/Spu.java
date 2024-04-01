@@ -57,6 +57,10 @@ public class Spu implements Serializable {
 
     private String indexSpuPrice;
 
+    private Integer priveAvg;
+
+    private Integer orderSales;
+
     @Override
     public String toString() {
         return "Spu{" +
@@ -74,7 +78,26 @@ public class Spu implements Serializable {
                 ", attributeList=" + attributeList +
                 ", spuAttributeValueList=" + spuAttributeValueList +
                 ", spuImages=" + spuImages +
+                ", indexSpuPrice='" + indexSpuPrice + '\'' +
+                ", priveAvg=" + priveAvg +
+                ", orderSales=" + orderSales +
                 '}';
+    }
+
+    public Integer getOrderSales() {
+        return orderSales;
+    }
+
+    public void setOrderSales(Integer orderSales) {
+        this.orderSales = orderSales;
+    }
+
+    public Integer getPriveAvg() {
+        return priveAvg;
+    }
+
+    public void setPriveAvg(Integer priveAvg) {
+        this.priveAvg = priveAvg;
     }
 
     public String getIndexSpuPrice() {

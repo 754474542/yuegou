@@ -12,11 +12,18 @@
         <result property="spuStatus" column="spu_status" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="discount" column="discount" jdbcType="INTEGER"/>
-        <association property="category" javaType="com.yuegou.entity.Category" select="com.yuegou.dao.CategoryDao.queryByIdAllStyle" column="category_id" />
-        <association property="spuImages" javaType="com.yuegou.entity.SpuImages" select="com.yuegou.dao.SpuImagesDao.queryBySpuId" column="spu_id"/>
-        <collection property="skuList" ofType="com.yuegou.entity.Sku" select="com.yuegou.dao.SkuDao.queryBySpuId" column="spu_id"/>
-        <collection property="attributeList" ofType="com.yuegou.entity.Attribute" select="com.yuegou.dao.AttributeDao.queryByCateId" column="category_id"/>
-        <collection property="spuAttributeValueList" ofType="com.yuegou.entity.SpuAttributeValue" select="com.yuegou.dao.SpuAttributeValueDao.queryBySpuId" column="spu_id"/>
+        <result property="priveAvg" column="prive_avg" jdbcType="INTEGER"/>
+        <result property="orderSales" column="order_sales" jdbcType="INTEGER"/>
+        <association property="category" javaType="com.yuegou.entity.Category"
+                     select="com.yuegou.dao.CategoryDao.queryByIdAllStyle" column="category_id"/>
+        <association property="spuImages" javaType="com.yuegou.entity.SpuImages"
+                     select="com.yuegou.dao.SpuImagesDao.queryBySpuId" column="spu_id"/>
+        <collection property="skuList" ofType="com.yuegou.entity.Sku" select="com.yuegou.dao.SkuDao.queryBySpuId"
+                    column="spu_id"/>
+        <collection property="attributeList" ofType="com.yuegou.entity.Attribute"
+                    select="com.yuegou.dao.AttributeDao.queryBySpuId" column="spu_id"/>
+        <collection property="spuAttributeValueList" ofType="com.yuegou.entity.SpuAttributeValue"
+                    select="com.yuegou.dao.SpuAttributeValueDao.queryBySpuId" column="spu_id"/>
     </resultMap>
 
     <resultMap type="com.yuegou.entity.Spu" id="SpuMap">
@@ -29,22 +36,32 @@
         <result property="spuStatus" column="spu_status" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="discount" column="discount" jdbcType="INTEGER"/>
+        <result property="priveAvg" column="prive_avg" jdbcType="INTEGER"/>
+        <result property="orderSales" column="order_sales" jdbcType="INTEGER"/>
     </resultMap>
 
 
-
     <!--查询指定行数据-->
-    <select id="queryBySpuId" resultMap="SpuMap">
-        select
-        s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
-        from spu s LEFT JOIN relation r ON s.spu_id = r.spu_id JOIN store dp ON r.store_id = dp.store_id
+    <select id="queryBySpuId" resultMap="SpuMaps">
+        select s.spu_id,
+               dp.store_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s
+                 LEFT JOIN relation r ON s.spu_id = r.spu_id
+                 JOIN store dp ON r.store_id = dp.store_id
         where s.spu_id = #{spuId};
     </select>
 
     <!--新增所有列-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="spuId">
         insert into spu(spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount)
-        values (#{spuName}, #{spuTitle}, #{spuDescription}, #{categoryId}, #{spuStatus}, #{createTime},#{discount})
+        values (#{spuName}, #{spuTitle}, #{spuDescription}, #{categoryId}, #{spuStatus}, #{createTime}, #{discount})
     </insert>
 
     <!--通过主键修改数据-->
@@ -84,18 +101,50 @@
     </delete>
 
     <select id="queryByStoreId" resultMap="SpuMap">
-        select  s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount from spu s JOIN relation r ON s.spu_id = r.spu_id where r.store_id = #{storeId}
+        select s.spu_id,
+               dp.store_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s
+                 JOIN relation r ON s.spu_id = r.spu_id
+        where r.store_id = #{storeId}
     </select>
 
     <select id="queryByStoreIdMax" resultMap="SpuMaps">
-        select  s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount from spu s JOIN relation r ON s.spu_id = r.spu_id where r.store_id = #{storeId}
+        select s.spu_id,
+               dp.store_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s
+                 JOIN relation r ON s.spu_id = r.spu_id
+        where r.store_id = #{storeId}
     </select>
 
     <select id="queryAll" resultMap="SpuMap">
-        select
-            s.spu_id, dp.store_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
-        from spu s LEFT JOIN relation r ON s.spu_id = r.spu_id JOIN store dp ON r.store_id = dp.store_id
-        limit #{size} offset #{offset};
+        select s.spu_id,
+               dp.store_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s
+                 LEFT JOIN relation r ON s.spu_id = r.spu_id
+                 JOIN store dp ON r.store_id = dp.store_id
+            limit #{size}
+        offset #{offset};
     </select>
 
     <resultMap type="com.yuegou.entity.Spu" id="SpuIndexList">
@@ -108,14 +157,62 @@
         <result property="spuStatus" column="spu_status" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="discount" column="discount" jdbcType="INTEGER"/>
-        <association property="spuImages" javaType="com.yuegou.entity.SpuImages" select="com.yuegou.dao.SpuImagesDao.queryBySpuId" column="spu_id"/>
-        <collection property="skuList" ofType="com.yuegou.entity.Sku" select="com.yuegou.dao.SkuDao.queryBySpuId" column="spu_id"/>
+        <result property="priveAvg" column="prive_avg" jdbcType="INTEGER"/>
+        <result property="orderSales" column="order_sales" jdbcType="INTEGER"/>
+        <association property="spuImages" javaType="com.yuegou.entity.SpuImages"
+                     select="com.yuegou.dao.SpuImagesDao.queryBySpuId" column="spu_id"/>
+        <collection property="skuList" ofType="com.yuegou.entity.Sku" select="com.yuegou.dao.SkuDao.queryBySpuId"
+                    column="spu_id"/>
     </resultMap>
 
     <select id="queryIndexPageList" resultMap="SpuIndexList">
-        select  s.spu_id, spu_name, spu_title, spu_description, category_id, spu_status, create_time, discount
-        from spu s LEFT JOIN spu_images si ON s.spu_id = si.spu_id
-        where si.index_img_path IS NOT NULL AND spu_status = 1
+        select s.spu_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s
+                 LEFT JOIN spu_images si ON s.spu_id = si.spu_id
+        where si.index_img_path IS NOT NULL
+          AND spu_status = 1
+            limit #{size} offset #{offset};
+    </select>
+
+    <select id="querySearchSpu" resultMap="SpuIndexList">
+            WITH sku_price_avg AS
+            (SELECT DISTINCT spu_id, ROUND(avg(sku_price) OVER(PARTITION BY spu_id),2) prive_avg from sku), order_sales
+            AS
+            (SELECT DISTINCT d.spu_id, sum(d.number) over(PARTITION BY spu_id) order_sales FROM `order` o JOIN detail d
+            ON o.order_id = d.order_id)
+        select
+        s.spu_id, spu_name, spu_title, spu_description, category_id, spu_status,
+        create_time, discount, ROUND((spa.prive_avg*(discount/100)),2) prive_avg, COALESCE(os.order_sales,0) order_sales
+        from spu s
+        LEFT JOIN spu_images si ON s.spu_id = si.spu_id
+            LEFT JOIN sku_price_avg spa ON s.spu_id = spa.spu_id
+            LEFT JOIN order_sales os ON s.spu_id = os.spu_id
+        <where>
+            si.index_img_path IS NOT NULL
+            AND spu_status = 1
+            <if test="typeSpuName != null and typeSpuName != ''">
+                AND s.spu_title LIKE CONCAT('%', #{typeSpuName}, '%')
+            </if>
+            <if test="typeDiscounts == 'OK' ">
+                AND s.discount != 100
+            </if>
+        </where>
+        <if test="typeSales != null and typeSales != '' and typePrice != null and typePrice != '' ">
+            order by ROUND((spa.prive_avg*(discount/100)),2) ${typePrice}, order_sales ${typeSales}
+        </if>
+        <if test="typeSales != null and typeSales != '' and typePrice == null or typePrice == '' ">
+            order by order_sales ${typeSales}
+        </if>
+        <if test="typePrice != null and typePrice != '' and typeSales == null or typeSales == '' ">
+            order by ROUND((spa.prive_avg*(discount/100)),2) ${typePrice}
+        </if>
         limit #{size} offset #{offset};
     </select>
 

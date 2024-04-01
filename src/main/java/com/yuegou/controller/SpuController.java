@@ -5,6 +5,7 @@ import com.yuegou.controller.pretreatment.Result;
 import com.yuegou.entity.Spu;
 import com.yuegou.entity.SpuAndAttributeValues;
 import com.yuegou.entity.SpuAttributeValue;
+import com.yuegou.entity.SpuSearchEntity;
 import com.yuegou.service.SpuService;
 import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,13 @@ public class SpuController {
     public Result queryIndexPageList(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
         int offset = PaginationUtil.calculateOffset(page, size);
         List<Spu> spus = spuService.queryIndexPageList(size,offset);
+        return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
+    }
+
+    @PostMapping("/searchSpu")
+    public Result querySearchSpu(@RequestBody SpuSearchEntity spuSearchEntity){
+        spuSearchEntity.setOffset(PaginationUtil.calculateOffset(spuSearchEntity.getPage(),spuSearchEntity.getSize()));
+        List<Spu> spus = spuService.querySearchSpu(spuSearchEntity);
         return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
     }
 

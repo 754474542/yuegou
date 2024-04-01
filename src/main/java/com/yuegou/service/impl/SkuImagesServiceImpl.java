@@ -3,6 +3,7 @@ package com.yuegou.service.impl;
 import com.yuegou.entity.SkuImages;
 import com.yuegou.dao.SkuImagesDao;
 import com.yuegou.service.SkuImagesService;
+import com.yuegou.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

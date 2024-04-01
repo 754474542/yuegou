@@ -1,8 +1,10 @@
 package com.yuegou.dao;
 
 import com.yuegou.entity.Spu;
+import com.yuegou.entity.SpuSearchEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -50,6 +52,9 @@ public interface SpuDao {
     List<Spu> queryIndexPageList(@Param("size") Integer size,@Param("offset") Integer offset);
 
     Spu queryBySpuId(Long spuId);
+
+    List<Spu> querySearchSpu(SpuSearchEntity spuSearchEntity);
+
 
 }
 
