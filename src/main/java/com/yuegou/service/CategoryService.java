@@ -3,6 +3,8 @@ package com.yuegou.service;
 import com.yuegou.entity.Category;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * (Category)表服务接口
  *
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2024-03-13 10:03:34
  */
 @Transactional
-public interface CategoryService {
+public interface CategoryService  {
 
     /**
      * 通过ID查询单条数据
@@ -22,13 +24,15 @@ public interface CategoryService {
 
     Category queryByIdAllStyle(Long categoryId);
 
+    List<Category> queryAllSecondary();
+
     /**
      * 新增数据
      *
      * @param category 实例对象
      * @return 实例对象
      */
-    Category insert(Category category);
+    boolean insert(Category category);
 
     /**
      * 修改数据
@@ -36,7 +40,7 @@ public interface CategoryService {
      * @param category 实例对象
      * @return 实例对象
      */
-    Category update(Category category);
+    boolean update(Category category);
 
     /**
      * 通过主键删除数据

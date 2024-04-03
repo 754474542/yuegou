@@ -29,6 +29,10 @@ public interface GoodEvaluateDao {
 
     List<GoodEvaluate> queryByUserId(Long userId);
 
+    List<GoodEvaluate> queryBySpuId(Long spuId);
+
+    List<GoodEvaluate> queryBySpuIdLimit(@Param("size") Integer size,@Param("offset") Integer offset,@Param("spuId") Long spuId);
+
     /**
      * 新增数据
      *

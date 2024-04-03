@@ -10,32 +10,40 @@ import java.io.Serializable;
  */
 public class Cart implements Serializable {
     private static final long serialVersionUID = -13137235360090552L;
-    
+
     private Long cartId;
-    
+
     private Long userId;
-    
-    private Long storeId;
-    
+
     private Long spuId;
-    
+
     private Long skuId;
-    
+
     private Integer number;
 
     private Spu spu;
+
+    private Sku sku;
 
     @Override
     public String toString() {
         return "Cart{" +
                 "cartId=" + cartId +
                 ", userId=" + userId +
-                ", storeId=" + storeId +
                 ", spuId=" + spuId +
                 ", skuId=" + skuId +
                 ", number=" + number +
                 ", spu=" + spu +
+                ", sku=" + sku +
                 '}';
+    }
+
+    public Sku getSku() {
+        return sku;
+    }
+
+    public void setSku(Sku sku) {
+        this.sku = sku;
     }
 
     public Spu getSpu() {
@@ -60,14 +68,6 @@ public class Cart implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public Long getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
     }
 
     public Long getSpuId() {

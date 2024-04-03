@@ -1,6 +1,8 @@
 package com.yuegou.entity;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * (GoodEvaluate)实体类
@@ -27,8 +29,13 @@ public class GoodEvaluate implements Serializable {
      */
     private Integer evaluateFraction;
 
-    public GoodEvaluate() {
-    }
+    private Long detailId;
+
+    private User user;
+
+    private Date createTime;
+
+    private Sku sku;
 
     @Override
     public String toString() {
@@ -39,7 +46,27 @@ public class GoodEvaluate implements Serializable {
                 ", userId=" + userId +
                 ", evaluateContent='" + evaluateContent + '\'' +
                 ", evaluateFraction=" + evaluateFraction +
+                ", detailId=" + detailId +
+                ", user=" + user +
+                ", createTime=" + createTime +
+                ", sku=" + sku +
                 '}';
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Sku getSku() {
+        return sku;
+    }
+
+    public void setSku(Sku sku) {
+        this.sku = sku;
     }
 
     public Long getEvaluateId() {
@@ -88,6 +115,22 @@ public class GoodEvaluate implements Serializable {
 
     public void setEvaluateFraction(Integer evaluateFraction) {
         this.evaluateFraction = evaluateFraction;
+    }
+
+    public Long getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(Long detailId) {
+        this.detailId = detailId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
 

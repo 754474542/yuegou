@@ -6,6 +6,7 @@ import com.yuegou.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Category)表服务实现类
@@ -34,6 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.queryByIdAllStyle(categoryId);
     }
 
+    @Override
+    public List<Category> queryAllSecondary() {
+        return categoryDao.queryAllSecondary();
+    }
+
     /**
      * 新增数据
      *
@@ -41,9 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
      * @return 实例对象
      */
     @Override
-    public Category insert(Category category) {
-        this.categoryDao.insert(category);
-        return category;
+    public boolean insert(Category category) {
+        return categoryDao.insert(category);
     }
 
     /**
@@ -53,9 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
      * @return 实例对象
      */
     @Override
-    public Category update(Category category) {
-        this.categoryDao.update(category);
-        return this.queryById(category.getCategoryId());
+    public boolean update(Category category) {
+        return categoryDao.update(category);
     }
 
     /**
@@ -66,6 +70,6 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public boolean deleteById(Long categoryId) {
-        return this.categoryDao.deleteById(categoryId) > 0;
+        return categoryDao.deleteById(categoryId);
     }
 }

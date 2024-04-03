@@ -3,6 +3,8 @@ package com.yuegou.service;
 import com.yuegou.entity.Cart;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * (Cart)表服务接口
  *
@@ -12,14 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface CartService {
 
-    Cart queryByUserId(Long userId);
+    List<Cart> queryByUserId(Long userId);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param cartId 主键
-     * @return 是否成功
-     */
+    boolean insert(Cart cart,String token);
+
+    boolean update(Cart cart);
+
     boolean deleteById(Long cartId);
 
 }

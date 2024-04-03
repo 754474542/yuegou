@@ -47,6 +47,15 @@
         </where>
     </select>
 
+    <select id="queryAllSecondary" resultMap="CategoryMap">
+        select category_id,
+               category_name,
+               parent_id,
+               create_time
+        from category
+        where parent_id != 0
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="categoryId" useGeneratedKeys="true">
         insert into category(category_name, parent_id, create_time)

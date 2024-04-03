@@ -62,6 +62,7 @@ public class SpuController {
 
     @PostMapping("/searchSpu")
     public Result querySearchSpu(@RequestBody SpuSearchEntity spuSearchEntity){
+        System.out.println(spuSearchEntity);
         spuSearchEntity.setOffset(PaginationUtil.calculateOffset(spuSearchEntity.getPage(),spuSearchEntity.getSize()));
         List<Spu> spus = spuService.querySearchSpu(spuSearchEntity);
         return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");

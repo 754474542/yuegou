@@ -49,6 +49,10 @@ public interface GoodEvaluateService {
 
     List<GoodEvaluate> queryBySkuId(Long skuId);
 
+    List<GoodEvaluate> queryBySpuId(Long spuId);
+
+    List<GoodEvaluate> queryBySpuIdLimit(Integer size, Integer offset,Long spuId);
+
     List<GoodEvaluate> queryAll(Integer size, Integer offset);
 
     List<GoodEvaluate> queryByUserId(Long userId);

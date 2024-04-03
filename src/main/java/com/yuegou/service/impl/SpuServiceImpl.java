@@ -31,8 +31,6 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     private SpuAttributeValueDao spuAttributeValueDao;
     @Autowired
-    private AttributeDao attributeDao;
-    @Autowired
     private JwtUtil jwtUtil;
     @Autowired
     private UserDao userDao;
@@ -66,7 +64,7 @@ public class SpuServiceImpl implements SpuService {
      */
     @Override
     public boolean deleteById(Long spuId) {
-        if (!spuDao.deleteById(spuId)) throw new CURDException(Code.DELETE_ERR,"spu删除失败");
+        if (!spuDao.deleteById(spuId)) throw new CURDException(Code.DELETE_ERR, "spu删除失败");
         List<SpuAttributeValue> spuAttributeValues = spuAttributeValueDao.queryBySpuId(spuId);
         int size = spuAttributeValues.size();
         for (SpuAttributeValue spuAttributeValue : spuAttributeValues) {
@@ -74,12 +72,14 @@ public class SpuServiceImpl implements SpuService {
         }
         //删除关系表的关系。
         Relation relation = relationDao.queryBySpuId(spuId);
-        if (relation == null) throw new CURDException(Code.DELETE_ERR,"找不到对应的关系");
-        if (!relationDao.deleteById(relation.getRelationId())) throw new CURDException(Code.DELETE_ERR,"删除关系失败");;
+        if (relation == null) throw new CURDException(Code.DELETE_ERR, "找不到对应的关系");
+        if (!relationDao.deleteById(relation.getRelationId())) throw new CURDException(Code.DELETE_ERR, "删除关系失败");
+        ;
         //删除所有有关系的sku
         List<Sku> skus = skuService.queryBySpuId(spuId);
         for (Sku sku : skus) {
-            if (!skuService.deleteById(sku.getSkuId())) throw new CURDException(Code.DELETE_ERR,"sku删除失败");;
+            if (!skuService.deleteById(sku.getSkuId())) throw new CURDException(Code.DELETE_ERR, "sku删除失败");
+            ;
         }
         return size == 0;
     }
@@ -87,18 +87,20 @@ public class SpuServiceImpl implements SpuService {
     @Override
     public boolean update(SpuAndAttributeValues spuAndAttributeValues) {
         Spu spu = spuAndAttributeValues.getSpu();
-        if (spuDao.queryBySpuId(spu.getSpuId()) == null) throw new CURDException(Code.SELECT_ERR,"没有找到id为" + spu.getSpuId() + " 的商品");
-        if (!spuDao.update(spu)) throw new CURDException(Code.UPDATE_ERR,"spu更新失败");
+        if (spuDao.queryBySpuId(spu.getSpuId()) == null)
+            throw new CURDException(Code.SELECT_ERR, "没有找到id为" + spu.getSpuId() + " 的商品");
+        if (!spuDao.update(spu)) throw new CURDException(Code.UPDATE_ERR, "spu更新失败");
         List<SpuAttributeValue> spuAttributeValueList = spuAndAttributeValues.getSpuAttributeValueList();
         for (SpuAttributeValue spuAttributeValue : spuAttributeValueList) {
             System.out.println(spuAttributeValue);
-            if(!spuAttributeValueDao.update(spuAttributeValue)) throw new CURDException(Code.UPDATE_ERR,"spuAttributeValue更新失败");
+            if (!spuAttributeValueDao.update(spuAttributeValue))
+                throw new CURDException(Code.UPDATE_ERR, "spuAttributeValue更新失败");
         }
         return true;
     }
 
     public List<Spu> queryAll(Integer size, Integer offset) {
-        return spuDao.queryAll(size,offset);
+        return spuDao.queryAll(size, offset);
     }
 
     @Override
@@ -107,14 +109,22 @@ public class SpuServiceImpl implements SpuService {
         List<Sku> skuList = spu.getSkuList();
         for (Sku sku : skuList) {
             List<SkuImages> skuImagesList = sku.getSkuImagesList();
-            for (SkuImages skuImages : skuImagesList) {
-                skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+            if (skuImagesList.size() == 0) {
+                skuImagesList.add(new SkuImages());
+                skuImagesList.add(new SkuImages());
+                skuImagesList.add(new SkuImages());
+                skuImagesList.add(new SkuImages());
+                skuImagesList.add(new SkuImages());
+            } else {
+                for (SkuImages skuImages : skuImagesList) {
+                    skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+                }
             }
         }
         return spu;
     }
 
-    public boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token) {
+    public boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues, String token) {
         Spu spu = spuAndAttributeValues.getSpu();
         List<SpuAttributeValue> spuAttributeValueList = spuAndAttributeValues.getSpuAttributeValueList();
         Date isTime = new Date();
@@ -127,8 +137,8 @@ public class SpuServiceImpl implements SpuService {
         User userName = userDao.getUserName((String) claims.get("userName"));
         Store store = storeDao.queryByUserId(userName.getUserId());
         //relation创建这个对象与店铺建立关系
-        Relation relation = new Relation(null,store.getStoreId(),spuId);
-        if (!relationDao.insert(relation)) throw new CURDException(Code.SAVE_ERR,"商品和店铺关系建立失败");
+        Relation relation = new Relation(null, store.getStoreId(), spuId);
+        if (!relationDao.insert(relation)) throw new CURDException(Code.SAVE_ERR, "商品和店铺关系建立失败");
 
         return true;
     }

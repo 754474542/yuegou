@@ -25,7 +25,7 @@
                attribute_id,
                attribute_value
         from spu_attribute_value
-        where spu_id = #{spuId}
+        where spu_id = #{spuId} order by attribute_id
     </select>
 
     <!--统计总行数-->

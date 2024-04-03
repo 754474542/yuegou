@@ -102,7 +102,6 @@
 
     <select id="queryByStoreId" resultMap="SpuMap">
         select s.spu_id,
-               dp.store_id,
                spu_name,
                spu_title,
                spu_description,
@@ -202,6 +201,9 @@
             </if>
             <if test="typeDiscounts == 'OK' ">
                 AND s.discount != 100
+            </if>
+            <if test="categoryId != null and categoryId != '' ">
+                AND s.category_id = ${categoryId}
             </if>
         </where>
         <if test="typeSales != null and typeSales != '' and typePrice != null and typePrice != '' ">

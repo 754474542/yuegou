@@ -2,7 +2,6 @@ package com.yuegou.dao;
 
 import com.yuegou.entity.Cart;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,15 +14,15 @@ import java.util.List;
 @Mapper
 public interface CartDao {
 
-    Cart queryByUserId(Long userId);
+    List<Cart> queryByUserId(Long userId);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param cartId 主键
-     * @return 影响行数
-     */
-    int deleteById(Long cartId);
+    boolean insert(Cart cart);
+
+    boolean mergeCart(Cart cart);
+
+    boolean update(Cart cart);
+
+    boolean deleteById(Long cartId);
 
 }
 

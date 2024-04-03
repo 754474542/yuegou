@@ -36,16 +36,23 @@ public class GoodEvaluateController {
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag);
     }
 
-    @GetMapping("/{id}")
-    public Result getById(@PathVariable Long id){
-        GoodEvaluate goodEvaluate = goodEvaluateService.queryById(id);
-        return new Result(goodEvaluate != null ? Code.SELECT_OK : Code.SELECT_ERR, goodEvaluate, goodEvaluate != null ? "OK" : "Error");
+    @GetMapping("/{spuId}")
+    public Result getById(@PathVariable Long spuId){
+        List<GoodEvaluate> goodEvaluateList = goodEvaluateService.queryBySpuId(spuId);
+        return new Result(goodEvaluateList != null ? Code.SELECT_OK : Code.SELECT_ERR, goodEvaluateList, goodEvaluateList != null ? "OK" : "Error");
     }
 
     @GetMapping
     public Result getAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size){
         int offset = PaginationUtil.calculateOffset(page, size);
         List<GoodEvaluate> goodEvaluateList = goodEvaluateService.queryAll(size,offset);
+        return new Result(goodEvaluateList != null ? Code.SELECT_OK : Code.SELECT_ERR, goodEvaluateList, goodEvaluateList != null ? "OK" : "Error");
+    }
+
+    @GetMapping("/queryBySpuIdLimit")
+    public Result queryBySpuIdAllLimit(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page, @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size,@RequestParam Long spuId){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<GoodEvaluate> goodEvaluateList = goodEvaluateService.queryBySpuIdLimit(size,offset,spuId);
         return new Result(goodEvaluateList != null ? Code.SELECT_OK : Code.SELECT_ERR, goodEvaluateList, goodEvaluateList != null ? "OK" : "Error");
     }
 

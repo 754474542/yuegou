@@ -24,13 +24,8 @@ public interface CategoryDao {
 
     Category queryByIdAllStyle(Long categoryId);
 
-    /**
-     * 统计总行数
-     *
-     * @param category 查询条件
-     * @return 总行数
-     */
-    long count(Category category);
+    List<Category> queryAllSecondary();
+
 
     /**
      * 新增数据
@@ -38,7 +33,7 @@ public interface CategoryDao {
      * @param category 实例对象
      * @return 影响行数
      */
-    int insert(Category category);
+    boolean insert(Category category);
 
     /**
      * 修改数据
@@ -46,7 +41,7 @@ public interface CategoryDao {
      * @param category 实例对象
      * @return 影响行数
      */
-    int update(Category category);
+    boolean update(Category category);
 
     /**
      * 通过主键删除数据
@@ -54,7 +49,7 @@ public interface CategoryDao {
      * @param categoryId 主键
      * @return 影响行数
      */
-    int deleteById(Long categoryId);
+    boolean deleteById(Long categoryId);
 
 }
 

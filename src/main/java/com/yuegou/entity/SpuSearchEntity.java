@@ -8,6 +8,7 @@ public class SpuSearchEntity {
     private String typePrice;
     private String typeDiscounts;
     private String typeSpuName;
+    private String categoryId;
 
     @Override
     public String toString() {
@@ -19,7 +20,16 @@ public class SpuSearchEntity {
                 ", typePrice='" + typePrice + '\'' +
                 ", typeDiscounts='" + typeDiscounts + '\'' +
                 ", typeSpuName='" + typeSpuName + '\'' +
+                ", categoryId='" + categoryId + '\'' +
                 '}';
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Integer getOffset() {
