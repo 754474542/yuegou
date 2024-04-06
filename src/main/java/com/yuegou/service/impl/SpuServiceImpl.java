@@ -92,7 +92,6 @@ public class SpuServiceImpl implements SpuService {
         if (!spuDao.update(spu)) throw new CURDException(Code.UPDATE_ERR, "spu更新失败");
         List<SpuAttributeValue> spuAttributeValueList = spuAndAttributeValues.getSpuAttributeValueList();
         for (SpuAttributeValue spuAttributeValue : spuAttributeValueList) {
-            System.out.println(spuAttributeValue);
             if (!spuAttributeValueDao.update(spuAttributeValue))
                 throw new CURDException(Code.UPDATE_ERR, "spuAttributeValue更新失败");
         }
@@ -106,6 +105,8 @@ public class SpuServiceImpl implements SpuService {
     @Override
     public Spu queryBySpuId(Long spuId) {
         Spu spu = spuDao.queryBySpuId(spuId);
+        SpuImages spuImages = spu.getSpuImages();
+        spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
         List<Sku> skuList = spu.getSkuList();
         for (Sku sku : skuList) {
             List<SkuImages> skuImagesList = sku.getSkuImagesList();

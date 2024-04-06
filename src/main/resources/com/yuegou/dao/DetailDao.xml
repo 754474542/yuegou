@@ -10,7 +10,9 @@
         <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
         <result property="price" column="price" jdbcType="NUMERIC"/>
         <result property="number" column="number" jdbcType="INTEGER"/>
-        <association property="spu" javaType="com.yuegou.entity.Spu" select="com.yuegou.dao.SpuDao.queryBySpuId" column="spu_id"/>
+        <result property="detailStatus" column="detail_status" jdbcType="INTEGER"/>
+        <association property="spu" javaType="com.yuegou.entity.Spu" select="com.yuegou.dao.SpuDao.queryBySpuId"
+                     column="spu_id"/>
     </resultMap>
 
     <resultMap type="com.yuegou.entity.Detail" id="DetailMap">
@@ -20,34 +22,38 @@
         <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
         <result property="skuId" column="sku_id" jdbcType="INTEGER"/>
         <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="detailStatus" column="detail_status" jdbcType="INTEGER"/>
         <result property="number" column="number" jdbcType="INTEGER"/>
     </resultMap>
 
     <update id="update">
         update detail
-            <set>
-                <if test="orderId != null">
-                    order_id = #{orderId},
-                </if>
-                <if test="storeId != null">
-                    store_id = #{storeId},
-                </if>
-                <if test="spuId != null">
-                    spu_id = #{spuId},
-                </if>
-                <if test="skuId != null">
-                    sku_id = #{skuId},
-                </if>
-                <if test="price != null">
-                    price = #{price},
-                </if>
-                <if test="number != null">
-                    number = #{number}
-                </if>
-            </set>
-    <where>
-        detail_id = #{detailId};
-    </where>
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId},
+            </if>
+            <if test="spuId != null">
+                spu_id = #{spuId},
+            </if>
+            <if test="skuId != null">
+                sku_id = #{skuId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="number != null">
+                number = #{number},
+            </if>
+            <if test="detailStatus != null">
+                detail_status = #{detailStatus},
+            </if>
+        </set>
+        <where>
+            detail_id = #{detailId};
+        </where>
     </update>
 
     <!--查询单个-->
@@ -58,20 +64,23 @@
                spu_id,
                sku_id,
                price,
-               number
+               number,
+               detail_status
         from detail
         where detail_id = #{detailId}
     </select>
 
-    <select id="queryByOrderId" resultMap="DetailMap">
+    <select id="queryByOrderId" resultMap="DetailMaps">
         select detail_id,
                order_id,
                store_id,
                spu_id,
                sku_id,
                price,
-               number
-        from detail where order_id = #{orderId};
+               number,
+               detail_status
+        from detail
+        where order_id = #{orderId};
     </select>
 
     <select id="queryByOrderIdMax" resultMap="DetailMaps">
@@ -81,8 +90,10 @@
                spu_id,
                sku_id,
                price,
-               number
-        from detail where order_id = #{orderId};
+               number,
+               detail_status
+        from detail
+        where order_id = #{orderId};
     </select>
 
     <select id="queryBySkuIdAndSpuId" resultMap="DetailMaps">
@@ -92,14 +103,35 @@
                spu_id,
                sku_id,
                price,
-               number
-        from detail where sku_id = #{skuId} And spu_id = #{spuId};
+               number,
+               detail_status
+        from detail
+        where sku_id = #{skuId}
+          And spu_id = #{spuId};
+    </select>
+    <select id="queryByStoreId" resultMap="DetailMaps">
+        select detail_id,
+               order_id,
+               store_id,
+               spu_id,
+               sku_id,
+               price,
+               number,
+               detail_status
+        from detail
+        <where>
+            store_id = #{storeId}
+        <if test="detailStatus != 10">
+            AND detail_status = #{detailStatus}
+        </if>
+        </where>
+        limit #{size} offset #{offset};
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="detailId" useGeneratedKeys="true">
-        insert into detail(order_id,store_id, spu_id, sku_id, price, number)
-        values (#{orderId},#{storeId}, #{spuId}, #{skuId}, #{price}, #{number})
+        insert into detail(order_id, store_id, spu_id, sku_id, price, number,detail_status)
+        values (#{orderId}, #{storeId}, #{spuId}, #{skuId}, #{price}, #{number},#{detailStatus})
     </insert>
 
     <!--通过主键删除-->

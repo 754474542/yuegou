@@ -2,14 +2,13 @@ package com.yuegou.service.impl;
 
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
-import com.yuegou.dao.DetailDao;
-import com.yuegou.dao.SkuDao;
-import com.yuegou.dao.SpuDao;
+import com.yuegou.dao.*;
 import com.yuegou.entity.*;
-import com.yuegou.dao.OrderDao;
 import com.yuegou.service.OrderService;
+import com.yuegou.utils.FileUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,7 +31,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private DetailDao detailDao;
     @Autowired
+    private SpuDao spuDao;
+    @Autowired
+    private CartDao cartDao;
+    @Autowired
     private Logger logger;
+
+    @Value("${utils.imagessavepath}")
+    private String path;
 
     /**
      * 通过ID查询单条数据
@@ -46,8 +52,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> queryByUserId(Long userId) {
-        return orderDao.queryByUserId(userId);
+    public List<Order> queryByUserId(Integer size,Integer offset,Long userId,Integer orderStatus) {
+        List<Order> orders = orderDao.queryByUserId(size,offset,userId,orderStatus);
+        for (Order order : orders) {
+            List<Detail> detailList = order.getDetailList();
+            for (Detail detail : detailList) {
+                Spu spu = detail.getSpu();
+                SpuImages spuImages = spu.getSpuImages();
+                if (spuImages.getIndexImgPath() != null){
+                    spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
+                }
+            }
+        }
+        return orders;
     }
 
     @Override
@@ -59,13 +76,16 @@ public class OrderServiceImpl implements OrderService {
     public boolean insert(OrderAndDetail orderAndDetail) {
         Date isTime = new Date();
         Order order = orderAndDetail.getOrder();
+        order.setOrderStatus(0);
         order.setCreateTime(isTime);
         if (!orderDao.insert(order)) throw new CURDException(Code.SAVE_ERR,"订单保存失败");
         List<Detail> detailList = orderAndDetail.getDetailList();
         for (Detail detail : detailList) {
+            if (detail.getCartId() != null) if (!cartDao.deleteById(detail.getCartId())) throw new CURDException(Code.DELETE_ERR,"购物车商品删除失败");
             detail.setOrderId(order.getOrderId());
             double money = calPrice(detail.getSkuId(), detail.getNumber(),null);
             detail.setPrice(money);
+            detail.setDetailStatus(0);
             if (!detailDao.insert(detail)) throw new CURDException(Code.SAVE_ERR,"订单详细保存失败");
         }
         return true;
@@ -99,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public double calPrice(Long skuId,Integer number,Long detailId){
         Sku sku = skuDao.queryById(skuId);
+        Spu spu = spuDao.queryBySpuId(sku.getSpuId());
         if (((Integer.parseInt(sku.getSkuFund()) - number)) < 0) throw new CURDException(Code.SAVE_ERR,"库存不足!");
         //判断，如果是修改订单的话，就要把之前买的商品回滚一下在继续计算
         if (detailId != null){
@@ -115,9 +136,11 @@ public class OrderServiceImpl implements OrderService {
         sku.setSkuFund(Integer.toString(skuFund));
         if (!skuDao.update(sku)) throw new CURDException(Code.UPDATE_ERR,"sku库存操作失败!");
 
-        BigDecimal money = new BigDecimal(Double.toString(sku.getSkuPrice() * number));
+        BigDecimal skuPrice = BigDecimal.valueOf(sku.getSkuPrice());
+        BigDecimal spuDiscount = BigDecimal.valueOf(spu.getDiscount()).divide(new BigDecimal(100));
+        BigDecimal priceNumber = BigDecimal.valueOf(number);
         // 使用BigDecimal保留后两位小数，并进行精确运算并设置舍入模式为ROUND_DOWN，隔断算法
-        return money.setScale(2, RoundingMode.DOWN).doubleValue();
+        return skuPrice.multiply(spuDiscount).multiply(priceNumber).setScale(2, RoundingMode.DOWN).doubleValue();
     }
 
 }

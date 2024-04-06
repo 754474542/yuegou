@@ -31,6 +31,7 @@ public class UserController {
     }
     @PutMapping
     public Result update(@RequestBody User user){
+        System.out.println(user);
         boolean flag = service.update(user);
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag);
     }

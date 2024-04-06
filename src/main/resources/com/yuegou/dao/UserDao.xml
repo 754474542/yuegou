@@ -44,34 +44,33 @@
     <update id="update">
         UPDATE user
         <set>
-            <if test="userName != null">
+            <if test="userName != null and userName != ''">
                 user_name = #{userName},
             </if>
-            <if test="userPhone != null">
+            <if test="userPhone != null and userPhone != ''">
                 user_phone = #{userPhone},
             </if>
-            <if test="userPassword != null">
+            <if test="userPassword != null and userPassword != ''">
                 user_password = #{userPassword},
             </if>
-            <if test="userCard != null">
+            <if test="userCard != null and userCard != ''">
                 user_card = #{userCard},
             </if>
-            <if test="userAddress != null">
+            <if test="userAddress != null and userAddress != ''">
                 user_address = #{userAddress},
             </if>
-            <if test="userHead != null">
+            <if test="userHead != null and userHead != ''">
                 user_head = #{userHead},
             </if>
-            <if test="userGender != null">
+            <if test="userGender != null and userGender != ''">
                 user_gender = #{userGender},
             </if>
-            <if test="userPower != null">
+            <if test="userPower != null and userPower != ''">
                 user_power = #{userPower},
             </if>
         </set>
-        <where>
-            user_id = #{userId};
-        </where>
+        where user_id = #{userId};
+
     </update>
 
     <update id="setEmpt">

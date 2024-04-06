@@ -1,6 +1,7 @@
 package com.yuegou.service;
 
 import com.yuegou.entity.Detail;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public interface DetailService {
     List<Detail> queryByOrderId(Long orderId);
 
     Detail queryBySkuIdAndSpuId(Detail detail);
+
+    List<Detail> queryByStoreId(Integer size,
+                                     Integer offset,
+                                     Long storeId,
+                                     Integer detailStatus);
 
     /**
      * 新增数据

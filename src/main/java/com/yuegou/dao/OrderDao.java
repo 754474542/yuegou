@@ -24,7 +24,7 @@ public interface OrderDao {
      */
     Order queryById(Long orderId);
 
-    List<Order> queryByUserId(Long userId);
+    List<Order> queryByUserId(@Param("size") Integer size,@Param("offset") Integer offset,@Param("userId") Long userId,@Param("orderStatus") Integer orderStatus);
 
     List<Order> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
 

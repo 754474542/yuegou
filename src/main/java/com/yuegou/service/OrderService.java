@@ -23,7 +23,7 @@ public interface OrderService {
      */
     Order queryById(Long orderId);
 
-    List<Order> queryByUserId(Long userId);
+    List<Order> queryByUserId(Integer size,Integer offset,Long userId,Integer orderStatus);
 
     List<Order> queryAll(Integer size,Integer offset);
 

@@ -81,5 +81,11 @@ public class StoreController {
         return new Result(delete ? Code.DELETE_OK : Code.DELETE_ERR, delete, delete ? "OK" : "Error");
     }
 
+    @GetMapping("/queryByUserId/{id}")
+    public Result queryByUserId(@PathVariable Long id) {
+        Store store = storeService.queryByUserId(id);
+        return new Result(store != null ? Code.SELECT_OK : Code.SELECT_ERR, store, store != null ? "OK" : "Error");
+    }
+
 }
 

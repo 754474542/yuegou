@@ -25,6 +25,10 @@ public class Detail implements Serializable {
     
     private Integer number;
 
+    private Integer detailStatus;
+
+    private Long cartId;
+
     private Spu spu;
 
     @Override
@@ -37,8 +41,26 @@ public class Detail implements Serializable {
                 ", skuId=" + skuId +
                 ", price=" + price +
                 ", number=" + number +
+                ", detailStatus=" + detailStatus +
+                ", cartId=" + cartId +
                 ", spu=" + spu +
                 '}';
+    }
+
+    public Integer getDetailStatus() {
+        return detailStatus;
+    }
+
+    public void setDetailStatus(Integer detailStatus) {
+        this.detailStatus = detailStatus;
+    }
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
     }
 
     public Spu getSpu() {

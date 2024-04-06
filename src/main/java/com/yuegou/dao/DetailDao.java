@@ -29,6 +29,11 @@ public interface DetailDao {
 
     Detail queryBySkuIdAndSpuId(Detail detail);
 
+    List<Detail> queryByStoreId(@Param("size") Integer size,
+                                     @Param("offset") Integer offset,
+                                     @Param("storeId") Long storeId,
+                                     @Param("detailStatus") Integer detailStatus);
+
     /**
      * 新增数据
      *

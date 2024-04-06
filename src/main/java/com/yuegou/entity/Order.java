@@ -21,20 +21,29 @@ public class Order implements Serializable {
     
     private Long userId;
 
+    private Integer orderStatus;
 
     private Date createTime;
 
     private List<Detail> detailList;
-
 
     @Override
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
                 ", userId=" + userId +
+                ", orderStatus=" + orderStatus +
                 ", createTime=" + createTime +
                 ", detailList=" + detailList +
                 '}';
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public List<Detail> getDetailList() {

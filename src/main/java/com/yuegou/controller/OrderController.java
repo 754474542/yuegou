@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
@@ -48,6 +48,16 @@ public class OrderController {
     public Result delete(@PathVariable Long id){
         boolean flag = orderService.deleteById(id);
         return new Result(flag ? Code.DELETE_OK : Code.DELETE_ERR,flag,flag ? "OK" : "Error");
+    }
+
+    @GetMapping("/queryUserId")
+    public Result queryOrderListByUserId(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page,
+                                         @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size,
+                                         @RequestParam("userId") Long userId,
+                                         @RequestParam("orderStatus")Integer orderStatus){
+        int offset = PaginationUtil.calculateOffset(page,size);
+        List<Order> orders = orderService.queryByUserId(size,offset,userId,orderStatus);
+        return new Result(orders != null ? Code.SELECT_OK : Code.SELECT_ERR,orders,orders != null ? "OK" : "ERROR");
     }
 
 }

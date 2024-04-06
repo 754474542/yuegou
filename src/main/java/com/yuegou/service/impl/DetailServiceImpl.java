@@ -1,11 +1,20 @@
 package com.yuegou.service.impl;
 
+import com.yuegou.controller.pretreatment.Code;
+import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
+import com.yuegou.dao.SkuDao;
 import com.yuegou.entity.Detail;
 import com.yuegou.dao.DetailDao;
+import com.yuegou.entity.Sku;
+import com.yuegou.entity.Spu;
+import com.yuegou.entity.SpuImages;
 import com.yuegou.service.DetailService;
+import com.yuegou.utils.FileUtil;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,8 +25,14 @@ import java.util.List;
  */
 @Service("detailService")
 public class DetailServiceImpl implements DetailService {
-    @Resource
+    @Autowired
     private DetailDao detailDao;
+    @Autowired
+    private Logger logger;
+    @Autowired
+    private SkuDao skuDao;
+    @Value("${utils.imagessavepath}")
+    private String path;
 
     /**
      * 通过ID查询单条数据
@@ -40,6 +55,17 @@ public class DetailServiceImpl implements DetailService {
         return detailDao.queryBySkuIdAndSpuId(detail);
     }
 
+    @Override
+    public List<Detail> queryByStoreId(Integer size, Integer offset, Long storeId, Integer detailStatus) {
+        List<Detail> details = detailDao.queryByStoreId(size, offset, storeId, detailStatus);
+        for (Detail detail : details) {
+            Spu spu = detail.getSpu();
+            SpuImages spuImages = spu.getSpuImages();
+            if (spuImages.getIndexImgPath() != null) spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
+        }
+        return details;
+    }
+
 
     /**
      * 新增数据
@@ -49,6 +75,7 @@ public class DetailServiceImpl implements DetailService {
      */
     @Override
     public boolean insert(Detail detail) {
+        detail.setDetailStatus(0);
         return detailDao.insert(detail);
     }
 
@@ -65,8 +92,12 @@ public class DetailServiceImpl implements DetailService {
 
     @Override
     public boolean update(Detail detail) {
-        //去根据detail ID去查询里面的东西，然后在计算spu sku直间的价格。
-        System.out.println(detail);
+        if (detail.getDetailStatus() == 4){
+            logger.info("执行退款，进行商品数量回滚");
+            Sku sku = skuDao.queryById(detail.getSkuId());
+            sku.setSkuFund(String.valueOf(Integer.parseInt(sku.getSkuFund()) + detail.getNumber()));
+            if (!skuDao.update(sku)) throw new CURDException(Code.UPDATE_ERR,"商品数量回滚失败");
+        }
         return detailDao.update(detail);
     }
 }
