@@ -44,4 +44,6 @@ public interface SpuService {
 
     List<Spu> querySearchSpu(SpuSearchEntity spuSearchEntity);
 
+    List<Spu> queryByStoreId(Integer size, Integer offset, Long storeId);
+
 }

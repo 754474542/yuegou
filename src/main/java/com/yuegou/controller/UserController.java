@@ -3,6 +3,7 @@ package com.yuegou.controller;
 import com.yuegou.config.PaginationConfig;
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
+import com.yuegou.entity.ModifyPasswordEntity;
 import com.yuegou.entity.User;
 import com.yuegou.service.UserService;
 import com.yuegou.utils.PaginationUtil;
@@ -23,7 +24,6 @@ public class UserController {
         boolean flag = service.save(user);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }
-
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long id){
         boolean flag = service.delete(id);
@@ -50,6 +50,11 @@ public class UserController {
     public Result getOnToken(@RequestHeader String token){
         User user = service.getUserOnToken(token);
         return new Result(user != null ? Code.SELECT_OK : Code.SELECT_ERR, user, user != null ? "OK" : "Error");
+    }
+    @PutMapping("/modifyPassword")
+    public Result setUserPassword(@RequestBody ModifyPasswordEntity modifyPassword){
+        boolean flag = service.modifyPassword(modifyPassword);
+        return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag ? "密码修改成功" : "密码修改失败");
     }
 
 }

@@ -15,10 +15,14 @@
         <result property="userGender" column="user_gender"/>
         <result property="userEmpt" column="user_empt"/>
         <result property="emptCreate" column="empt_create"/>
-        <association property="store" javaType="com.yuegou.entity.Store" select="com.yuegou.dao.StoreDao.queryByUserId" column="user_id"/>
-        <association property="ban" javaType="com.yuegou.entity.Ban" select="com.yuegou.dao.BanDao.queryById" column="user_id"/>
-        <collection property="cartList" ofType="com.yuegou.entity.Cart" select="com.yuegou.dao.CartDao.queryByUserId" column="user_id"/>
-        <collection property="order" ofType="com.yuegou.entity.Order" select="com.yuegou.dao.OrderDao.queryByUserId" column="user_id" />
+        <association property="store" javaType="com.yuegou.entity.Store" select="com.yuegou.dao.StoreDao.queryByUserId"
+                     column="user_id"/>
+        <association property="ban" javaType="com.yuegou.entity.Ban" select="com.yuegou.dao.BanDao.queryById"
+                     column="user_id"/>
+        <collection property="cartList" ofType="com.yuegou.entity.Cart" select="com.yuegou.dao.CartDao.queryByUserId"
+                    column="user_id"/>
+        <collection property="order" ofType="com.yuegou.entity.Order" select="com.yuegou.dao.OrderDao.queryByUserId"
+                    column="user_id"/>
     </resultMap>
 
     <resultMap id="user" type="com.yuegou.entity.User">
@@ -37,8 +41,8 @@
 
 
     <update id="save">
-        INSERT INTO user (user_name,user_phone,user_password,user_card,user_address,user_gender)
-         VALUES (#{userName},#{userPhone},#{userPassword},#{userCard},#{userAddress},#{userGender})
+        INSERT INTO user (user_name, user_phone, user_password, user_card, user_address, user_gender)
+        VALUES (#{userName}, #{userPhone}, #{userPassword}, #{userCard}, #{userAddress}, #{userGender})
     </update>
 
     <update id="update">
@@ -62,61 +66,124 @@
             <if test="userHead != null and userHead != ''">
                 user_head = #{userHead},
             </if>
-            <if test="userGender != null and userGender != ''">
+            <if test="userGender != null">
                 user_gender = #{userGender},
             </if>
-            <if test="userPower != null and userPower != ''">
+            <if test="userPower != null">
                 user_power = #{userPower},
             </if>
         </set>
         where user_id = #{userId};
-
     </update>
 
     <update id="setEmpt">
-        UPDATE user <set>
-                        <if test="userEmpt != null">
-                            user_empt = #{userEmpt},
-                        </if>
-                        <if test="userEmpt == 1">
-                            empt_create = NOW(),
-                        </if>
-                        <if test="userEmpt == 0">
-                            empt_create = NULL,
-                        </if>
-                    </set> WHERE user_id = #{userId};
+        UPDATE user
+        <set>
+            <if test="userEmpt != null">
+                user_empt = #{userEmpt},
+            </if>
+            <if test="userEmpt == 1">
+                empt_create = NOW(),
+            </if>
+            <if test="userEmpt == 0">
+                empt_create = NULL,
+            </if>
+            <if test="userPower != null ">
+                user_power = #{userPower},
+            </if>
+        </set>
+        WHERE user_id = #{userId};
     </update>
 
     <delete id="delete">
-        DELETE FROM user WHERE user_id = #{id};
+        DELETE
+        FROM user
+        WHERE user_id = #{id};
     </delete>
 
     <select id="getById" resultMap="user">
-        SELECT user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create FROM user WHERE user_id = #{userId};
+        SELECT user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        FROM user
+        WHERE user_id = #{userId};
     </select>
 
     <select id="getAll" resultMap="user">
-        SELECT
-               user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create
-        FROM user limit #{size} OFFSET #{offset};
+        SELECT user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        FROM user limit #{size}
+        OFFSET #{offset};
     </select>
 
     <select id="getUserPhone" resultMap="user">
-        select user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create from user
+        select user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        from user
         where user_phone = #{userPhone};
     </select>
     <select id="getEmptTimeUser" resultMap="user">
-        select user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create from user
-        where  empt_create IS NOT NULL
+        select user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        from user
+        where empt_create IS NOT NULL
     </select>
 
 
     <select id="getUserAndStore" resultMap="user">
-        SELECT * FROM user u JOIN store s ON u.user_id = s.user_id;
+        SELECT *
+        FROM user u
+                 JOIN store s ON u.user_id = s.user_id;
     </select>
 
-    <select id="getUserName"  resultMap="user">
-        select user_id,user_name,user_phone,user_password,user_card,user_power,user_address,user_head,user_gender,user_empt,empt_create from user
+    <select id="getUserName" resultMap="user">
+        select user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        from user
         where user_name = #{userName};
     </select>
 

@@ -190,7 +190,7 @@
         s.spu_id, spu_name, spu_title, spu_description, category_id, spu_status,
         create_time, discount, ROUND((spa.prive_avg*(discount/100)),2) prive_avg, COALESCE(os.order_sales,0) order_sales
         from spu s
-        LEFT JOIN spu_images si ON s.spu_id = si.spu_id
+            LEFT JOIN spu_images si ON s.spu_id = si.spu_id
             LEFT JOIN sku_price_avg spa ON s.spu_id = spa.spu_id
             LEFT JOIN order_sales os ON s.spu_id = os.spu_id
         <where>
@@ -216,6 +216,21 @@
             order by ROUND((spa.prive_avg*(discount/100)),2) ${typePrice}
         </if>
         limit #{size} offset #{offset};
+    </select>
+
+    <select id="queryByStoreIdAllSpu" resultMap="SpuMap">
+        select s.spu_id,
+               store_id,
+               spu_name,
+               spu_title,
+               spu_description,
+               category_id,
+               spu_status,
+               create_time,
+               discount
+        from spu s JOIN relation r ON s.spu_id = r.spu_id
+        where r.store_id = #{storeId}
+        limit #{size} offset #{offset}
     </select>
 
 </mapper>

@@ -164,4 +164,9 @@ public class SpuServiceImpl implements SpuService {
         return spuList;
     }
 
+    @Override
+    public List<Spu> queryByStoreId(Integer size, Integer offset, Long storeId) {
+        return spuDao.queryByStoreIdAllSpu(size,offset,storeId);
+    }
+
 }

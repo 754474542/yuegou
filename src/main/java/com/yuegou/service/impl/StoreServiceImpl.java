@@ -55,7 +55,6 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public boolean insert(Store store) {
         if (storeDao.queryByUserId(store.getUserId()) != null) throw new CURDException(Code.SAVE_ERR,"您已经有店铺了！");
-        System.out.println(store);
         User user = userDao.getById(store.getUserId());
         user.setUserPower(2);
         if (!userDao.update(user))throw new CURDException(Code.UPDATE_ERR,"权限更新失败！");
