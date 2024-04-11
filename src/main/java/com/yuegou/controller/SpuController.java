@@ -2,10 +2,7 @@ package com.yuegou.controller;
 
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.Result;
-import com.yuegou.entity.Spu;
-import com.yuegou.entity.SpuAndAttributeValues;
-import com.yuegou.entity.SpuAttributeValue;
-import com.yuegou.entity.SpuSearchEntity;
+import com.yuegou.entity.*;
 import com.yuegou.service.SpuService;
 import com.yuegou.utils.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,13 @@ public class SpuController {
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }
 
+    //这里也是接收spu，attribute，由于前端更改，上面接口过时，可以用，但不推荐。
+    @PostMapping("/intersectSpuAndAttribute")
+    public Result intersetSpu(@RequestBody SpuAndAttributeAllList spuAndAttributeAllList){
+        boolean flag = spuService.intersectSpuAndAttribute(spuAndAttributeAllList);
+        return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
+    }
+
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long id){
         boolean flag = spuService.deleteById(id);
@@ -35,8 +39,8 @@ public class SpuController {
     }
 
     @PutMapping
-    public Result update(@RequestBody SpuAndAttributeValues spuAndAttributeValues){
-        boolean flag = spuService.update(spuAndAttributeValues);
+    public Result update(@RequestBody Spu spu){
+        boolean flag = spuService.update(spu);
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag);
     }
 

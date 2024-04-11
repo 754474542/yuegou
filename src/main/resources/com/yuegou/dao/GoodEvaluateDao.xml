@@ -95,6 +95,7 @@
                create_time,
                evaluate_content,
                evaluate_fraction from good_evaluate where spu_id = #{spuId}
+               order by create_time DESC
                limit #{size} OFFSET #{offset};
     </select>
 

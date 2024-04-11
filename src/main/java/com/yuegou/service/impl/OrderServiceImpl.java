@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
                 Spu spu = detail.getSpu();
                 SpuImages spuImages = spu.getSpuImages();
                 if (spuImages.getIndexImgPath() != null){
-                    spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
+                    if (spuImages.getIndexImgPath() != null)spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
                 }
             }
         }

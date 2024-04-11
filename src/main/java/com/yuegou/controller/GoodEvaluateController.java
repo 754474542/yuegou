@@ -19,6 +19,7 @@ public class GoodEvaluateController {
 
     @PostMapping
     public Result save(@RequestBody GoodEvaluate goodEvaluate){
+        System.out.println(goodEvaluate);
         boolean flag = goodEvaluateService.insert(goodEvaluate);
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }

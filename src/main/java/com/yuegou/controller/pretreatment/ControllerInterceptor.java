@@ -33,15 +33,15 @@ public class ControllerInterceptor implements HandlerInterceptor {
         for (String s : ignoreList) {
             if (path.equals(s)) return true;
         }
-        Claims claims = null;
-        String token = request.getHeader("token");
-        try {
-            claims = jwtUtil.parseToken(token);
-        } catch (Exception e) {
+//        Claims claims = null;
+//        String token = request.getHeader("token");
+//        try {
+//            claims = jwtUtil.parseToken(token);
+//        } catch (Exception e) {
 //            throw new ExpiredJwtException(Code.TOKEN_EXPIRE_ERR, "没检索到token过期，或者token过期，请重新登录");
-            e.printStackTrace();
-        }
-        logger.info(claims.get("userName") + " 访问了 " + path);
+//        }
+//        logger.info(claims.get("userName") + " 访问了 " + path);
+        logger.info(" 访问了 " + path);
         return true;
     }
 

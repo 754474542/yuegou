@@ -25,7 +25,7 @@ public class AttributeController {
         return new Result(flag ? Code.SAVE_OK : Code.SAVE_ERR, flag);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{spuId}")
     public Result delete(@PathVariable Long spuId){
         boolean flag = attributeService.deleteBySpuId(spuId);
         return new Result(flag ? Code.DELETE_OK : Code.DELETE_ERR, flag);
@@ -35,7 +35,7 @@ public class AttributeController {
         boolean flag = attributeService.update(attribute);
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/{spuId}")
     public Result getById(@PathVariable Long spuId){
         List<Attribute> attributes = attributeService.queryBySpuId(spuId);
         return new Result(attributes != null ? Code.SELECT_OK : Code.SELECT_ERR, attributes, attributes != null ? "OK" : "Error");

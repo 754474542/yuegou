@@ -22,8 +22,6 @@ public class Attribute implements Serializable {
 
     private Long attributeSort;
 
-    private Long categoryId;
-
     private Date createTime;
 
     private Long spuId;
@@ -76,14 +74,6 @@ public class Attribute implements Serializable {
         this.attributeSort = attributeSort;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -100,7 +90,6 @@ public class Attribute implements Serializable {
                 ", attributeOptions='" + attributeOptions + '\'' +
                 ", attributeType=" + attributeType +
                 ", attributeSort=" + attributeSort +
-                ", categoryId=" + categoryId +
                 ", createTime=" + createTime +
                 ", spuId=" + spuId +
                 '}';

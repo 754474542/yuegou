@@ -1,6 +1,7 @@
 package com.yuegou.service;
 
 import com.yuegou.entity.Spu;
+import com.yuegou.entity.SpuAndAttributeAllList;
 import com.yuegou.entity.SpuAndAttributeValues;
 import com.yuegou.entity.SpuSearchEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,13 +33,15 @@ public interface SpuService {
      */
     boolean deleteById(Long spuId);
 
-    boolean update(SpuAndAttributeValues spuAndAttributeValues);
+    boolean update(Spu spu);
 
     List<Spu> queryAll(Integer size, Integer offset);
 
     Spu queryBySpuId(Long spuId);
 
     boolean saveSpuAndAttributeValues(SpuAndAttributeValues spuAndAttributeValues,String token);
+
+    boolean intersectSpuAndAttribute(SpuAndAttributeAllList spuAndAttributeAllList);
 
     List<Spu> queryIndexPageList(Integer size, Integer offset);
 

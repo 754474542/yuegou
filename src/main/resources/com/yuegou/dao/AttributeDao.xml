@@ -8,7 +8,6 @@
         <result property="attributeOptions" column="attribute_options" jdbcType="VARCHAR"/>
         <result property="attributeType" column="attribute_type" jdbcType="INTEGER"/>
         <result property="attributeSort" column="attribute_sort" jdbcType="INTEGER"/>
-        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="spuId" column="spu_id" jdbcType="INTEGER"/>
     </resultMap>
@@ -20,7 +19,6 @@
                attribute_options,
                attribute_type,
                attribute_sort,
-               category_id,
                create_time
         from attribute
         where spu_id = #{spuId} order by attribute_sort;
@@ -28,9 +26,9 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="attributeId" useGeneratedKeys="true">
-        insert into attribute(attribute_name,spu_id, attribute_options, attribute_type, attribute_sort, category_id,
+        insert into attribute(attribute_name,spu_id, attribute_options, attribute_type, attribute_sort,
                               create_time)
-        values (#{attributeName}, #{spu_id}, #{attributeOptions}, #{attributeType}, #{attributeSort}, #{categoryId}, #{createTime})
+        values (#{attributeName}, #{spuId}, #{attributeOptions}, #{attributeType}, #{attributeSort}, #{createTime})
     </insert>
 
     <!--通过主键修改数据-->
@@ -48,9 +46,6 @@
             </if>
             <if test="attributeSort != null">
                 attribute_sort = #{attributeSort},
-            </if>
-            <if test="categoryId != null">
-                category_id = #{categoryId},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime},

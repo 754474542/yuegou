@@ -185,7 +185,7 @@
             (SELECT DISTINCT spu_id, ROUND(avg(sku_price) OVER(PARTITION BY spu_id),2) prive_avg from sku), order_sales
             AS
             (SELECT DISTINCT d.spu_id, sum(d.number) over(PARTITION BY spu_id) order_sales FROM `order` o JOIN detail d
-            ON o.order_id = d.order_id)
+            ON o.order_id = d.order_id WHERE d.detail_status != 4)
         select
         s.spu_id, spu_name, spu_title, spu_description, category_id, spu_status,
         create_time, discount, ROUND((spa.prive_avg*(discount/100)),2) prive_avg, COALESCE(os.order_sales,0) order_sales
@@ -218,7 +218,7 @@
         limit #{size} offset #{offset};
     </select>
 
-    <select id="queryByStoreIdAllSpu" resultMap="SpuMap">
+    <select id="queryByStoreIdAllSpu" resultMap="SpuMaps">
         select s.spu_id,
                store_id,
                spu_name,

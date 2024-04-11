@@ -5,6 +5,7 @@ import com.yuegou.dao.AttributeDao;
 import com.yuegou.service.AttributeService;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public boolean insert(Attribute attribute) {
+        attribute.setCreateTime(new Date());
         return attributeDao.insert(attribute);
     }
 

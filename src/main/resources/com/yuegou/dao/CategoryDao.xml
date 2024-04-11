@@ -21,10 +21,8 @@
     </select>
 
     <select id="queryByIdAllStyle" resultMap="CategoryMap">
-        WITH job_tb AS
-        (select c.category_id j_id, c.category_name j_name, c.parent_id j_pid FROM category c WHERE c.parent_id != 0 AND category_id = #{categoryId})
         SELECT *
-        FROM category c JOIN job_tb j ON j.j_pid = c.category_id
+        FROM category c where category_id = #{categoryId}
     </select>
 
     <!--统计总行数-->
