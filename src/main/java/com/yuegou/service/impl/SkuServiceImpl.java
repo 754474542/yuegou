@@ -2,13 +2,12 @@ package com.yuegou.service.impl;
 
 import com.yuegou.controller.pretreatment.Code;
 import com.yuegou.controller.pretreatment.exceptionhandle.CURDException;
-import com.yuegou.dao.AttributeDao;
-import com.yuegou.dao.SkuAttributeValueDao;
-import com.yuegou.dao.SpuDao;
+import com.yuegou.dao.*;
 import com.yuegou.entity.*;
-import com.yuegou.dao.SkuDao;
 import com.yuegou.service.SkuService;
+import com.yuegou.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -31,6 +30,14 @@ public class SkuServiceImpl implements SkuService {
     private AttributeDao attributeDao;
     @Autowired
     private SkuAttributeValueDao skuAttributeValueDao;
+    @Autowired
+    private DetailDao detailDao;
+    @Autowired
+    private GoodEvaluateDao goodEvaluateDao;
+
+    @Value("${utils.imagessavepath}")
+    private String path;
+
 
     /**
      * 通过ID查询单条数据
@@ -45,6 +52,15 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public List<Sku> queryBySpuId(Long spuId) {
+        List<Sku> skus = skuDao.queryBySpuId(spuId);
+        for (Sku sku : skus) {
+            List<SkuImages> skuImagesList = sku.getSkuImagesList();
+            if (skuImagesList == null) continue;
+            for (SkuImages skuImages : skuImagesList) {
+                if (skuImages == null) continue;
+                skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+            }
+        }
         return skuDao.queryBySpuId(spuId);
     }
 
@@ -98,6 +114,14 @@ public class SkuServiceImpl implements SkuService {
         for (SkuAttributeValue skuAttributeValue : skuAttributeValues) {
             if (!skuAttributeValueDao.deleteById(skuAttributeValue.getSkuAttrId())) throw new CURDException(Code.DELETE_ERR,"skuAttributeValue删除失败");
             sum--;
+        }
+        List<Detail> details = detailDao.queryBySkuId(skuId);
+        if (details.size()!=0){
+            if (!detailDao.deleteBySkuId(skuId)) throw new CURDException(Code.DELETE_ERR,"订单详情删除失败");
+        }
+        List<GoodEvaluate> goodEvaluateList = goodEvaluateDao.queryBySkuId(skuId);
+        if (goodEvaluateList.size()!=0){
+            if (!goodEvaluateDao.deleteBySkuId(skuId)) throw new CURDException(Code.DELETE_ERR,"相关评论删除失败");
         }
         return sum == 0;
     }

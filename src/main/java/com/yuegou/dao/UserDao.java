@@ -19,4 +19,5 @@ public interface UserDao {
     List<User> getEmptTimeUser();
     List<User> getAll(@Param("size") Integer size,@Param("offset") Integer offset);
     List<User> getUserAndStore();
+    List<User> queryUserAll(@Param("size") Integer size,@Param("offset") Integer offset,@Param("search") String search);
 }

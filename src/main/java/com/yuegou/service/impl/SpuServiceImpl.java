@@ -205,8 +205,8 @@ public class SpuServiceImpl implements SpuService {
     }
 
     @Override
-    public List<Spu> queryByStoreId(Integer size, Integer offset, Long storeId) {
-        List<Spu> spuList = spuDao.queryByStoreIdAllSpu(size, offset, storeId);
+    public List<Spu> queryByStoreId(Integer size, Integer offset, Long storeId,String search,Integer power) {
+        List<Spu> spuList = spuDao.queryByStoreIdAllSpu(size, offset, storeId, search, power);
         for (Spu spu : spuList) {
             SpuImages spuImages = spu.getSpuImages();
             if (spuImages == null) continue;

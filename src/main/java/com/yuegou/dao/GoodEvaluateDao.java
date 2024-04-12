@@ -57,5 +57,7 @@ public interface GoodEvaluateDao {
      */
     boolean deleteById(Long evaluateId);
 
+    boolean deleteBySkuId(Long skuId);
+
 }
 

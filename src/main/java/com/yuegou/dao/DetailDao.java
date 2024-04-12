@@ -27,6 +27,8 @@ public interface DetailDao {
 
     List<Detail> queryByOrderIdMax(Long orderId);
 
+    List<Detail> queryBySkuId(Long skuId);
+
     Detail queryBySkuIdAndSpuId(Detail detail);
 
     List<Detail> queryByStoreId(@Param("size") Integer size,
@@ -50,6 +52,8 @@ public interface DetailDao {
      * @return 影响行数
      */
     boolean deleteById(Long detailId);
+
+    boolean deleteBySkuId(Long skuId);
 
     boolean update(Detail detail);
 

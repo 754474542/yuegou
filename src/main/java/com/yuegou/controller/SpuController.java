@@ -74,9 +74,11 @@ public class SpuController {
     @GetMapping("/byStoreId")
     public Result queryByStoreId(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page,
                                  @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size,
-                                 @RequestParam Long storeId){
+                                 @RequestParam Long storeId,
+                                 @RequestParam String search,
+                                 @RequestParam Integer power){
         int offset = PaginationUtil.calculateOffset(page, size);
-        List<Spu> spus = spuService.queryByStoreId(size,offset,storeId);
+        List<Spu> spus = spuService.queryByStoreId(size,offset,storeId,search,power);
         return new Result(spus != null ? Code.SELECT_OK : Code.SELECT_ERR, spus, spus != null ? "OK" : "Error");
     }
 

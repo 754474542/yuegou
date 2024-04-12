@@ -57,4 +57,19 @@ public class UserController {
         return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag ? "密码修改成功" : "密码修改失败");
     }
 
+    @PutMapping("/admModifyPassword")
+    public Result admSetUserPassword(@RequestBody ModifyPasswordEntity modifyPassword){
+        boolean flag = service.admModifyPassword(modifyPassword);
+        return new Result(flag ? Code.UPDATE_OK : Code.UPDATE_ERR, flag ? "密码修改成功" : "密码修改失败");
+    }
+
+    @GetMapping("/queryUserAll")
+    public Result queryUserAll(@RequestParam(value = "page",defaultValue = "#{paginationConfig.page}") Integer page,
+                               @RequestParam(value = "size", defaultValue = "#{paginationConfig.size}") Integer size,
+                               @RequestParam String search){
+        int offset = PaginationUtil.calculateOffset(page, size);
+        List<User> userList = service.queryUserAll(size,offset,search);
+        return new Result(userList != null ? Code.SELECT_OK : Code.SELECT_ERR, userList, userList != null ? "OK" : "Error");
+    }
+
 }

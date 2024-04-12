@@ -187,4 +187,25 @@
         where user_name = #{userName};
     </select>
 
+    <select id="queryUserAll" resultMap="user">
+        select user_id,
+               user_name,
+               user_phone,
+               user_password,
+               user_card,
+               user_power,
+               user_address,
+               user_head,
+               user_gender,
+               user_empt,
+               empt_create
+        from user
+        <where>
+            <if test="search!= null and search != ''">
+                user_name LIKE CONCAT('%', #{search}, '%')
+            </if>
+        </where>
+        limit #{size} offset #{offset};
+    </select>
+
 </mapper>

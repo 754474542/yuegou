@@ -130,5 +130,11 @@
         where evaluate_id = #{evaluateId}
     </delete>
 
+    <delete id="deleteBySkuId">
+        delete
+        from good_evaluate
+        where sku_id = #{skuId}
+    </delete>
+
 </mapper>
 

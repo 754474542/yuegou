@@ -127,6 +127,18 @@
         </where>
         limit #{size} offset #{offset};
     </select>
+    <select id="queryBySkuId" resultMap="DetailMap">
+        select detail_id,
+               order_id,
+               store_id,
+               spu_id,
+               sku_id,
+               price,
+               number,
+               detail_status
+        from detail
+        where sku_id = #{skuId};
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="detailId" useGeneratedKeys="true">
@@ -139,6 +151,12 @@
         delete
         from detail
         where detail_id = #{detailId}
+    </delete>
+
+    <delete id="deleteBySkuId">
+        delete
+        from detail
+        where sku_id = #{skuId}
     </delete>
 
 </mapper>

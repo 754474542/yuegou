@@ -44,7 +44,11 @@ public interface SpuDao {
 
     List<Spu> queryAll(@Param("size") Integer size,@Param("offset") Integer offset);
     //根据店铺id查询，支持分页
-    List<Spu> queryByStoreIdAllSpu(@Param("size") Integer size,@Param("offset") Integer offset,@Param("storeId") Long storeId);
+    List<Spu> queryByStoreIdAllSpu(@Param("size") Integer size,
+                                   @Param("offset") Integer offset,
+                                   @Param("storeId") Long storeId,
+                                   @Param("search") String search,
+                                   @Param("power")Integer power);
 
     //根据店铺id查询
     List<Spu> queryByStoreId(Long storeId);

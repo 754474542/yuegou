@@ -3,8 +3,27 @@ package com.yuegou.entity;
 public class ModifyPasswordEntity {
 
     private String userName;
+    private Integer userId;
     private String oldPassword;
     private String newPassword;
+
+    @Override
+    public String toString() {
+        return "ModifyPasswordEntity{" +
+                "userName='" + userName + '\'' +
+                ", userId=" + userId +
+                ", oldPassword='" + oldPassword + '\'' +
+                ", newPassword='" + newPassword + '\'' +
+                '}';
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -30,12 +49,4 @@ public class ModifyPasswordEntity {
         this.newPassword = newPassword;
     }
 
-    @Override
-    public String toString() {
-        return "ModifyPasswordEntity{" +
-                "userName='" + userName + '\'' +
-                ", oldPassword='" + oldPassword + '\'' +
-                ", newPassword='" + newPassword + '\'' +
-                '}';
-    }
 }

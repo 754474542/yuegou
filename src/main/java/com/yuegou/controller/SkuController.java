@@ -49,4 +49,10 @@ public class SkuController {
         return new Result(sku != null ? Code.SELECT_OK : Code.SELECT_ERR , sku ,sku != null ? "OK" : "ERROR" );
     }
 
+    @GetMapping("/queryBySpuId/{id}")
+    public Result queryBySpuId(@PathVariable Long id){
+        List<Sku> skuList = skuService.queryBySpuId(id);
+        return new Result(skuList != null ? Code.SELECT_OK : Code.SELECT_ERR , skuList ,skuList != null ? "OK" : "ERROR" );
+    }
+
 }
