@@ -176,7 +176,7 @@ public class SpuServiceImpl implements SpuService {
             //创建spu_attribute_value对象
             SpuAttributeValue spuAttributeValue = new SpuAttributeValue();
             spuAttributeValue.setSpuId(spu.getSpuId());
-            spuAttributeValue.setSpuAttrId((long) i + 1);
+            spuAttributeValue.setAttributeId((long) i + 1);
             spuAttributeValue.setAttributeValue(spuAttAndAttValList.get(i).getAttributeValue());
             if (!spuAttributeValueDao.insert(spuAttributeValue))
                 throw new CURDException(Code.SAVE_ERR, "创建SpuAttributeValue失败");

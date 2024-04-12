@@ -54,6 +54,8 @@ public class SpuController {
     @GetMapping("/{id}")
     public Result queryBySpuId(@PathVariable Long id){
         Spu spu = spuService.queryBySpuId(id);
+        List<Attribute> attributeList = spu.getAttributeList();
+        List<SpuAttributeValue> spuAttributeValueList = spu.getSpuAttributeValueList();
         return new Result(spu != null ? Code.SELECT_OK : Code.SELECT_ERR, spu, spu != null ? "OK" : "Error");
     }
 
