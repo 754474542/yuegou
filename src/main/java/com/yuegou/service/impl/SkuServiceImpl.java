@@ -58,7 +58,7 @@ public class SkuServiceImpl implements SkuService {
             if (skuImagesList == null) continue;
             for (SkuImages skuImages : skuImagesList) {
                 if (skuImages == null) continue;
-                skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+                skuImages.setImgPath(FileUtil.queryFile(path + skuImages.getImgPath()));
             }
         }
         return skuDao.queryBySpuId(spuId);

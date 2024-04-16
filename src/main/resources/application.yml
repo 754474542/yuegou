@@ -9,14 +9,14 @@ mybatis:
 logging:
   pattern:
     console: '%clr(%d{yyyy-MM-dd hh:mm:ss.SSS}){cyan} %clr([%thread] %-5level %logger{50}) - %msg%n'
-#  file:
-#    path: C:\Users\Undertale\Desktop\悦购网上购物系统\YueGouService
-#    name: yuegou.log
-#  logback:
-#    rollingpolicy:
-#      max-history: 7
-#      max-file-size: 10MB
-#      total-size-cap: 100MB
+  file:
+    path: C:\Users\Undertale\Desktop\悦购网上商城\19-23李春铭毕业设计\
+    name: yuegou.log
+  logback:
+    rollingpolicy:
+      max-history: 7
+      max-file-size: 10MB
+      total-size-cap: 100MB
 
 #配置日志格式
 
@@ -64,7 +64,7 @@ utils:
     detectionUnBanTime: 0 5 0 * * *
     #封号处理每次处理时间,这里是每天凌晨12:05分执行。
     bannerCarousel: 0 0 0 * * *
-  imagessavepath: C:\Users\Undertale\Desktop\悦购网上购物系统\images\
+  imagessavepath: C:\Users\Undertale\Desktop\悦购网上商城\19-23李春铭毕业设计\images\
 #配置token，密钥和有效时间
 
 

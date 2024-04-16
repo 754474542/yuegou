@@ -96,7 +96,7 @@ public class GoodEvaluateServiceImpl implements GoodEvaluateService {
             }else {
                 User user = goodEvaluate.getUser();
                 String userHead = user.getUserHead();
-                if (userHead != null && !userHead.trim().equals("") && userHead.length() <= 200) user.setUserHead(FileUtil.fileToByte(path + userHead));
+                if (userHead != null && !userHead.trim().equals("") && userHead.length() <= 100) user.setUserHead(FileUtil.fileToByte(path + userHead));
             }
         }
         return goodEvaluateList;

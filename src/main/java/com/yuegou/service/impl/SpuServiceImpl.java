@@ -107,7 +107,7 @@ public class SpuServiceImpl implements SpuService {
             if (spuImages.getIndexImgPath() != null)
                 spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
             if (spuImages.getImgPath() != null)
-                spuImages.setImgPathBase64(FileUtil.fileToByte(path + spuImages.getImgPath()));
+                spuImages.setImgPathBase64(FileUtil.queryFile(path + spuImages.getImgPath()));
         }
         List<Sku> skuList = spu.getSkuList();
         if (skuList.size() != 0) {
@@ -121,7 +121,7 @@ public class SpuServiceImpl implements SpuService {
                     skuImagesList.add(new SkuImages());
                 } else {
                     for (SkuImages skuImages : skuImagesList) {
-                        skuImages.setImgPath(FileUtil.fileToByte(path + skuImages.getImgPath()));
+                        skuImages.setImgPath(FileUtil.queryFile(path + skuImages.getImgPath()));
                     }
                 }
             }
@@ -213,7 +213,7 @@ public class SpuServiceImpl implements SpuService {
             if (spuImages.getIndexImgPath() != null)
                 spuImages.setIndexImgPathBase64(FileUtil.fileToByte(path + spuImages.getIndexImgPath()));
             if (spuImages.getImgPath() != null)
-                spuImages.setImgPathBase64(FileUtil.fileToByte(path + spuImages.getImgPath()));
+                spuImages.setImgPathBase64(FileUtil.queryFile(path + spuImages.getImgPath()));
         }
         return spuList;
     }

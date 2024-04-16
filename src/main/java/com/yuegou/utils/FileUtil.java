@@ -40,7 +40,7 @@ public class FileUtil {
         return file.delete();
     }
 
-    public static byte[] queryFile(String url){
+    public static String queryFile(String url){
         File file = new File(url);
         if (!file.isFile()) throw new FileFailedException(Code.SELECT_ERR,"文件不存在");
         try(
@@ -48,7 +48,7 @@ public class FileUtil {
             ){
             byte [] buffer = new byte[(int) file.length()];
             fis.read(buffer);
-            return buffer;
+            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(buffer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

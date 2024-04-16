@@ -197,7 +197,7 @@ public class ImageDownloadServiceImpl implements ImageDownloadService {
     public List<SpuImages> queryBannerList() {
         List<SpuImages> bannerList = projectTasks.getBannerList();
         for (SpuImages spuImages : bannerList) {
-            spuImages.setImgPathBase64(FileUtil.fileToByte(path + spuImages.getImgPath()));
+            spuImages.setImgPathBase64(FileUtil.queryFile(path + spuImages.getImgPath()));
         }
         return bannerList;
     }
